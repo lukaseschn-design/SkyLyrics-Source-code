@@ -137,7 +137,7 @@ All Rights Reserved (ARR). This mod may be downloaded and used for personal game
 ---
 ## 📜 Just some guys:
 
-Pnio/VexVibe/BitePioner/Speez
+Pnio/VexVibe/BitePioner/Speez/storxm_
 
 <p align="center">
   <strong>Created by Maximus</strong><br>
