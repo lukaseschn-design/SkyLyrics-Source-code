@@ -120,7 +120,7 @@ public final class ConfigManager {
             if (k.startsWith("_")) continue;
             flat.add(k, v);
         }
-        for (Map.Entry e : new ArrayList(flat.entrySet())) {
+        for (Map.Entry<String, JsonElement> e : new ArrayList<>(flat.entrySet())) {
             if (!ConfigManager.isColor((String)e.getKey()) || !((JsonElement)e.getValue()).isJsonPrimitive() || !((JsonElement)e.getValue()).getAsJsonPrimitive().isString()) continue;
             String s = ((JsonElement)e.getValue()).getAsString().trim();
             int col = 0;
@@ -376,4 +376,3 @@ public final class ConfigManager {
         DROP = Set.of("connection", "spotifyClientId", "spotifyRefreshToken");
     }
 }
-

@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1044
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
+ *  com.mojang.blaze3d.platform.NativeImage
+ *  net.minecraft.client.renderer.texture.DynamicTexture
+ *  net.minecraft.client.renderer.texture.AbstractTexture
+ *  net.minecraft.resources.Identifier
+ *  net.minecraft.client.Minecraft
  */
 package dev.lyricsflow.app.hud;
 
@@ -17,15 +17,15 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import net.minecraft.class_1011;
-import net.minecraft.class_1043;
-import net.minecraft.class_1044;
-import net.minecraft.class_2960;
-import net.minecraft.class_310;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.Minecraft;
 
 public final class Shapes {
     public static final int MAX_R = 512;
-    private static final Map<Integer, class_2960> CIRCLES = new HashMap<Integer, class_2960>();
+    private static final Map<Integer, Identifier> CIRCLES = new HashMap<Integer, Identifier>();
     private static boolean failed = false;
 
     private Shapes() {
@@ -39,9 +39,9 @@ public final class Shapes {
         failed = true;
     }
 
-    public static class_2960 circle(int r) {
+    public static Identifier circle(int r) {
         if (!failed && r >= 1) {
-            class_2960 id;
+            Identifier id;
             if (r > 96) {
                 r = Math.min(512, (r + 4) / 8 * 8);
             }
@@ -68,10 +68,10 @@ public final class Shapes {
                 }
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 ImageIO.write((RenderedImage)img, "png", out);
-                class_1011 ni = class_1011.method_49277((byte[])out.toByteArray());
-                id = class_2960.method_60655((String)"lyricsflow", (String)("shape/c" + r));
-                class_1043 tex = new class_1043(() -> "lyricsflow_circle", ni);
-                class_310.method_1551().method_1531().method_4616(id, (class_1044)tex);
+                NativeImage ni = NativeImage.read((byte[])out.toByteArray());
+                id = Identifier.fromNamespaceAndPath((String)"lyricsflow", (String)("shape/c" + r));
+                DynamicTexture tex = new DynamicTexture(() -> "lyricsflow_circle", ni);
+                Minecraft.getInstance().getTextureManager().register(id, (AbstractTexture)tex);
                 CIRCLES.put(r, id);
                 return id;
             }

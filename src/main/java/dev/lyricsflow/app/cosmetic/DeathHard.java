@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_12249
- *  net.minecraft.class_243
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
+ *  net.minecraft.client.renderer.rendertype.RenderTypes
+ *  net.minecraft.world.phys.Vec3
+ *  net.minecraft.resources.Identifier
+ *  net.minecraft.client.Minecraft
+ *  com.mojang.blaze3d.vertex.VertexConsumer
+ *  dev.lyricsflow.compat.LegacyBufferSource
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  *  org.joml.Quaternionf
@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import net.minecraft.class_12249;
-import net.minecraft.class_243;
-import net.minecraft.class_2960;
-import net.minecraft.class_310;
-import net.minecraft.class_4588;
-import net.minecraft.class_4597;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.lyricsflow.compat.LegacyBufferSource;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Quaternionf;
@@ -74,7 +74,7 @@ final class DeathHard {
         return new Tentacles(r);
     }
 
-    static void draw(class_310 mc, class_4597 buffers, Matrix4f base, class_243 cam, DeathFx.Fx f, float t) {
+    static void draw(Minecraft mc, LegacyBufferSource buffers, Matrix4f base, Vec3 cam, DeathFx.Fx f, float t) {
         Object object = f.extra;
         if (object instanceof Anim) {
             Anim s = (Anim)object;
@@ -84,9 +84,9 @@ final class DeathHard {
                 c.base = base;
                 c.cam = cam;
                 c.f = f;
-                c.m = new Matrix4f((Matrix4fc)base).translate((float)(f.ox - cam.field_1352), (float)(f.oy - cam.field_1351), (float)(f.oz - cam.field_1350)).rotateY(-f.yaw);
+                c.m = new Matrix4f((Matrix4fc)base).translate((float)(f.ox - cam.x), (float)(f.oy - cam.y), (float)(f.oz - cam.z)).rotateY(-f.yaw);
                 c.light = DeathFx.light(mc, f.ox, f.oy + 1.0, f.oz);
-                c.firstPerson = f.self && mc.field_1690.method_31044().method_31034();
+                c.firstPerson = f.self && mc.options.getCameraType().isFirstPerson();
                 float dt = t - s.lastT;
                 if (dt < 0.0f || dt > 0.5f) {
                     dt = 0.0f;
@@ -100,10 +100,10 @@ final class DeathHard {
                 }
                 s.simT = t;
                 s.pose(t);
-                class_4588 g = buffers.method_73477(class_12249.method_76023());
+                VertexConsumer g = buffers.getBuffer(RenderTypes.debugQuads());
                 s.glow(c, g, t);
                 s.drawPools(g, c.m, t);
-                class_4588 w = buffers.method_73477(class_12249.method_75994((class_2960)Accessories.WHITE));
+                VertexConsumer w = buffers.getBuffer(RenderTypes.entityCutout((Identifier)Accessories.WHITE));
                 s.solid(c, w, t);
                 if (s.blood != null) {
                     s.blood.draw(w, c.m, s.fade(t), c.light);
@@ -112,18 +112,18 @@ final class DeathHard {
                     s.dirt.draw(w, c.m, s.fade(t), c.light);
                 }
                 if (f.skin != null && !c.firstPerson) {
-                    class_4588 sk = buffers.method_73477(class_12249.method_75994((class_2960)f.skin));
+                    VertexConsumer sk = buffers.getBuffer(RenderTypes.entityCutout((Identifier)f.skin));
                     s.skin(c, sk, t);
                 }
                 if (SkyTextures.spritesReady()) {
-                    class_4588 sp = buffers.method_73477(class_12249.method_76022((class_2960)SkyTextures.SPRITES));
+                    VertexConsumer sp = buffers.getBuffer(RenderTypes.text((Identifier)SkyTextures.SPRITES));
                     s.sprites(c, sp, t);
                 }
             }
         }
     }
 
-    static void poolDisc(class_4588 g, Matrix4f m, float cx, float cz, float rad, float k, float a, int seed) {
+    static void poolDisc(VertexConsumer g, Matrix4f m, float cx, float cz, float rad, float k, float a, int seed) {
         if (!(k <= 0.01f) && !(a <= 0.01f)) {
             int seg = 18;
             float[] p = new float[12];
@@ -185,7 +185,7 @@ final class DeathHard {
         return out;
     }
 
-    static void rig(class_4588 sk, Matrix4f m, Rig g, int tint, int light, int lo, int hi) {
+    static void rig(VertexConsumer sk, Matrix4f m, Rig g, int tint, int light, int lo, int hi) {
         Matrix4f tmp = new Matrix4f();
         for (int i = 0; i < 6; ++i) {
             float y1;
@@ -199,7 +199,7 @@ final class DeathHard {
         }
     }
 
-    static void caps(class_4588 w, Matrix4f m, Rig g, int cut, int col) {
+    static void caps(VertexConsumer w, Matrix4f m, Rig g, int cut, int col) {
         Matrix4f tmp = new Matrix4f();
         for (int i = 0; i < 6; ++i) {
             int b = BOTTOM[i];
@@ -214,7 +214,7 @@ final class DeathHard {
         }
     }
 
-    static void sbox(class_4588 vc, Matrix4f m, float w, float h, float d, float infl, int u, int v, float y0, float y1, int col, int light) {
+    static void sbox(VertexConsumer vc, Matrix4f m, float w, float h, float d, float infl, int u, int v, float y0, float y1, int col, int light) {
         float hx = (w / 2.0f + infl) * 0.05859375f;
         float hz = (d / 2.0f + infl) * 0.05859375f;
         float yb = (y0 - h / 2.0f) * 0.05859375f - (y0 <= 0.0f ? infl * 0.05859375f : 0.0f);
@@ -234,7 +234,7 @@ final class DeathHard {
         }
     }
 
-    static void voxel(class_4588 vc, Matrix4f m, int part, float cx, float cy, float cz, float s, int tint, int light) {
+    static void voxel(VertexConsumer vc, Matrix4f m, int part, float cx, float cy, float cz, float s, int tint, int light) {
         int w = DIM[part][0];
         int h = DIM[part][1];
         int d = DIM[part][2];
@@ -283,7 +283,7 @@ final class DeathHard {
         return out;
     }
 
-    static void drawVox(class_4588 sk, Matrix4f m, Vox v, float s, float scale, int light) {
+    static void drawVox(VertexConsumer sk, Matrix4f m, Vox v, float s, float scale, int light) {
         if (!(scale <= 0.01f)) {
             Matrix4f vm = new Matrix4f((Matrix4fc)m).translate((Vector3fc)v.p).rotate((Quaternionfc)v.q).rotateXYZ(v.r.x, v.r.y, v.r.z).scale(scale);
             DeathHard.voxel(sk, vm, v.part, v.cx, v.cy, v.cz, s, v.tint, light);
@@ -307,7 +307,7 @@ final class DeathHard {
         return false;
     }
 
-    static void gline(class_4588 g, Matrix4f m, float ax, float ay, float az, float bx, float by, float bz, float w, int rgb, float a) {
+    static void gline(VertexConsumer g, Matrix4f m, float ax, float ay, float az, float bx, float by, float bz, float w, int rgb, float a) {
         float dz;
         float dy;
         float dx;
@@ -354,14 +354,14 @@ final class DeathHard {
         }
     }
 
-    static void gbox(class_4588 g, Matrix4f m, float hx, float hy, float hz, int argbCol) {
+    static void gbox(VertexConsumer g, Matrix4f m, float hx, float hy, float hz, int argbCol) {
         float[][] f;
         for (float[] q : f = new float[][]{{-hx, hy, hz, hx, hy, hz, hx, -hy, hz, -hx, -hy, hz}, {hx, hy, -hz, -hx, hy, -hz, -hx, -hy, -hz, hx, -hy, -hz}, {-hx, hy, -hz, -hx, hy, hz, -hx, -hy, hz, -hx, -hy, -hz}, {hx, hy, hz, hx, hy, -hz, hx, -hy, -hz, hx, -hy, hz}, {-hx, hy, -hz, hx, hy, -hz, hx, hy, hz, -hx, hy, hz}, {-hx, -hy, hz, hx, -hy, hz, hx, -hy, -hz, -hx, -hy, -hz}}) {
             DeathFx.gquad(g, m, q, argbCol, argbCol, argbCol, argbCol);
         }
     }
 
-    static void block(class_4588 w, Matrix4f m, float cx, float cy, float cz, float sx, float sy, float sz, int rgb, int light) {
+    static void block(VertexConsumer w, Matrix4f m, float cx, float cy, float cz, float sx, float sy, float sz, int rgb, int light) {
         DeathFx.cube(w, m, cx - sx / 2.0f, cy - sy / 2.0f, cz - sz / 2.0f, cx + sx / 2.0f, cy + sy / 2.0f, cz + sz / 2.0f, 0xFF000000 | rgb, light);
     }
 
@@ -469,7 +469,7 @@ final class DeathHard {
         }
 
         @Override
-        void glow(Ctx c, class_4588 gv, float t) {
+        void glow(Ctx c, VertexConsumer gv, float t) {
             float fade = this.fade(t);
             DeathFx.disc(gv, c.m, 0.0f, 0.012f, 0.0f, 0.0f, 1.6f, 9054936, 0.35f * DeathFx.sm(0.0f, 0.9f, t) * (0.7f + 0.3f * this.throb) * fade, 9054936, 0.0f, 32);
             for (int i = 0; i < 5; ++i) {
@@ -486,7 +486,7 @@ final class DeathHard {
         }
 
         @Override
-        void solid(Ctx c, class_4588 w, float t) {
+        void solid(Ctx c, VertexConsumer w, float t) {
             float grow = DeathFx.eo(DeathFx.sm(1.6f, 2.4f, t));
             float dive = DeathFx.sm(2.35f, 3.25f, t);
             if (grow > 0.01f) {
@@ -547,13 +547,13 @@ final class DeathHard {
         }
 
         @Override
-        void skin(Ctx c, class_4588 sk, float t) {
+        void skin(Ctx c, VertexConsumer sk, float t) {
             int tint = DeathFx.mix(0xFFFFFF, 13144319, 0.5f * this.inner * this.throb);
             DeathHard.rig(sk, c.m, this.g, tint, c.light, 0, 32);
         }
 
         @Override
-        void sprites(Ctx c, class_4588 sp, float t) {
+        void sprites(Ctx c, VertexConsumer sp, float t) {
             float on = DeathFx.sm(0.3f, 1.0f, t) * (1.0f - DeathFx.sm(5.4f, 6.2f, t));
             for (int e = 0; e < 60; ++e) {
                 double ae = (double)e * 2.39996;
@@ -593,16 +593,16 @@ final class DeathHard {
 
         abstract void pose(float var1);
 
-        void glow(Ctx c, class_4588 g, float t) {
+        void glow(Ctx c, VertexConsumer g, float t) {
         }
 
-        void solid(Ctx c, class_4588 w, float t) {
+        void solid(Ctx c, VertexConsumer w, float t) {
         }
 
-        void skin(Ctx c, class_4588 sk, float t) {
+        void skin(Ctx c, VertexConsumer sk, float t) {
         }
 
-        void sprites(Ctx c, class_4588 sp, float t) {
+        void sprites(Ctx c, VertexConsumer sp, float t) {
         }
 
         float end() {
@@ -617,23 +617,23 @@ final class DeathHard {
             this.pools.add(new float[]{x, z, rad, start, dur, this.r.nextInt(100000)});
         }
 
-        void drawPools(class_4588 g, Matrix4f m, float t) {
+        void drawPools(VertexConsumer g, Matrix4f m, float t) {
             float a = this.fade(t);
             for (float[] p : this.pools) {
                 DeathHard.poolDisc(g, m, p[0], p[1], p[2], DeathFx.eo((t - p[3]) / p[4]), a, (int)p[5]);
             }
         }
 
-        void spr(Ctx c, class_4588 sp, float x, float y, float z, float size, int k, int rgb, float a) {
+        void spr(Ctx c, VertexConsumer sp, float x, float y, float z, float size, int k, int rgb, float a) {
             DeathFx.sprite(sp, c.base, c.f, c.cam, x, y, z, size, k, rgb, a, DeathFx.AX[0], DeathFx.AX[1], DeathFx.AX[2], DeathFx.AX[3], DeathFx.AX[4], DeathFx.AX[5]);
         }
     }
 
     static final class Ctx {
-        class_310 mc;
+        Minecraft mc;
         Matrix4f base;
         Matrix4f m;
-        class_243 cam;
+        Vec3 cam;
         DeathFx.Fx f;
         int light;
         boolean firstPerson;
@@ -709,7 +709,7 @@ final class DeathHard {
             }
         }
 
-        void draw(class_4588 w, Matrix4f m, float fade, int light) {
+        void draw(VertexConsumer w, Matrix4f m, float fade, int light) {
             if (!(fade <= 0.01f)) {
                 for (int i = 0; i < this.n; ++i) {
                     int c = 0xFF000000 | this.col[i];

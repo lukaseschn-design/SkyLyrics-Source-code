@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_332
+ *  net.minecraft.client.gui.GuiGraphicsExtractor
  */
 package dev.lyricsflow.gui;
 
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import net.minecraft.class_332;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 
 public final class NowPlaying {
     private static final float[] btnHover = new float[5];
@@ -119,7 +119,7 @@ public final class NowPlaying {
         return 36.0f + NowPlaying.coverH(w) + 10.0f + 13.0f + 11.0f + 10.0f + 18.0f + 16.0f + 30.0f + 10.0f + 13.0f + 16.0f;
     }
 
-    public static void renderHero(class_332 g, float x, float y, float w, float h, double mx, double my, float a) {
+    public static void renderHero(GuiGraphicsExtractor g, float x, float y, float w, float h, double mx, double my, float a) {
         int stc;
         String st;
         boolean playing;
@@ -140,7 +140,7 @@ public final class NowPlaying {
         float cw = w - pad * 2.0f;
         float yy = y + 12.0f;
         boolean bl = spotify = t == null || t.sourceApp.equals("Spotify");
-        String string = t == null ? "Spotify" : (src = t.sourceApp.equals("Browser") ? "YouTube" : t.sourceApp);
+        src = t == null ? "Spotify" : (t.sourceApp.equals("Browser") ? "YouTube" : t.sourceApp);
         int srcCol = t == null ? -14756000 : (spotify ? -14756000 : (t.sourceApp.equals("Browser") ? -45499 : (t.sourceApp.equals("YT Music") ? -65485 : Themes.accent())));
         boolean yt = t != null && t.sourceApp.equals("Browser");
         boolean bl2 = ytm = t != null && t.sourceApp.equals("YT Music");
@@ -168,9 +168,9 @@ public final class NowPlaying {
             CoverArt.draw(g, cx, yy, cw, a);
             Gfx.roundOutline(g, cx, yy, cw, bh, 4.0f, 0.5f, Col.alpha(0x30FFFFFF, a));
             Gfx.gradientV(g, cx, yy + bh * 0.55f, cw, bh * 0.45f, Col.alpha(0, a), Col.alpha(-1073741824, a));
-            g.method_44379((int)cx, (int)(yy + bh * 0.5f), (int)Math.ceil(cx + cw), (int)Math.ceil(yy + bh));
+            g.enableScissor((int)cx, (int)(yy + bh * 0.5f), (int)Math.ceil(cx + cw), (int)Math.ceil(yy + bh));
             NowPlaying.previewLyrics(g, cx, yy + bh * 0.5f, cw, bh * 0.5f, a, th, c);
-            g.method_44380();
+            g.disableScissor();
         } else {
             Gfx.roundGradient(g, cx, yy, cw, bh, 10.0f, Col.alpha(th.skyTop(), a), Col.alpha(th.skyBottom(), a));
             double time = Anim.seconds();
@@ -180,9 +180,9 @@ public final class NowPlaying {
                 float tw = 0.35f + 0.65f * (float)(0.5 + 0.5 * Math.sin(time * (double)(1.0f + Anim.hash01(i) * 2.0f) + (double)i));
                 Gfx.circle(g, sx2, sy2, 0.5f + Anim.hash01((long)i * 7L) * 0.5f, Col.alpha(-1, a * tw * 0.8f));
             }
-            g.method_44379((int)cx, (int)yy, (int)Math.ceil(cx + cw), (int)Math.ceil(yy + bh));
+            g.enableScissor((int)cx, (int)yy, (int)Math.ceil(cx + cw), (int)Math.ceil(yy + bh));
             NowPlaying.previewLyrics(g, cx, yy, cw, bh, a, th, c);
-            g.method_44380();
+            g.disableScissor();
         }
         String title = t == null ? Ui.tr("lyricsflow.hero.nothing_title", new Object[0]) : t.title;
         String artist = t == null ? Ui.tr("lyricsflow.hero.nothing_sub", new Object[0]) : t.artist;
@@ -284,11 +284,11 @@ public final class NowPlaying {
             NowPlaying.btn[3][0] = chx + chw - 8.0f;
             NowPlaying.btn[3][1] = chipY + 6.5f;
             NowPlaying.btn[3][2] = 7.0f;
-            g.method_51448().pushMatrix();
-            g.method_51448().translate(btn[3][0], btn[3][1]);
-            g.method_51448().rotate(btnHover[3] * 1.2f);
+            g.pose().pushMatrix();
+            g.pose().translate(btn[3][0], btn[3][1]);
+            g.pose().rotate(btnHover[3] * 1.2f);
             Icons.draw(g, "refresh", 0.0f, 0.0f, 7.0f, Col.alpha(Col.lerp(-6515020, -1, btnHover[3]), a));
-            g.method_51448().popMatrix();
+            g.pose().popMatrix();
         } else {
             NowPlaying.btn[3][2] = 0.0f;
         }
@@ -298,12 +298,11 @@ public final class NowPlaying {
     }
 
     static String sourceName(String src) {
-        Object base;
         String s;
         String string = s = src == null ? "" : src.toLowerCase(Locale.ROOT);
-        Object object = s.contains("musixmatch") ? "Musixmatch" : (s.contains("netease") ? "NetEase" : (s.contains("lrclib") ? "LRCLIB" : (base = src == null || src.isBlank() ? "?" : src)));
+        String base = s.contains("musixmatch") ? "Musixmatch" : (s.contains("netease") ? "NetEase" : (s.contains("lrclib") ? "LRCLIB" : (src == null || src.isBlank() ? "?" : src)));
         if (s.contains("word")) {
-            base = (String)base + " \u00b7 " + Ui.tr("lyricsflow.hero.word_by_word", new Object[0]);
+            base += " \u00b7 " + Ui.tr("lyricsflow.hero.word_by_word", new Object[0]);
         }
         return base;
     }
@@ -313,7 +312,7 @@ public final class NowPlaying {
         return s / 60L + ":" + String.format("%02d", s % 60L);
     }
 
-    private static void drawButton(class_332 g, int i, float cx, float cy, float r, String icon, double mx, double my, float a, boolean primary) {
+    private static void drawButton(GuiGraphicsExtractor g, int i, float cx, float cy, float r, String icon, double mx, double my, float a, boolean primary) {
         boolean over = Ui.inside(mx, my, cx - r, cy - r, r * 2.0f, r * 2.0f);
         if (over && btnHover[i] < 0.05f) {
             UiSounds.play(UiSounds.HOVER, 1.25f);
@@ -334,7 +333,7 @@ public final class NowPlaying {
         }
     }
 
-    static void drawRepeat(class_332 g, int i, float cx, float cy, float r, double mx, double my, float a, int on) {
+    static void drawRepeat(GuiGraphicsExtractor g, int i, float cx, float cy, float r, double mx, double my, float a, int on) {
         int mode = MediaManager.get().repeat();
         boolean over = Ui.inside(mx, my, cx - r, cy - r, r * 2.0f, r * 2.0f);
         if (over && btnHover[i] < 0.05f) {
@@ -395,7 +394,7 @@ public final class NowPlaying {
         }
     }
 
-    private static void previewLyrics(class_332 g, float x, float y, float w, float h, float a, Themes.Theme th, LFConfig c) {
+    private static void previewLyrics(GuiGraphicsExtractor g, float x, float y, float w, float h, float a, Themes.Theme th, LFConfig c) {
         MediaManager mm = MediaManager.get();
         Lyrics l = mm.lyrics();
         long t = mm.position();
@@ -414,7 +413,7 @@ public final class NowPlaying {
             return;
         }
         float size = 13.0f;
-        ArrayList rows = new ArrayList();
+        ArrayList<List<Lyrics.Word>> rows = new ArrayList<>();
         ArrayList<Lyrics.Word> row = new ArrayList<Lyrics.Word>();
         float rw = 0.0f;
         float space = Gfx.textWidth(" ", font, size);
@@ -432,18 +431,18 @@ public final class NowPlaying {
             rows.add(row);
         }
         if (Fonts.isRtl(line.text)) {
-            for (List list : rows) {
+            for (List<Lyrics.Word> list : rows) {
                 Collections.reverse(list);
             }
         }
         float lineH = size * 1.25f;
         float f = y + h * 0.5f - (float)rows.size() * lineH / 2.0f;
-        g.method_51448().pushMatrix();
-        g.method_51448().translate(x + w / 2.0f, y + h / 2.0f);
-        g.method_51448().rotate((float)Math.toRadians(-4.0));
-        g.method_51448().translate(-(x + w / 2.0f), -(y + h / 2.0f));
+        g.pose().pushMatrix();
+        g.pose().translate(x + w / 2.0f, y + h / 2.0f);
+        g.pose().rotate((float)Math.toRadians(-4.0));
+        g.pose().translate(-(x + w / 2.0f), -(y + h / 2.0f));
         for (int r = 0; r < rows.size(); ++r) {
-            List rr = (List)rows.get(r);
+            List<Lyrics.Word> rr = rows.get(r);
             float total = 0.0f;
             for (int i = 0; i < rr.size(); ++i) {
                 total += Gfx.textWidth(Lyrics.show(((Lyrics.Word)rr.get((int)i)).text), font, size) + (i > 0 ? space : 0.0f);
@@ -460,11 +459,10 @@ public final class NowPlaying {
                 wx += ww + space;
             }
         }
-        g.method_51448().popMatrix();
+        g.pose().popMatrix();
     }
 
     static {
         dragFrac = -1.0f;
     }
 }
-

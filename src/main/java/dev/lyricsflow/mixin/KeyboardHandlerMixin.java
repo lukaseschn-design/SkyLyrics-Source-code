@@ -4,9 +4,9 @@
  * Could not load the following classes:
  *  com.llamalad7.mixinextras.injector.wrapoperation.Operation
  *  com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation
- *  net.minecraft.class_2561
- *  net.minecraft.class_276
- *  net.minecraft.class_309
+ *  net.minecraft.network.chat.Component
+ *  com.mojang.blaze3d.pipeline.RenderTarget
+ *  net.minecraft.client.KeyboardHandler
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  */
@@ -17,16 +17,16 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.lyricsflow.render.ScreenshotHelper;
 import java.io.File;
 import java.util.function.Consumer;
-import net.minecraft.class_2561;
-import net.minecraft.class_276;
-import net.minecraft.class_309;
+import net.minecraft.network.chat.Component;
+import com.mojang.blaze3d.pipeline.RenderTarget;
+import net.minecraft.client.KeyboardHandler;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
-@Mixin(value={class_309.class})
+@Mixin(value={KeyboardHandler.class})
 public abstract class KeyboardHandlerMixin {
-    @WrapOperation(method={"method_1466"}, require=0, at={@At(value="INVOKE", target="Lnet/minecraft/class_318;method_1659(Ljava/io/File;Lnet/minecraft/class_276;Ljava/util/function/Consumer;)V")})
-    private void lyricsflow$delayScreenshot(File dir, class_276 target, Consumer<class_2561> done, Operation<Void> original) {
+    @WrapOperation(method={"keyPress"}, require=0, at={@At(value="INVOKE", target="Lnet/minecraft/Screenshot;grab(Ljava/io/File;Lnet/minecraft/RenderTarget;Ljava/util/function/Consumer;)V")})
+    private void lyricsflow$delayScreenshot(File dir, RenderTarget target, Consumer<Component> done, Operation<Void> original) {
         if (!ScreenshotHelper.defer(() -> original.call(new Object[]{dir, target, done}))) {
             original.call(new Object[]{dir, target, done});
         }

@@ -2,25 +2,25 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  com.mojang.blaze3d.buffers.GpuBufferSlice
+ *  com.mojang.renderpearl.api.buffers.GpuBufferSlice
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_2338
- *  net.minecraft.class_243
- *  net.minecraft.class_2561
- *  net.minecraft.class_310
- *  net.minecraft.class_327$class_6415
- *  net.minecraft.class_4587
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
- *  net.minecraft.class_5250
- *  net.minecraft.class_758
- *  net.minecraft.class_758$class_4596
+ *  net.minecraft.core.BlockPos
+ *  net.minecraft.world.phys.Vec3
+ *  net.minecraft.network.chat.Component
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.Font$DisplayMode
+ *  com.mojang.blaze3d.vertex.PoseStack
+ *  dev.lyricsflow.compat.LegacyBufferSource
+ *  dev.lyricsflow.compat.LegacyBufferSource$BufferSource
+ *  net.minecraft.network.chat.MutableComponent
+ *  net.minecraft.client.renderer.fog.FogRenderer
+ *  net.minecraft.client.renderer.fog.FogRenderer$FogMode
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  */
 package dev.lyricsflow.render;
 
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
+import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
@@ -38,15 +38,15 @@ import dev.lyricsflow.util.Col;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import net.minecraft.class_2338;
-import net.minecraft.class_243;
-import net.minecraft.class_2561;
-import net.minecraft.class_310;
-import net.minecraft.class_327;
-import net.minecraft.class_4587;
-import net.minecraft.class_4597;
-import net.minecraft.class_5250;
-import net.minecraft.class_758;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import com.mojang.blaze3d.vertex.PoseStack;
+import dev.lyricsflow.compat.LegacyBufferSource;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.client.renderer.fog.FogRenderer;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 
@@ -83,8 +83,8 @@ final class AirLyrics {
 
     static boolean inPit() {
         boolean covered;
-        class_310 mc = class_310.method_1551();
-        if (mc.field_1687 == null) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null) {
             return false;
         }
         long now = System.currentTimeMillis();
@@ -92,7 +92,7 @@ final class AirLyrics {
             return pit;
         }
         pitCheck = now;
-        boolean bl = covered = !mc.field_1687.method_8311(class_2338.method_49637((double)Proj.cx, (double)Proj.cy, (double)Proj.cz).method_10084());
+        boolean bl = covered = !mc.level.canSeeSky(BlockPos.containing((double)Proj.cx, (double)Proj.cy, (double)Proj.cz).above());
         if (covered != pit) {
             if (pitSince == 0L) {
                 pitSince = now;
@@ -116,8 +116,8 @@ final class AirLyrics {
         fChunk = -1;
     }
 
-    static void render(class_4587 ps, class_4597 buffers, class_327.class_6415 mode) {
-        class_310 mc = class_310.method_1551();
+    static void render(PoseStack ps, LegacyBufferSource buffers, Font.DisplayMode mode) {
+        Minecraft mc = Minecraft.getInstance();
         if (System.currentTimeMillis() - lastRender > 500L) {
             AirLyrics.clear();
         }
@@ -131,7 +131,7 @@ final class AirLyrics {
             seq = mm.songSeq();
             AirLyrics.clear();
         }
-        Matrix4f base = ps.method_23760().method_23761();
+        Matrix4f base = ps.last().pose();
         float alpha = Math.max(0.0f, Math.min(1.0f, c.textOpacity)) * Hud.focusA;
         if (c.lyricsStyle == LFConfig.LyricsStyle.SKY) {
             WORDS.clear();
@@ -148,27 +148,27 @@ final class AirLyrics {
     }
 
     private static float widthU(String s, String font) {
-        return Fonts.unitWidth(s, font, class_310.method_1551().field_1772) * 9.25f;
+        return Fonts.unitWidth(s, font, Minecraft.getInstance().font) * 9.25f;
     }
 
-    private static void text(Matrix4f m, String s, String font, float x, float y, float z, int rgb, float a, class_4597 buf, class_327.class_6415 mode) {
+    private static void text(Matrix4f m, String s, String font, float x, float y, float z, int rgb, float a, LegacyBufferSource buf, Font.DisplayMode mode) {
         if (a <= 0.03f) {
             return;
         }
         float h = Fonts.height(font);
         float u = 9.25f / h;
         Matrix4f mm = new Matrix4f((Matrix4fc)m).translate(x, y, z).scale(u, u, u);
-        class_5250 comp = Fonts.text(s, font);
+        MutableComponent comp = Fonts.text(s, font);
         float gy = 4.5f / u - h / 2.0f + h * Fonts.yShift(font, ConfigManager.get().allCaps);
         int col = Col.alpha(0xFF000000 | rgb & 0xFFFFFF, Math.min(1.0f, a));
         if (col >>> 24 < 8) {
             return;
         }
-        class_310.method_1551().field_1772.method_27522((class_2561)comp, 0.0f, gy, col, false, mm, buf, mode, 0, 0xF000F0);
+        buf.drawText((Component)comp, 0.0f, gy, col, false, mm, mode, 0, 0xF000F0);
     }
 
-    private static boolean skyOpen(class_310 mc) {
-        return mc.field_1687 == null || mc.field_1687.method_8311(class_2338.method_49637((double)Proj.cx, (double)Proj.cy, (double)Proj.cz).method_10084());
+    private static boolean skyOpen(Minecraft mc) {
+        return mc.level == null || mc.level.canSeeSky(BlockPos.containing((double)Proj.cx, (double)Proj.cy, (double)Proj.cz).above());
     }
 
     private static double skyEl(LFConfig c, boolean open) {
@@ -176,8 +176,8 @@ final class AirLyrics {
         return c.showUnderground && !open ? b : Math.max(-6.0, Math.min(60.0, b));
     }
 
-    private static double degPerUnit(class_310 mc, LFConfig c) {
-        double guiH = Math.max(1, mc.method_22683().method_4502());
+    private static double degPerUnit(Minecraft mc, LFConfig c) {
+        double guiH = Math.max(1, mc.getWindow().getGuiScaledHeight());
         double focalRef = guiH / 2.0 / Math.tan(Math.toRadians(35.0));
         return Math.toDegrees(1.6 * (double)c.lyricsScale / focalRef);
     }
@@ -189,7 +189,7 @@ final class AirLyrics {
     /*
      * WARNING - Removed try catching itself - possible behaviour change.
      */
-    private static void sky(class_310 mc, LFConfig c, MediaManager mm, class_4597 buf, Matrix4f base, class_327.class_6415 mode, float dt, float alpha) {
+    private static void sky(Minecraft mc, LFConfig c, MediaManager mm, LegacyBufferSource buf, Matrix4f base, Font.DisplayMode mode, float dt, float alpha) {
         Lyrics lyrics = mm.lyrics();
         long now = System.currentTimeMillis();
         long prog = mm.position() + 60L;
@@ -215,13 +215,13 @@ final class AirLyrics {
         while (exiting.size() > 1) {
             exiting.remove(0);
         }
-        class_327.class_6415 m = c.showUnderground && !open ? class_327.class_6415.field_33994 : mode;
+        Font.DisplayMode m = c.showUnderground && !open ? Font.DisplayMode.SEE_THROUGH : mode;
         double d = WorldLyrics.skyDistance() * 0.9;
         GpuBufferSlice oldFog = null;
         try {
             oldFog = RenderSystem.getShaderFog();
-            class_758 fr = ((GameRendererAccessor)mc.field_1773).lyricsflow$fogRenderer();
-            RenderSystem.setShaderFog((GpuBufferSlice)fr.method_71109(class_758.class_4596.field_60101));
+            FogRenderer fr = ((GameRendererAccessor)mc.gameRenderer).lyricsflow$fogRenderer();
+            RenderSystem.setShaderFog((GpuBufferSlice)fr.getBuffer(FogRenderer.FogMode.NONE));
         }
         catch (Throwable ignored) {
             oldFog = null;
@@ -234,9 +234,9 @@ final class AirLyrics {
             if (active != null) {
                 AirLyrics.drawLine(c, buf, base, active, color, AirLyrics.active.line.wordAt(prog), now, dt, dpp, d, font, m, alpha, open);
             }
-            if (buf instanceof class_4597.class_4598) {
-                class_4597.class_4598 bs = (class_4597.class_4598)buf;
-                bs.method_22993();
+            if (buf instanceof LegacyBufferSource.BufferSource) {
+                LegacyBufferSource.BufferSource bs = (LegacyBufferSource.BufferSource)buf;
+                bs.endBatch();
             }
         }
         finally {
@@ -246,7 +246,7 @@ final class AirLyrics {
         }
     }
 
-    private static void drawLine(LFConfig c, class_4597 buf, Matrix4f base, SkyLine s, int color, int cur, long now, float dt, double dpp, double d, String font, class_327.class_6415 mode, float alpha, boolean open) {
+    private static void drawLine(LFConfig c, LegacyBufferSource buf, Matrix4f base, SkyLine s, int color, int cur, long now, float dt, double dpp, double d, String font, Font.DisplayMode mode, float alpha, boolean open) {
         float exit;
         float lineA;
         if (!c.viewLock && s.exitAt == 0L) {
@@ -343,11 +343,11 @@ final class AirLyrics {
         return 1.6f * c.lyricsScale / 1.7f;
     }
 
-    private static void floating(class_310 mc, LFConfig c, MediaManager mm, class_4597 buf, Matrix4f base, class_327.class_6415 mode, float alpha) {
+    private static void floating(Minecraft mc, LFConfig c, MediaManager mm, LegacyBufferSource buf, Matrix4f base, Font.DisplayMode mode, float alpha) {
         long progress;
         Lyrics.Line line;
         long now = System.currentTimeMillis();
-        class_243 cam = new class_243(Proj.cx, Proj.cy, Proj.cz);
+        Vec3 cam = new Vec3(Proj.cx, Proj.cy, Proj.cz);
         boolean live = false;
         Lyrics lyrics = mm.lyrics();
         if (lyrics != null && mm.isPlaying() && mm.position() >= 0L && !lyrics.lines.isEmpty() && (line = lyrics.lastStartedBefore(progress = mm.position())) != null && progress <= line.end + 450L) {
@@ -364,7 +364,7 @@ final class AirLyrics {
         AirLyrics.draw(c, buf, base, cam, now, fadeMs, mode, alpha);
     }
 
-    private static boolean update(LFConfig c, Lyrics.Line line, long progress, class_243 cam, long now) {
+    private static boolean update(LFConfig c, Lyrics.Line line, long progress, Vec3 cam, long now) {
         if (line.text == null || line.text.isBlank() || line.words.isEmpty()) {
             return false;
         }
@@ -437,7 +437,7 @@ final class AirLyrics {
         return Character.isLetterOrDigit(ch) || ch == '*' || ch == '\'';
     }
 
-    private static void spawn(String text, LFConfig c, class_243 cam, long now) {
+    private static void spawn(String text, LFConfig c, Vec3 cam, long now) {
         double nz;
         double nx;
         if (text == null || text.isEmpty()) {
@@ -485,9 +485,9 @@ final class AirLyrics {
         double dx = -Math.sin(bAz) * Math.cos(bEl);
         double dy = Math.sin(bEl);
         double dz = Math.cos(bAz) * Math.cos(bEl);
-        double x = cam.field_1352 + dx * bDist;
-        double y = cam.field_1351 + dy * bDist;
-        double z = cam.field_1350 + dz * bDist;
+        double x = cam.x + dx * bDist;
+        double y = cam.y + dy * bDist;
+        double z = cam.z + dz * bDist;
         double h = Math.sqrt(dx * dx + dz * dz);
         if (h < 1.0E-4) {
             double yr = Math.toRadians(yaw);
@@ -510,14 +510,14 @@ final class AirLyrics {
         }
     }
 
-    private static double overlap(double az, double el, double dist, double hw, double hh, class_243 cam) {
+    private static double overlap(double az, double el, double dist, double hw, double hh, Vec3 cam) {
         double score = 0.0;
         double angW = hw / dist;
         double angH = hh / dist;
         for (Word o : WORDS) {
-            double ex = o.x - cam.field_1352;
-            double ey = o.y - cam.field_1351;
-            double ez = o.z - cam.field_1350;
+            double ex = o.x - cam.x;
+            double ey = o.y - cam.y;
+            double ez = o.z - cam.z;
             double d = Math.sqrt(ex * ex + ey * ey + ez * ez);
             if (d < 0.5) continue;
             double oAz = Math.atan2(-ex, ez);
@@ -532,7 +532,7 @@ final class AirLyrics {
         return score;
     }
 
-    private static void draw(LFConfig c, class_4597 buf, Matrix4f base, class_243 cam, long now, float fadeMs, class_327.class_6415 mode, float alpha) {
+    private static void draw(LFConfig c, LegacyBufferSource buf, Matrix4f base, Vec3 cam, long now, float fadeMs, Font.DisplayMode mode, float alpha) {
         if (WORDS.isEmpty()) {
             return;
         }
@@ -560,7 +560,7 @@ final class AirLyrics {
                 a *= 1.0f - k * k;
                 bright = 1.0f - 0.5f * AirLyrics.easeOut(AirLyrics.clamp01((float)(now - w.gone) / 240.0f));
             }
-            if (a < 0.03f || (rx = w.x - cam.field_1352) * vfx + (ry = w.y + (drift = Math.min((double)age / 1000.0 * 0.25, 1.0)) - cam.field_1351) * vfy + (rz = w.z - cam.field_1350) * vfz < 0.3) continue;
+            if (a < 0.03f || (rx = w.x - cam.x) * vfx + (ry = w.y + (drift = Math.min((double)age / 1000.0 * 0.25, 1.0)) - cam.y) * vfy + (rz = w.z - cam.z) * vfz < 0.3) continue;
             double ct = Math.cos(w.tilt);
             double st = Math.sin(w.tilt);
             double nx = w.nx * ct - w.nz * st;
@@ -611,9 +611,9 @@ final class AirLyrics {
             AirLyrics.text(m, shown, font, 0.7f, 0.9f, -0.5f, 328716, a * 0.55f, buf, mode);
             AirLyrics.text(m, shown, font, 0.0f, 0.0f, 0.3f, col, a, buf, mode);
         }
-        if (buf instanceof class_4597.class_4598) {
-            class_4597.class_4598 bs = (class_4597.class_4598)buf;
-            bs.method_22993();
+        if (buf instanceof LegacyBufferSource.BufferSource) {
+            LegacyBufferSource.BufferSource bs = (LegacyBufferSource.BufferSource)buf;
+            bs.endBatch();
         }
     }
 
@@ -652,7 +652,6 @@ final class AirLyrics {
         long exitAt;
 
         SkyLine(Lyrics.Line l, double az, double el, double dpp, String font) {
-            int rowsN;
             this.line = l;
             int n = l.words.size();
             this.shown = new long[n];
@@ -684,7 +683,7 @@ final class AirLyrics {
             if (cn == 0) {
                 return;
             }
-            int n2 = cn <= 2 ? 1 : (rowsN = cn >= 6 && RND.nextFloat() < 0.35f ? 3 : 2);
+            int rowsN = cn <= 2 ? 1 : (cn >= 6 && RND.nextFloat() < 0.35f ? 3 : 2);
             if (cn == 3 && RND.nextFloat() < 0.35f) {
                 rowsN = 1;
             }
@@ -710,7 +709,7 @@ final class AirLyrics {
             double lift = 2.5 + RND.nextDouble() * 6.0;
             double stair = (double)(RND.nextBoolean() ? 1 : -1) * (5.0 + RND.nextDouble() * 8.0);
             for (int r = 0; r < rows.size(); ++r) {
-                List rr = (List)rows.get(r);
+                List<Chunk> rr = rows.get(r);
                 double total = -gap;
                 for (Chunk ch : rr) {
                     total += gap + (double)ch.widthU * dpp * (double)ch.size;
@@ -787,4 +786,3 @@ final class AirLyrics {
         }
     }
 }
-

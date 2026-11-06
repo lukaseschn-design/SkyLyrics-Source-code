@@ -2,20 +2,20 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_12249
- *  net.minecraft.class_1297
- *  net.minecraft.class_1922
- *  net.minecraft.class_1944
- *  net.minecraft.class_2338
- *  net.minecraft.class_243
- *  net.minecraft.class_2680
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_4608
- *  net.minecraft.class_742
- *  net.minecraft.class_765
+ *  net.minecraft.client.renderer.rendertype.RenderTypes
+ *  net.minecraft.world.entity.Entity
+ *  net.minecraft.world.level.BlockGetter
+ *  net.minecraft.world.level.LightLayer
+ *  net.minecraft.core.BlockPos
+ *  net.minecraft.world.phys.Vec3
+ *  net.minecraft.world.level.block.state.BlockState
+ *  net.minecraft.resources.Identifier
+ *  net.minecraft.client.Minecraft
+ *  com.mojang.blaze3d.vertex.VertexConsumer
+ *  dev.lyricsflow.compat.LegacyBufferSource
+ *  net.minecraft.client.renderer.texture.OverlayTexture
+ *  net.minecraft.client.player.AbstractClientPlayer
+ *  net.minecraft.client.renderer.LightTexture
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  *  org.joml.Quaternionf
@@ -40,20 +40,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
-import net.minecraft.class_12249;
-import net.minecraft.class_1297;
-import net.minecraft.class_1922;
-import net.minecraft.class_1944;
-import net.minecraft.class_2338;
-import net.minecraft.class_243;
-import net.minecraft.class_2680;
-import net.minecraft.class_2960;
-import net.minecraft.class_310;
-import net.minecraft.class_4588;
-import net.minecraft.class_4597;
-import net.minecraft.class_4608;
-import net.minecraft.class_742;
-import net.minecraft.class_765;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.lyricsflow.compat.LegacyBufferSource;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.player.AbstractClientPlayer;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Quaternionf;
@@ -220,25 +219,25 @@ public final class DeathFx {
         o.e = (float)(0.9 * Math.exp(-t * 12.0f) + (t >= 1.9f ? 0.8 * Math.exp(-(t - 1.9f) * 7.0f) : 0.0));
     }
 
-    public static void tick(class_310 mc) {
+    public static void tick(Minecraft mc) {
         Config c = Core.cfg();
-        if (mc.field_1687 != null && mc.field_1724 != null) {
+        if (mc.level != null && mc.player != null) {
             if (c.deathFx <= 0 || !ConfigManager.get().enabled) {
                 ACTIVE.clear();
                 TRIGGERED.clear();
             } else {
                 SEEN.clear();
-                for (class_742 p : mc.field_1687.method_18456()) {
-                    int id = p.method_5628();
+                for (AbstractClientPlayer p : mc.level.players()) {
+                    int id = p.getId();
                     SEEN.add(id);
-                    boolean dead = p.method_29504();
+                    boolean dead = p.isDeadOrDying();
                     if (!dead) {
                         TRIGGERED.remove(id);
                         continue;
                     }
                     if (TRIGGERED.contains(id)) continue;
                     TRIGGERED.add(id);
-                    if (p == mc.field_1724 || p.method_5858((class_1297)mc.field_1724) > 6400.0 || !c.deathOthers && !DeathFx.killedByMe(id)) continue;
+                    if (p == mc.player || p.distanceToSqr((Entity)mc.player) > 6400.0 || !c.deathOthers && !DeathFx.killedByMe(id)) continue;
                     DeathFx.spawn(mc, p, false, false);
                 }
                 TRIGGERED.retainAll(SEEN);
@@ -251,9 +250,9 @@ public final class DeathFx {
         }
     }
 
-    public static void onAttack(class_1297 target) {
-        if (target instanceof class_742) {
-            HITS.put(target.method_5628(), System.currentTimeMillis());
+    public static void onAttack(Entity target) {
+        if (target instanceof AbstractClientPlayer) {
+            HITS.put(target.getId(), System.currentTimeMillis());
         }
     }
 
@@ -263,58 +262,58 @@ public final class DeathFx {
     }
 
     public static void test() {
-        class_310 mc = class_310.method_1551();
-        if (mc.field_1724 != null && mc.field_1687 != null) {
-            DeathFx.spawn(mc, (class_742)mc.field_1724, false, true);
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null && mc.level != null) {
+            DeathFx.spawn(mc, (AbstractClientPlayer)mc.player, false, true);
         }
     }
 
-    public static boolean hides(class_1297 e) {
+    public static boolean hides(Entity e) {
         if (Core.cfg().deathFx > 0 && e != null && ConfigManager.get().enabled) {
-            int id = e.method_5628();
-            return TRIGGERED.contains(id) && e instanceof class_742;
+            int id = e.getId();
+            return TRIGGERED.contains(id) && e instanceof AbstractClientPlayer;
         }
         return false;
     }
 
-    static void spawn(class_310 mc, class_742 p, boolean self, boolean test) {
+    static void spawn(Minecraft mc, AbstractClientPlayer p, boolean self, boolean test) {
         int i;
         int i2;
         if (ACTIVE.size() >= 6) {
             ACTIVE.remove(0);
         }
         Fx f = new Fx();
-        f.id = p.method_5628();
+        f.id = p.getId();
         f.self = self;
         f.test = test;
         f.kind = Math.max(1, Core.cfg().deathFx);
-        class_243 pos = p.method_73189();
-        f.yaw = (float)Math.toRadians(p.field_6283);
+        Vec3 pos = p.position();
+        f.yaw = (float)Math.toRadians(p.yBodyRot);
         if (test) {
-            double yr = Math.toRadians(p.method_36454());
-            pos = pos.method_1031(-Math.sin(yr) * 3.2, 0.0, Math.cos(yr) * 3.2);
-            f.yaw = (float)Math.toRadians(p.method_36454() + 180.0f);
+            double yr = Math.toRadians(p.getYRot());
+            pos = pos.add(-Math.sin(yr) * 3.2, 0.0, Math.cos(yr) * 3.2);
+            f.yaw = (float)Math.toRadians(p.getYRot() + 180.0f);
             f.id = Integer.MIN_VALUE;
         }
         f.start = System.nanoTime();
         try {
-            f.skin = p.method_52814().comp_1626().comp_3627();
+            f.skin = p.getSkin().body().texturePath();
         }
         catch (Throwable var35) {
             f.skin = null;
         }
-        double gy = pos.field_1351;
+        double gy = pos.y;
         int top = 5999164;
         int under = 8017460;
         try {
             for (int dy = 0; dy <= 8; ++dy) {
-                class_2338 bp = class_2338.method_49637((double)pos.field_1352, (double)(pos.field_1351 - 0.01 - (double)dy), (double)pos.field_1350);
-                class_2680 st = mc.field_1687.method_8320(bp);
-                if (st.method_26220((class_1922)mc.field_1687, bp).method_1110()) continue;
-                gy = (double)bp.method_10264() + 1.0;
-                int c1 = st.method_26205((class_1922)mc.field_1687, (class_2338)bp).field_16011;
-                class_2338 b2 = bp.method_10074();
-                int c2 = mc.field_1687.method_8320((class_2338)b2).method_26205((class_1922)mc.field_1687, (class_2338)b2).field_16011;
+                BlockPos bp = BlockPos.containing((double)pos.x, (double)(pos.y - 0.01 - (double)dy), (double)pos.z);
+                BlockState st = mc.level.getBlockState(bp);
+                if (st.getCollisionShape((BlockGetter)mc.level, bp).isEmpty()) continue;
+                gy = (double)bp.getY() + 1.0;
+                int c1 = st.getMapColor((BlockGetter)mc.level, (BlockPos)bp).col;
+                BlockPos b2 = bp.below();
+                int c2 = mc.level.getBlockState((BlockPos)b2).getMapColor((BlockGetter)mc.level, (BlockPos)b2).col;
                 if (c1 != 0) {
                     top = c1;
                 }
@@ -325,9 +324,9 @@ public final class DeathFx {
         catch (Throwable dy) {
             // empty catch block
         }
-        f.ox = pos.field_1352;
+        f.ox = pos.x;
         f.oy = gy;
-        f.oz = pos.field_1350;
+        f.oz = pos.z;
         f.groundCol = top;
         f.dirtCol = under;
         Random r = new Random(f.start ^ 31L * (long)f.id);
@@ -352,7 +351,7 @@ public final class DeathFx {
                 w *= 0.94;
             }
         }
-        f.cracks = (float[][])cr.toArray((T[])new float[0][]);
+        f.cracks = cr.toArray(new float[0][]);
         f.chunks = new float[42][];
         for (i2 = 0; i2 < f.chunks.length; ++i2) {
             boolean big = i2 < 12;
@@ -403,8 +402,8 @@ public final class DeathFx {
         ACTIVE.add(f);
     }
 
-    public static void render(class_310 mc, class_4597 buffers, Matrix4f base, class_243 cam, float pt) {
-        if (!ACTIVE.isEmpty() && mc.field_1687 != null) {
+    public static void render(Minecraft mc, LegacyBufferSource buffers, Matrix4f base, Vec3 cam, float pt) {
+        if (!ACTIVE.isEmpty() && mc.level != null) {
             long now = System.nanoTime();
             DeathFx.cameraAxes(mc, base, pt);
             Iterator<Fx> it = ACTIVE.iterator();
@@ -431,7 +430,7 @@ public final class DeathFx {
                 boolean bl = hard = f.kind >= 3;
                 float[] table = f.kind == 2 ? DeathCards.TT : (hard ? DeathHard.TT[Math.min(f.kind - 3, DeathHard.TT.length - 1)] : TT);
                 float t = table[Math.min(table.length - 1, Math.max(0, ms))];
-                float f2 = f.kind == 2 ? 4.2f : (tEnd = hard ? DeathHard.END[Math.min(f.kind - 3, DeathHard.END.length - 1)] : 4.75f);
+                tEnd = f.kind == 2 ? 4.2f : (hard ? DeathHard.END[Math.min(f.kind - 3, DeathHard.END.length - 1)] : 4.75f);
                 if (!(t > tEnd) && ms < table.length - 1) {
                     try {
                         if (f.kind == 2) {
@@ -458,7 +457,7 @@ public final class DeathFx {
     /*
      * WARNING - void declaration
      */
-    static void draw(class_310 mc, class_4597 buffers, Matrix4f base, class_243 cam, Fx f, float t) {
+    static void draw(Minecraft mc, LegacyBufferSource buffers, Matrix4f base, Vec3 cam, Fx f, float t) {
         if (Accessories.whiteTex()) {
             boolean bl;
             float sz;
@@ -466,11 +465,11 @@ public final class DeathFx {
             float y;
             float ag;
             float ai;
-            Matrix4f m = new Matrix4f((Matrix4fc)base).translate((float)(f.ox - cam.field_1352), (float)(f.oy - cam.field_1351), (float)(f.oz - cam.field_1350)).rotateY(-f.yaw);
+            Matrix4f m = new Matrix4f((Matrix4fc)base).translate((float)(f.ox - cam.x), (float)(f.oy - cam.y), (float)(f.oz - cam.z)).rotateY(-f.yaw);
             int light = DeathFx.light(mc, f.ox, f.oy + 0.5, f.oz);
             float fade = 1.0f - DeathFx.sm(3.7f, 4.7f, t);
-            boolean firstPerson = f.self && mc.field_1690.method_31044().method_31034();
-            class_4588 g = buffers.method_73477(class_12249.method_76023());
+            boolean firstPerson = f.self && mc.options.getCameraType().isFirstPerson();
+            VertexConsumer g = buffers.getBuffer(RenderTypes.debugQuads());
             float glow = DeathFx.sm(0.95f, 1.6f, t) * (1.0f + 0.2f * (float)Math.sin(t * 19.0f));
             float y0 = 0.02f;
             float sheen = (t < 1.62f ? 0.35f * glow : 0.42f * (float)Math.exp((double)(-(t - 1.62f)) * 1.2) + 0.22f) * fade * DeathFx.sm(0.95f, 1.3f, t);
@@ -501,14 +500,13 @@ public final class DeathFx {
                 DeathFx.disc(g, m, 1.7f, y0 + 0.02f, 0.85f, rr * 0.9f, rr, 16722500, 0.0f, 16722500, 0.9f * (1.0f - ag), 40);
                 DeathFx.disc(g, m, 1.7f, y0 + 0.02f, 0.85f, rr, rr * 1.04f, 16751272, 0.6f * (1.0f - ag), 16751272, 0.0f, 40);
             }
-            class_4588 w = buffers.method_73477(class_12249.method_75994((class_2960)Accessories.WHITE));
+            VertexConsumer w = buffers.getBuffer(RenderTypes.entityCutout((Identifier)Accessories.WHITE));
             boolean on = t >= 1.62f;
             float st = DeathFx.sTip(t);
             if (on) {
                 float s;
-                void var21_30;
-                boolean bl2 = false;
-                while (var21_30 < 44 && !((s = st - 0.26f - (float)var21_30 * 0.33f) <= SH - 2.5f)) {
+                int segment = 0;
+                while (segment < 44 && !((s = st - 0.26f - (float)segment * 0.33f) <= SH - 2.5f)) {
                     DeathFx.chainPoint(s, t, Q);
                     DeathFx.chainPoint(s + 0.06f, t, Q2);
                     float e = 0.0f;
@@ -525,11 +523,11 @@ public final class DeathFx {
                     int col = DeathFx.mix(0x2A2A32, 16722504, Math.min(1.0f, e));
                     int li = e > 0.35f ? 0xF000F0 : light;
                     Matrix4f lm = new Matrix4f((Matrix4fc)m).translate(Q[0], Q[1], Q[2]).rotate((Quaternionfc)DeathFx.toward(Q2[0] - Q[0], Q2[1] - Q[1], Q2[2] - Q[2]));
-                    if ((var21_30 & 1) == 1) {
+                    if ((segment & 1) == 1) {
                         lm.rotateY(1.5707964f);
                     }
                     DeathFx.link(w, lm, col, li);
-                    ++var21_30;
+                    ++segment;
                 }
                 DeathFx.chainPoint(st, t, Q);
                 DeathFx.chainPoint(st + 0.06f, t, Q2);
@@ -575,7 +573,7 @@ public final class DeathFx {
             DeathFx.pose(t, POSE);
             boolean bl3 = bl = DeathFx.POSE.p[1] > -1.4f && !firstPerson;
             if (bl && f.skin != null) {
-                class_4588 sk = buffers.method_73477(class_12249.method_75994((class_2960)f.skin));
+                VertexConsumer sk = buffers.getBuffer(RenderTypes.entityCutout((Identifier)f.skin));
                 int bl2 = DeathFx.light(mc, f.ox + (double)DeathFx.POSE.p[0], f.oy + (double)DeathFx.POSE.p[1], f.oz + (double)DeathFx.POSE.p[2]);
                 float ex = Math.min(1.0f, DeathFx.POSE.e);
                 int tint = 0xFFFF0000 | Math.round(255.0f * (1.0f - 0.6f * ex)) << 8 | Math.round(255.0f * (1.0f - 0.6f * ex));
@@ -583,7 +581,7 @@ public final class DeathFx {
             }
             if (SkyTextures.spritesReady()) {
                 float a;
-                class_4588 sp = buffers.method_73477(class_12249.method_76022((class_2960)SkyTextures.SPRITES));
+                VertexConsumer sp = buffers.getBuffer(RenderTypes.text((Identifier)SkyTextures.SPRITES));
                 float rx = AX[0];
                 float ry = AX[1];
                 float rz = AX[2];
@@ -620,7 +618,7 @@ public final class DeathFx {
         }
     }
 
-    static void cameraAxes(class_310 mc, Matrix4f base, float pt) {
+    static void cameraAxes(Minecraft mc, Matrix4f base, float pt) {
         boolean identity;
         boolean bl = identity = Math.abs(base.m00() - 1.0f) + Math.abs(base.m11() - 1.0f) + Math.abs(base.m22() - 1.0f) < 1.0E-4f;
         if (!identity) {
@@ -631,9 +629,9 @@ public final class DeathFx {
             DeathFx.AX[4] = base.m11();
             DeathFx.AX[5] = base.m21();
         } else {
-            double y = Math.toRadians(mc.field_1724.method_5705(pt));
-            double p = Math.toRadians(mc.field_1724.method_5695(pt));
-            if (mc.field_1690.method_31044().method_31035()) {
+            double y = Math.toRadians(mc.player.getViewYRot(pt));
+            double p = Math.toRadians(mc.player.getViewXRot(pt));
+            if (mc.options.getCameraType().isMirrored()) {
                 y += Math.PI;
                 p = -p;
             }
@@ -657,7 +655,7 @@ public final class DeathFx {
         return l < 1.0E-6f ? new Quaternionf() : new Quaternionf().rotationTo(0.0f, 1.0f, 0.0f, x / l, y / l, z / l);
     }
 
-    static void link(class_4588 w, Matrix4f m, int col, int light) {
+    static void link(VertexConsumer w, Matrix4f m, int col, int light) {
         float L = 0.25f;
         float W = 0.13f;
         float T = 0.034f;
@@ -667,7 +665,7 @@ public final class DeathFx {
         DeathFx.cube(w, m, -W + 2.0f * T, -L, -T, W - 2.0f * T, -L + 2.0f * T, T, col, light);
     }
 
-    static void spear(class_4588 w, Matrix4f m, int light, int edge) {
+    static void spear(VertexConsumer w, Matrix4f m, int light, int edge) {
         int dark = -14408660;
         DeathFx.cube(w, m, -0.09f, -0.12f, -0.09f, 0.09f, 0.1f, 0.09f, dark, light);
         float by = 0.12f;
@@ -690,7 +688,7 @@ public final class DeathFx {
         }
     }
 
-    static void body(class_4588 v, Matrix4f mb, Pose o, int tint, int light) {
+    static void body(VertexConsumer v, Matrix4f mb, Pose o, int tint, int light) {
         DeathFx.skinBox(v, mb, 8.0f, 12.0f, 4.0f, 0.0f, 16, 16, tint, light);
         DeathFx.skinBox(v, mb, 8.0f, 12.0f, 4.0f, 0.25f, 16, 32, tint, light);
         Matrix4f mh = new Matrix4f((Matrix4fc)mb).translate(0.0f, 0.3515625f, 0.0f).rotateX(o.head).translate(0.0f, 0.234375f, 0.0f);
@@ -710,7 +708,7 @@ public final class DeathFx {
         DeathFx.skinBox(v, ll, 4.0f, 12.0f, 4.0f, 0.25f, 0, 48, tint, light);
     }
 
-    static void skinBox(class_4588 vc, Matrix4f m, float w, float h, float d, float infl, int u, int v, int col, int light) {
+    static void skinBox(VertexConsumer vc, Matrix4f m, float w, float h, float d, float infl, int u, int v, int col, int light) {
         float hx = (w / 2.0f + infl) * 0.05859375f;
         float hy = (h / 2.0f + infl) * 0.05859375f;
         float hz = (d / 2.0f + infl) * 0.05859375f;
@@ -723,7 +721,7 @@ public final class DeathFx {
         DeathFx.face(vc, m, -hx, -hy, hz, hx, -hy, hz, hx, -hy, -hz, -hx, -hy, -hz, ((float)u + d + w) * k, (float)v * k, ((float)u + d + 2.0f * w) * k, ((float)v + d) * k, 0.0f, -1.0f, 0.0f, col, light);
     }
 
-    static void face(class_4588 vc, Matrix4f m, float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float u0, float v0, float u1, float v1, float nx, float ny, float nz, int col, int light) {
+    static void face(VertexConsumer vc, Matrix4f m, float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float u0, float v0, float u1, float v1, float nx, float ny, float nz, int col, int light) {
         Vector3f n = m.transformDirection(new Vector3f(nx, ny, nz)).normalize();
         DeathFx.vert(vc, m, x0, y0, z0, u0, v0, col, light, n);
         DeathFx.vert(vc, m, x1, y1, z1, u1, v0, col, light, n);
@@ -731,11 +729,11 @@ public final class DeathFx {
         DeathFx.vert(vc, m, x3, y3, z3, u0, v1, col, light, n);
     }
 
-    static void vert(class_4588 vc, Matrix4f m, float x, float y, float z, float u, float v, int col, int light, Vector3f n) {
-        vc.method_22918((Matrix4fc)m, x, y, z).method_39415(col).method_22913(u, v).method_22922(class_4608.field_21444).method_60803(light).method_22914(n.x, n.y, n.z);
+    static void vert(VertexConsumer vc, Matrix4f m, float x, float y, float z, float u, float v, int col, int light, Vector3f n) {
+        vc.addVertex((Matrix4fc)m, x, y, z).setColor(col).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(n.x, n.y, n.z);
     }
 
-    static void cube(class_4588 vc, Matrix4f m, float x0, float y0, float z0, float x1, float y1, float z1, int col, int light) {
+    static void cube(VertexConsumer vc, Matrix4f m, float x0, float y0, float z0, float x1, float y1, float z1, int col, int light) {
         float u = 0.5f;
         DeathFx.face(vc, m, x0, y1, z1, x1, y1, z1, x1, y0, z1, x0, y0, z1, u, u, u, u, 0.0f, 0.0f, 1.0f, col, light);
         DeathFx.face(vc, m, x1, y1, z0, x0, y1, z0, x0, y0, z0, x1, y0, z0, u, u, u, u, 0.0f, 0.0f, -1.0f, col, light);
@@ -745,7 +743,7 @@ public final class DeathFx {
         DeathFx.face(vc, m, x0, y0, z1, x1, y0, z1, x1, y0, z0, x0, y0, z0, u, u, u, u, 0.0f, -1.0f, 0.0f, col, light);
     }
 
-    static void tri(class_4588 vc, Matrix4f m, float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz, int col, int light) {
+    static void tri(VertexConsumer vc, Matrix4f m, float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz, int col, int light) {
         float e1x = bx - ax;
         float e1y = by - ay;
         float e1z = bz - az;
@@ -759,7 +757,7 @@ public final class DeathFx {
         DeathFx.vert(vc, m, cx, cy, cz, 0.5f, 0.5f, col, light, n);
     }
 
-    static void quadW(class_4588 vc, Matrix4f m, float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz, float dx, float dy, float dz, int col, int light) {
+    static void quadW(VertexConsumer vc, Matrix4f m, float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz, float dx, float dy, float dz, int col, int light) {
         Vector3f n = m.transformDirection(new Vector3f(0.0f, 0.0f, 1.0f)).normalize();
         DeathFx.vert(vc, m, ax, ay, az, 0.5f, 0.5f, col, light, n);
         DeathFx.vert(vc, m, bx, by, bz, 0.5f, 0.5f, col, light, n);
@@ -767,11 +765,11 @@ public final class DeathFx {
         DeathFx.vert(vc, m, dx, dy, dz, 0.5f, 0.5f, col, light, n);
     }
 
-    static void gv(class_4588 g, Matrix4f m, float x, float y, float z, int argb) {
-        g.method_22918((Matrix4fc)m, x, y, z).method_39415(argb);
+    static void gv(VertexConsumer g, Matrix4f m, float x, float y, float z, int argb) {
+        g.addVertex((Matrix4fc)m, x, y, z).setColor(argb);
     }
 
-    static void gquad(class_4588 g, Matrix4f m, float[] p, int c0, int c1, int c2, int c3) {
+    static void gquad(VertexConsumer g, Matrix4f m, float[] p, int c0, int c1, int c2, int c3) {
         DeathFx.gv(g, m, p[0], p[1], p[2], c0);
         DeathFx.gv(g, m, p[3], p[4], p[5], c1);
         DeathFx.gv(g, m, p[6], p[7], p[8], c2);
@@ -782,7 +780,7 @@ public final class DeathFx {
         DeathFx.gv(g, m, p[0], p[1], p[2], c0);
     }
 
-    static void disc(class_4588 g, Matrix4f m, float cx, float y, float cz, float r0, float r1, int cIn, float aIn, int cOut, float aOut, int seg) {
+    static void disc(VertexConsumer g, Matrix4f m, float cx, float y, float cz, float r0, float r1, int cIn, float aIn, int cOut, float aOut, int seg) {
         if (!(aIn <= 0.003f) || !(aOut <= 0.003f)) {
             int ci = DeathFx.argb(cIn, aIn);
             int co = DeathFx.argb(cOut, aOut);
@@ -810,7 +808,7 @@ public final class DeathFx {
         }
     }
 
-    static void strip(class_4588 g, Matrix4f m, float x0, float z0, float x1, float z1, float y, float w, int rgb, float a) {
+    static void strip(VertexConsumer g, Matrix4f m, float x0, float z0, float x1, float z1, float y, float w, int rgb, float a) {
         float dx = x1 - x0;
         float dz = z1 - z0;
         float l = (float)Math.sqrt(dx * dx + dz * dz);
@@ -834,7 +832,7 @@ public final class DeathFx {
         }
     }
 
-    static void ringAround(class_4588 g, Matrix4f m, float cx, float cy, float cz, float dx, float dy, float dz, float r, float width, int rgb, float a) {
+    static void ringAround(VertexConsumer g, Matrix4f m, float cx, float cy, float cz, float dx, float dy, float dz, float r, float width, int rgb, float a) {
         float l = (float)Math.sqrt(dx * dx + dy * dy + dz * dz);
         if (!(l < 1.0E-6f)) {
             float e1z;
@@ -888,14 +886,14 @@ public final class DeathFx {
         }
     }
 
-    static void sprite(class_4588 vc, Matrix4f base, Fx f, class_243 cam, float lx, float ly, float lz, float size, int k, int rgb, float a, float rx, float ry, float rz, float ux, float uy, float uz) {
+    static void sprite(VertexConsumer vc, Matrix4f base, Fx f, Vec3 cam, float lx, float ly, float lz, float size, int k, int rgb, float a, float rx, float ry, float rz, float ux, float uy, float uz) {
         if (!(a <= 0.02f)) {
             int i;
             float c = (float)Math.cos(-f.yaw);
             float s = (float)Math.sin(-f.yaw);
-            float wx = (float)(f.ox - cam.field_1352) + lx * c + lz * s;
-            float wy = (float)(f.oy - cam.field_1351) + ly;
-            float wz = (float)(f.oz - cam.field_1350) - lx * s + lz * c;
+            float wx = (float)(f.ox - cam.x) + lx * c + lz * s;
+            float wy = (float)(f.oy - cam.y) + ly;
+            float wz = (float)(f.oz - cam.z) - lx * s + lz * c;
             float h = size / 2.0f;
             int col = DeathFx.argb(rgb, a);
             float u0 = (float)k * 0.25f;
@@ -911,14 +909,14 @@ public final class DeathFx {
         }
     }
 
-    static void sv(class_4588 vc, Matrix4f base, float[] p, int i, float[][] uv, int col) {
-        vc.method_22918((Matrix4fc)base, p[i * 3], p[i * 3 + 1], p[i * 3 + 2]).method_39415(col).method_22913(uv[i][0], uv[i][1]).method_22922(class_4608.field_21444).method_60803(0xF000F0).method_22914(0.0f, 1.0f, 0.0f);
+    static void sv(VertexConsumer vc, Matrix4f base, float[] p, int i, float[][] uv, int col) {
+        vc.addVertex((Matrix4fc)base, p[i * 3], p[i * 3 + 1], p[i * 3 + 2]).setColor(col).setUv(uv[i][0], uv[i][1]).setOverlay(OverlayTexture.NO_OVERLAY).setLight(0xF000F0).setNormal(0.0f, 1.0f, 0.0f);
     }
 
-    static int light(class_310 mc, double x, double y, double z) {
+    static int light(Minecraft mc, double x, double y, double z) {
         try {
-            class_2338 bp = class_2338.method_49637((double)x, (double)y, (double)z);
-            return class_765.method_23687((int)mc.field_1687.method_8314(class_1944.field_9282, bp), (int)mc.field_1687.method_8314(class_1944.field_9284, bp));
+            BlockPos bp = BlockPos.containing((double)x, (double)y, (double)z);
+            return net.minecraft.util.LightCoordsUtil.pack((int)mc.level.getBrightness(LightLayer.BLOCK, bp), (int)mc.level.getBrightness(LightLayer.SKY, bp));
         }
         catch (Throwable var8) {
             return 0xF000F0;
@@ -1076,7 +1074,7 @@ public final class DeathFx {
         double oy;
         double oz;
         float yaw;
-        class_2960 skin;
+        Identifier skin;
         int kind = 1;
         Object extra;
         long start;
@@ -1094,4 +1092,3 @@ public final class DeathFx {
         }
     }
 }
-

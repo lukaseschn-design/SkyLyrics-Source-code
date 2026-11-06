@@ -4,13 +4,14 @@
  * Could not load the following classes:
  *  com.google.gson.JsonObject
  *  com.google.gson.JsonParser
- *  net.minecraft.class_156
+ *  net.minecraft.util.Util
  */
 package dev.lyricsflow.media;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.app.util.Fx;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.media.Track;
 import dev.lyricsflow.util.Http;
@@ -33,7 +34,6 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import net.minecraft.class_156;
 
 public final class SpotifyWeb {
     public static final String REDIRECT = "http://127.0.0.1:8789/callback";
@@ -175,7 +175,7 @@ public final class SpotifyWeb {
             sr.nextBytes(st);
             String stateTag = Base64.getUrlEncoder().withoutPadding().encodeToString(st);
             String url = "https://accounts.spotify.com/authorize?" + Http.query(Map.of("client_id", clientId, "response_type", "code", "redirect_uri", REDIRECT, "scope", SCOPES, "code_challenge_method", "S256", "code_challenge", challenge, "state", stateTag));
-            class_156.method_668().method_670(url);
+            Fx.openUri(url);
             String code = null;
             String err = null;
             while (code == null && err == null) {
@@ -513,4 +513,3 @@ public final class SpotifyWeb {
         sPos = -1L;
     }
 }
-

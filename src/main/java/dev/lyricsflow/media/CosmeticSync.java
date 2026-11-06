@@ -4,7 +4,7 @@
  * Could not load the following classes:
  *  com.google.gson.JsonObject
  *  com.google.gson.JsonParser
- *  net.minecraft.class_310
+ *  net.minecraft.client.Minecraft
  */
 package dev.lyricsflow.media;
 
@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Stream;
-import net.minecraft.class_310;
+import net.minecraft.client.Minecraft;
 
 public final class CosmeticSync {
     private static final String TOPIC = "https://ntfy.sh/lyricsflow-cosmetics-v1-7f3a9c";
@@ -58,12 +58,12 @@ public final class CosmeticSync {
         return others.getOrDefault(id, "none");
     }
 
-    public static void tick(class_310 mc) {
+    public static void tick(Minecraft mc) {
         LFConfig c = ConfigManager.get();
-        if (mc.field_1724 == null || mc.field_1687 == null || !c.enabled) {
+        if (mc.player == null || mc.level == null || !c.enabled) {
             return;
         }
-        CosmeticSync.startLive(mc.method_1548().method_44717());
+        CosmeticSync.startLive(mc.getUser().getProfileId());
         long now = System.currentTimeMillis();
         ArrayList<String> w = new ArrayList<String>();
         for (String x : c.worn()) {
@@ -71,7 +71,7 @@ public final class CosmeticSync {
             w.add(x);
         }
         String mine = w.isEmpty() ? "none" : String.join((CharSequence)",", w);
-        UUID me = mc.method_1548().method_44717();
+        UUID me = mc.getUser().getProfileId();
         if (!(me == null || mine.equals(sent) && now - sentAt <= 18000000L)) {
             if (!mine.equals(pending)) {
                 pending = mine;

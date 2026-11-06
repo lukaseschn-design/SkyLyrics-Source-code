@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "Yuki.lumiclient.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "TitleScreenMixin",
+    "SplashOverlayMixin",
+    "LevelLoadingScreenMixin",
+    "ScreenMixin",
+    "PressableWidgetMixin",
+    "SliderWidgetMixin",
+    "GameRendererMixin",
+    "KeyMappingAccessor"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

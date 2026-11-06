@@ -2,30 +2,34 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  com.mojang.blaze3d.pipeline.BlendFunction
- *  com.mojang.blaze3d.pipeline.RenderPipeline
- *  com.mojang.blaze3d.pipeline.RenderPipeline$Snippet
+ *  com.mojang.renderpearl.api.pipeline.BlendFunction
+ *  com.mojang.renderpearl.api.pipeline.RenderPipeline
+ *  com.mojang.renderpearl.api.pipeline.RenderPipeline$Snippet
  *  com.mojang.blaze3d.systems.RenderSystem
- *  com.mojang.blaze3d.vertex.VertexFormat$class_5596
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1044
- *  net.minecraft.class_10789
- *  net.minecraft.class_12247
- *  net.minecraft.class_1921
- *  net.minecraft.class_290
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
+ *  com.mojang.renderpearl.api.vertex.VertexFormat$Mode
+ *  com.mojang.blaze3d.platform.NativeImage
+ *  net.minecraft.client.renderer.texture.DynamicTexture
+ *  net.minecraft.client.renderer.texture.AbstractTexture
+ *  com.mojang.renderpearl.api.pipeline.UniformType
+ *  net.minecraft.client.renderer.rendertype.RenderSetup
+ *  net.minecraft.client.renderer.rendertype.RenderType
+ *  com.mojang.blaze3d.vertex.DefaultVertexFormat
+ *  net.minecraft.resources.Identifier
+ *  net.minecraft.client.Minecraft
  *  org.joml.Matrix3f
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  */
 package dev.lyricsflow.app.sky;
 
-import com.mojang.blaze3d.pipeline.BlendFunction;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.BlendFunction;
+import com.mojang.renderpearl.api.pipeline.BindGroupLayout;
+import com.mojang.renderpearl.api.pipeline.ColorTargetState;
+import com.mojang.renderpearl.api.pipeline.CompareOp;
+import com.mojang.renderpearl.api.pipeline.DepthStencilState;
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import dev.lyricsflow.app.Core;
 import dev.lyricsflow.app.config.Config;
 import dev.lyricsflow.app.config.Storage;
@@ -34,24 +38,37 @@ import dev.lyricsflow.app.sky.SkyPreset;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.time.LocalDateTime;
-import net.minecraft.class_1011;
-import net.minecraft.class_1043;
-import net.minecraft.class_1044;
-import net.minecraft.class_10789;
-import net.minecraft.class_12247;
-import net.minecraft.class_1921;
-import net.minecraft.class_290;
-import net.minecraft.class_2960;
-import net.minecraft.class_310;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import com.mojang.renderpearl.api.pipeline.UniformType;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.Minecraft;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 
 public final class LiveSkyShader {
-    private static final class_2960 TEX = class_2960.method_60655((String)"lyricsflow", (String)"live_sky_params");
-    private static final RenderPipeline PIPE = RenderPipeline.builder((RenderPipeline.Snippet[])new RenderPipeline.Snippet[0]).withLocation(class_2960.method_60655((String)"lyricsflow", (String)"pipeline/live_sky")).withUniform("DynamicTransforms", class_10789.field_60031).withUniform("Projection", class_10789.field_60031).withVertexShader(class_2960.method_60655((String)"lyricsflow", (String)"core/live_sky")).withFragmentShader(class_2960.method_60655((String)"lyricsflow", (String)"core/live_sky")).withSampler("Sampler0").withBlend(BlendFunction.TRANSLUCENT).withDepthWrite(false).withCull(false).withVertexFormat(class_290.field_1575, VertexFormat.class_5596.field_27382).build();
-    private static class_1921 type;
-    private static class_1043 tex;
+    private static final Identifier TEX = Identifier.fromNamespaceAndPath((String)"lyricsflow", (String)"live_sky_params");
+    private static final RenderPipeline PIPE = RenderPipeline.builder()
+        .withLocation(Identifier.fromNamespaceAndPath("lyricsflow", "pipeline/live_sky"))
+        .withBindGroupLayout(BindGroupLayout.builder()
+            .withUniform("DynamicTransforms", UniformType.UNIFORM_BUFFER)
+            .withUniform("Projection", UniformType.UNIFORM_BUFFER)
+            .build())
+        .withVertexShader(Identifier.fromNamespaceAndPath("lyricsflow", "core/live_sky"))
+        .withFragmentShader(Identifier.fromNamespaceAndPath("lyricsflow", "core/live_sky"))
+        .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
+        .withDepthStencilState(new DepthStencilState(CompareOp.LESS_THAN_OR_EQUAL, false))
+        .withCull(false)
+        .withVertexBinding(0, DefaultVertexFormat.POSITION_TEX_COLOR)
+        .withPrimitiveTopology(PrimitiveTopology.QUADS)
+        .build();
+    private static RenderType type;
+    private static DynamicTexture tex;
     private static int state;
     private static final int[] last;
     private static final int[] next;
@@ -64,15 +81,10 @@ public final class LiveSkyShader {
             return state > 0;
         }
         try {
-            if (!RenderSystem.getDevice().precompilePipeline(PIPE).isValid()) {
-                Core.LOG.warn("Himmel-Shader laesst sich nicht kompilieren - nehme den alten Himmel");
-                state = -1;
-                return false;
-            }
-            class_1011 img = new class_1011(16, 1, false);
-            tex = new class_1043(() -> "lyricsflow_live_sky", img);
-            class_310.method_1551().method_1531().method_4616(TEX, (class_1044)tex);
-            type = class_1921.method_75940((String)"lyricsflow_live_sky", (class_12247)class_12247.method_75927((RenderPipeline)PIPE).method_75934("Sampler0", TEX).method_75938());
+            NativeImage img = new NativeImage(16, 1, false);
+            tex = new DynamicTexture(() -> "lyricsflow_live_sky", img);
+            Minecraft.getInstance().getTextureManager().register(TEX, (AbstractTexture)tex);
+            type = RenderType.create((String)"lyricsflow_live_sky", (RenderSetup)RenderSetup.builder((RenderPipeline)PIPE).withTexture("Sampler0", TEX).createRenderSetup());
             state = 1;
             Core.LOG.info("Himmel-Shader aktiv");
         }
@@ -88,7 +100,7 @@ public final class LiveSkyShader {
         try {
             Object gpu = "";
             try {
-                gpu = RenderSystem.getDevice().getRenderer() + " / " + RenderSystem.getDevice().getVersion();
+                gpu = RenderSystem.getDevice().getDeviceInfo().name() + " / " + RenderSystem.getDevice().getDeviceInfo().backendName();
             }
             catch (Throwable throwable) {
                 // empty catch block
@@ -106,7 +118,7 @@ public final class LiveSkyShader {
         LiveSkyShader.status("Fehler beim Zeichnen: " + String.valueOf(t));
     }
 
-    public static class_1921 type() {
+    public static RenderType type() {
         return type;
     }
 
@@ -141,10 +153,10 @@ public final class LiveSkyShader {
             LiveSkyShader.last[i] = next[i];
             changed = true;
             int v = next[i];
-            tex.method_4525().method_61941(i, 0, (v & 0xFF) << 24 | v >>> 8);
+            tex.getPixels().setPixel(i, 0, (v & 0xFF) << 24 | v >>> 8);
         }
         if (changed) {
-            tex.method_4524();
+            tex.upload();
         }
     }
 
@@ -176,4 +188,3 @@ public final class LiveSkyShader {
         next = new int[16];
     }
 }
-

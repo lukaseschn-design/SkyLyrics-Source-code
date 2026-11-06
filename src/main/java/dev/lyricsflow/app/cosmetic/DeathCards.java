@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1044
- *  net.minecraft.class_12249
- *  net.minecraft.class_243
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
+ *  com.mojang.blaze3d.platform.NativeImage
+ *  net.minecraft.client.renderer.texture.DynamicTexture
+ *  net.minecraft.client.renderer.texture.AbstractTexture
+ *  net.minecraft.client.renderer.rendertype.RenderTypes
+ *  net.minecraft.world.phys.Vec3
+ *  net.minecraft.resources.Identifier
+ *  net.minecraft.client.Minecraft
+ *  com.mojang.blaze3d.vertex.VertexConsumer
+ *  dev.lyricsflow.compat.LegacyBufferSource
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  */
@@ -35,15 +35,15 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.Random;
 import javax.imageio.ImageIO;
-import net.minecraft.class_1011;
-import net.minecraft.class_1043;
-import net.minecraft.class_1044;
-import net.minecraft.class_12249;
-import net.minecraft.class_243;
-import net.minecraft.class_2960;
-import net.minecraft.class_310;
-import net.minecraft.class_4588;
-import net.minecraft.class_4597;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.lyricsflow.compat.LegacyBufferSource;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 
@@ -70,7 +70,7 @@ final class DeathCards {
     private static final float CW = 0.21f;
     private static final float CH = 0.29f;
     private static final float CT = 0.006f;
-    static final class_2960 CARDS;
+    static final Identifier CARDS;
     private static final int AW = 512;
     private static final int AH = 256;
     private static final int TW = 80;
@@ -214,7 +214,7 @@ final class DeathCards {
         return o[5] > 0.01f;
     }
 
-    static void draw(class_310 mc, class_4597 buffers, Matrix4f base, class_243 cam, DeathFx.Fx f, float t) {
+    static void draw(Minecraft mc, LegacyBufferSource buffers, Matrix4f base, Vec3 cam, DeathFx.Fx f, float t) {
         Object object = f.extra;
         if (object instanceof State) {
             State s = (State)object;
@@ -224,10 +224,10 @@ final class DeathCards {
                 float a;
                 float dz;
                 float dx;
-                Matrix4f m = new Matrix4f((Matrix4fc)base).translate((float)(f.ox - cam.field_1352), (float)(f.oy - cam.field_1351), (float)(f.oz - cam.field_1350)).rotateY(-f.yaw);
+                Matrix4f m = new Matrix4f((Matrix4fc)base).translate((float)(f.ox - cam.x), (float)(f.oy - cam.y), (float)(f.oz - cam.z)).rotateY(-f.yaw);
                 int light = DeathFx.light(mc, f.ox, f.oy + 1.0, f.oz);
-                boolean firstPerson = f.self && mc.field_1690.method_31044().method_31034();
-                class_4588 g = buffers.method_73477(class_12249.method_76023());
+                boolean firstPerson = f.self && mc.options.getCameraType().isFirstPerson();
+                VertexConsumer g = buffers.getBuffer(RenderTypes.debugQuads());
                 for (int i = 0; i < 8; ++i) {
                     if (t < DeathCards.appear(i) + 0.05f || t > 2.75f) continue;
                     boolean dash = t >= 1.15f + (float)i * 0.1f && t < 1.15f + (float)i * 0.1f + 0.14f;
@@ -273,7 +273,7 @@ final class DeathCards {
                 if ((as = (t - 2.05f) / 0.35f) > 0.0f && as < 1.0f) {
                     DeathCards.ringFlat(g, m, 0.0f, 1.1f, 0.0f, 0.2f + DeathFx.eo(as) * 1.6f, 0.3f + DeathFx.eo(as) * 1.75f, 16724048, 0.85f * (1.0f - as));
                 }
-                class_4588 w = buffers.method_73477(class_12249.method_75994((class_2960)Accessories.WHITE));
+                VertexConsumer w = buffers.getBuffer(RenderTypes.entityCutout((Identifier)Accessories.WHITE));
                 if (t >= 2.05f && !firstPerson) {
                     for (int j = 0; j < SLICES.length; ++j) {
                         Matrix4f pm = DeathCards.pieceMatrix(m, s, j, t);
@@ -333,14 +333,14 @@ final class DeathCards {
                         DeathCards.chip(w, cm, Float.floatToRawIntBits(c[4]) | 0xFF000000, light);
                     }
                 }
-                class_4588 cv = buffers.method_73477(class_12249.method_75994((class_2960)CARDS));
+                VertexConsumer cv = buffers.getBuffer(RenderTypes.entityCutout((Identifier)CARDS));
                 for (int ixxx = 0; ixxx < 8; ++ixxx) {
                     if (!DeathCards.card(ixxx, t, C) || C[5] <= 0.01f) continue;
                     Matrix4f cm = new Matrix4f((Matrix4fc)m).translate(C[0], C[1], C[2]).rotateY(C[3]).rotateX(C[4]).scale(C[5]);
                     DeathCards.cardQuad(cv, cm, s.face[ixxx]);
                 }
                 if (!firstPerson && f.skin != null) {
-                    class_4588 sk = buffers.method_73477(class_12249.method_75994((class_2960)f.skin));
+                    VertexConsumer sk = buffers.getBuffer(RenderTypes.entityCutout((Identifier)f.skin));
                     int bl = DeathFx.light(mc, f.ox, f.oy + 1.2, f.oz);
                     if (t < 2.05f) {
                         float e = (float)(0.8 * Math.exp(-t * 10.0f));
@@ -375,7 +375,7 @@ final class DeathCards {
                     }
                 }
                 if (SkyTextures.spritesReady()) {
-                    class_4588 sp = buffers.method_73477(class_12249.method_76022((class_2960)SkyTextures.SPRITES));
+                    VertexConsumer sp = buffers.getBuffer(RenderTypes.text((Identifier)SkyTextures.SPRITES));
                     float rx = DeathFx.AX[0];
                     float ry = DeathFx.AX[1];
                     float rz = DeathFx.AX[2];
@@ -459,7 +459,7 @@ final class DeathCards {
         return new Matrix4f((Matrix4fc)m).translate(B[0], B[1], B[2]).rotate(ang, p[3], p[4], p[5]).scale(sc).translate(0.0f, -y0, 0.0f);
     }
 
-    private static void slice(class_4588 vc, Matrix4f m, float[] p, int lo, int hi, int col, int light) {
+    private static void slice(VertexConsumer vc, Matrix4f m, float[] p, int lo, int hi, int col, int light) {
         float b;
         float p0 = p[1];
         float p1 = p[1] + p[3];
@@ -471,7 +471,7 @@ final class DeathCards {
         }
     }
 
-    private static void caps(class_4588 w, Matrix4f m, float[] p, int lo, int hi, int col) {
+    private static void caps(VertexConsumer w, Matrix4f m, float[] p, int lo, int hi, int col) {
         float b;
         float p0 = p[1];
         float p1 = p[1] + p[3];
@@ -492,7 +492,7 @@ final class DeathCards {
         }
     }
 
-    private static void box(class_4588 vc, Matrix4f m, float w, float h, float d, float infl, int u, int v, float y0, float y1, int col, int light) {
+    private static void box(VertexConsumer vc, Matrix4f m, float w, float h, float d, float infl, int u, int v, float y0, float y1, int col, int light) {
         float hx = (w / 2.0f + infl) * 0.05859375f;
         float hz = (d / 2.0f + infl) * 0.05859375f;
         float yb = (y0 - h / 2.0f) * 0.05859375f - (y0 <= 0.0f ? infl * 0.05859375f : 0.0f);
@@ -512,14 +512,14 @@ final class DeathCards {
         }
     }
 
-    private static void cardQuad(class_4588 vc, Matrix4f m, int tile) {
+    private static void cardQuad(VertexConsumer vc, Matrix4f m, int tile) {
         float[] f = DeathCards.uv(tile);
         float[] b = DeathCards.uv(0);
         DeathFx.face(vc, m, -0.21f, 0.006f, -0.29f, 0.21f, 0.006f, -0.29f, 0.21f, 0.006f, 0.29f, -0.21f, 0.006f, 0.29f, f[0], f[1], f[2], f[3], 0.0f, 1.0f, 0.0f, -1, 0xF000F0);
         DeathFx.face(vc, m, 0.21f, -0.006f, -0.29f, -0.21f, -0.006f, -0.29f, -0.21f, -0.006f, 0.29f, 0.21f, -0.006f, 0.29f, b[0], b[1], b[2], b[3], 0.0f, -1.0f, 0.0f, -1, 0xF000F0);
     }
 
-    private static void chip(class_4588 w, Matrix4f m, int col, int light) {
+    private static void chip(VertexConsumer w, Matrix4f m, int col, int light) {
         float r = 0.075f;
         float h = 0.014f;
         int rim = DeathFx.mix(col & 0xFFFFFF, 0xFFFFFF, 0.55f);
@@ -539,7 +539,7 @@ final class DeathCards {
         }
     }
 
-    private static void ribbon(class_4588 g, Matrix4f m, float ax, float ay, float az, float bx, float by, float bz, float wa, float wb, int rgb, float aa, float ab) {
+    private static void ribbon(VertexConsumer g, Matrix4f m, float ax, float ay, float az, float bx, float by, float bz, float wa, float wb, int rgb, float aa, float ab) {
         float dx = bx - ax;
         float dz = bz - az;
         float l = (float)Math.sqrt(dx * dx + dz * dz);
@@ -577,7 +577,7 @@ final class DeathCards {
         }
     }
 
-    private static void cross(class_4588 g, Matrix4f m, float ax, float ay, float az, float bx, float by, float bz, float w, int rgb, float a) {
+    private static void cross(VertexConsumer g, Matrix4f m, float ax, float ay, float az, float bx, float by, float bz, float w, int rgb, float a) {
         DeathCards.ribbon(g, m, ax, ay, az, bx, by, bz, w, w, rgb, a, a);
         float dx = bx - ax;
         float dz = bz - az;
@@ -600,7 +600,7 @@ final class DeathCards {
         }
     }
 
-    private static void ringFlat(class_4588 g, Matrix4f m, float cx, float y, float cz, float r0, float r1, int rgb, float a) {
+    private static void ringFlat(VertexConsumer g, Matrix4f m, float cx, float y, float cz, float r0, float r1, int rgb, float a) {
         DeathFx.disc(g, m, cx, y, cz, r0, r1, rgb, 0.0f, rgb, a, 40);
         DeathFx.disc(g, m, cx, y, cz, r1, r1 * 1.05f, rgb, a, rgb, 0.0f, 40);
     }
@@ -641,7 +641,7 @@ final class DeathCards {
             g.dispose();
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write((RenderedImage)img, "png", out);
-            class_310.method_1551().method_1531().method_4616(CARDS, (class_1044)new class_1043(() -> "lyricsflow_cards", class_1011.method_49277((byte[])out.toByteArray())));
+            Minecraft.getInstance().getTextureManager().register(CARDS, (AbstractTexture)new DynamicTexture(() -> "lyricsflow_cards", NativeImage.read((byte[])out.toByteArray())));
             cardsReady = true;
         }
         catch (Throwable var9) {
@@ -749,7 +749,7 @@ final class DeathCards {
         LAND = new float[][]{{-0.17f, 0.02f, 0.05f, 0.35f}, {0.16f, 0.028f, -0.05f, -0.28f}};
         C = new float[6];
         C2 = new float[6];
-        CARDS = class_2960.method_60655((String)"lyricsflow", (String)"cosmetic/cards");
+        CARDS = Identifier.fromNamespaceAndPath((String)"lyricsflow", (String)"cosmetic/cards");
     }
 
     private static final class State {
@@ -765,4 +765,3 @@ final class DeathCards {
         }
     }
 }
-

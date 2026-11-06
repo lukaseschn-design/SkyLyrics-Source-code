@@ -2,22 +2,22 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_279
- *  net.minecraft.class_283
+ *  net.minecraft.client.renderer.PostChain
+ *  net.minecraft.client.renderer.PostPass
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.gen.Accessor
  */
 package dev.lyricsflow.mixin;
 
 import java.util.List;
-import net.minecraft.class_279;
-import net.minecraft.class_283;
+import net.minecraft.client.renderer.PostChain;
+import net.minecraft.client.renderer.PostPass;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(value={class_279.class})
+@Mixin(value={PostChain.class})
 public interface PostChainAccessor {
-    @Accessor(value="field_1497")
-    public List<class_283> lyricsflow$passes();
+    @Accessor(value="passes")
+    public List<PostPass> lyricsflow$passes();
 }
 

@@ -2,10 +2,10 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_4184
- *  net.minecraft.class_5636
- *  net.minecraft.class_638
- *  net.minecraft.class_758
+ *  net.minecraft.client.Camera
+ *  net.minecraft.world.level.material.FogType
+ *  net.minecraft.client.multiplayer.ClientLevel
+ *  net.minecraft.client.renderer.fog.FogRenderer
  *  org.joml.Vector4f
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
@@ -16,24 +16,23 @@ package dev.lyricsflow.mixin;
 
 import dev.lyricsflow.app.sky.WorldSky;
 import dev.lyricsflow.config.ConfigManager;
-import net.minecraft.class_4184;
-import net.minecraft.class_5636;
-import net.minecraft.class_638;
-import net.minecraft.class_758;
+import net.minecraft.client.Camera;
+import net.minecraft.world.level.material.FogType;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.fog.FogRenderer;
 import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value={class_758.class})
+@Mixin(value={FogRenderer.class})
 public abstract class FogRendererMixin {
-    @Inject(method={"method_62185"}, at={@At(value="RETURN")}, cancellable=true, require=0)
-    private void lyricsflow$skyFog(class_4184 camera, float pt, class_638 level, int renderDistance, float darken, CallbackInfoReturnable<Vector4f> cir) {
+    @Inject(method={"computeFogColor"}, at={@At(value="RETURN")}, cancellable=true, require=0)
+    private void lyricsflow$skyFog(Camera camera, float pt, ClientLevel level, int renderDistance, float darken, CallbackInfoReturnable<Vector4f> cir) {
         Vector4f v;
-        if (camera.method_19334() == class_5636.field_27888 && ConfigManager.get().enabled && (v = (Vector4f)cir.getReturnValue()) != null && WorldSky.tintFog(v)) {
-            cir.setReturnValue((Object)v);
+        if (camera.getFluidInCamera() == FogType.NONE && ConfigManager.get().enabled && (v = (Vector4f)cir.getReturnValue()) != null && WorldSky.tintFog(v)) {
+            cir.setReturnValue(v);
         }
     }
 }
-

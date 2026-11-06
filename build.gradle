@@ -1,5 +1,5 @@
 plugins {
-    id 'fabric-loom' version '1.9-SNAPSHOT'
+    id 'net.fabricmc.fabric-loom' version '1.17.20'
     id 'maven-publish'
 }
 
@@ -19,18 +19,23 @@ repositories {
             includeGroup 'maven.modrinth'
         }
     }
+    maven {
+        name = 'Terraformers'
+        url = 'https://maven.terraformersmc.com/releases/'
+    }
 }
 
 dependencies {
     // Minecraft
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-
     // Fabric Loader
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Mod Menu API (optional at runtime)
+    compileOnly "com.terraformersmc:modmenu:21.0.0"
 }
 
 processResources {
@@ -73,4 +78,3 @@ publishing {
         // }
     }
 }
-

@@ -2,21 +2,21 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  com.mojang.blaze3d.buffers.GpuBuffer
- *  com.mojang.blaze3d.buffers.GpuBufferSlice
+ *  com.mojang.renderpearl.api.buffers.GpuBuffer
+ *  com.mojang.renderpearl.api.buffers.GpuBufferSlice
  *  com.mojang.blaze3d.buffers.Std140Builder
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1297
- *  net.minecraft.class_243
- *  net.minecraft.class_279
- *  net.minecraft.class_283
- *  net.minecraft.class_310
- *  net.minecraft.class_4184
- *  net.minecraft.class_4587
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
- *  net.minecraft.class_9922
- *  net.minecraft.class_9960
+ *  net.minecraft.world.entity.Entity
+ *  net.minecraft.world.phys.Vec3
+ *  net.minecraft.client.renderer.PostChain
+ *  net.minecraft.client.renderer.PostPass
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.Camera
+ *  com.mojang.blaze3d.vertex.PoseStack
+ *  dev.lyricsflow.compat.LegacyBufferSource
+ *  dev.lyricsflow.compat.LegacyBufferSource$BufferSource
+ *  com.mojang.blaze3d.resource.GraphicsResourceAllocator
+ *  net.minecraft.client.renderer.LevelTargetBundle
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fStack
  *  org.joml.Matrix4fc
@@ -24,8 +24,8 @@
  */
 package dev.lyricsflow.render;
 
-import com.mojang.blaze3d.buffers.GpuBuffer;
-import com.mojang.blaze3d.buffers.GpuBufferSlice;
+import com.mojang.renderpearl.api.buffers.GpuBuffer;
+import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.buffers.Std140Builder;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.lyricsflow.SkyLyrics;
@@ -38,16 +38,16 @@ import dev.lyricsflow.render.WorldLyrics;
 import dev.lyricsflow.util.Anim;
 import java.nio.ByteBuffer;
 import java.util.Map;
-import net.minecraft.class_1297;
-import net.minecraft.class_243;
-import net.minecraft.class_279;
-import net.minecraft.class_283;
-import net.minecraft.class_310;
-import net.minecraft.class_4184;
-import net.minecraft.class_4587;
-import net.minecraft.class_4597;
-import net.minecraft.class_9922;
-import net.minecraft.class_9960;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.renderer.PostChain;
+import net.minecraft.client.renderer.PostPass;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Camera;
+import com.mojang.blaze3d.vertex.PoseStack;
+import dev.lyricsflow.compat.LegacyBufferSource;
+import com.mojang.blaze3d.resource.GraphicsResourceAllocator;
+import net.minecraft.client.renderer.LevelTargetBundle;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
 import org.joml.Matrix4fc;
@@ -63,7 +63,7 @@ public final class Chroma {
     private static float strength;
     private static boolean wasOn;
     private static GpuBuffer ubo;
-    private static class_279 hooked;
+    private static PostChain hooked;
     private static final Matrix4f VIEW;
     private static final Matrix4f PROJ;
     private static final Matrix4f INV;
@@ -85,8 +85,8 @@ public final class Chroma {
      * WARNING - Removed try catching itself - possible behaviour change.
      */
     public static void drawGhost() {
-        class_310 mc = class_310.method_1551();
-        if (mc.field_1687 == null || mc.field_1724 == null || !haveMatrices) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null || mc.player == null || !haveMatrices) {
             return;
         }
         Matrix4fStack mv = RenderSystem.getModelViewStack();
@@ -97,9 +97,9 @@ public final class Chroma {
             if (FOG != null) {
                 RenderSystem.setShaderFog((GpuBufferSlice)FOG);
             }
-            class_4597.class_4598 buffers = mc.method_22940().method_23000();
-            WorldLyrics.renderGhost(new class_4587(), (class_4597)buffers);
-            buffers.method_22993();
+            LegacyBufferSource.BufferSource buffers = LegacyBufferSource.current();
+            WorldLyrics.renderGhost(new PoseStack(), (LegacyBufferSource)buffers);
+            buffers.endBatch();
         }
         catch (Throwable t) {
             SkyLyrics.LOG.debug("ghost lyrics draw failed", t);
@@ -117,8 +117,8 @@ public final class Chroma {
      */
     public static void drawLate() {
         deferred = false;
-        class_310 mc = class_310.method_1551();
-        if (mc.field_1687 == null || mc.field_1724 == null || !haveMatrices) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null || mc.player == null || !haveMatrices) {
             return;
         }
         Matrix4fStack mv = RenderSystem.getModelViewStack();
@@ -129,10 +129,10 @@ public final class Chroma {
             if (FOG != null) {
                 RenderSystem.setShaderFog((GpuBufferSlice)FOG);
             }
-            class_4597.class_4598 buffers = mc.method_22940().method_23000();
-            Hud.renderWorldSky(new class_4587(), (class_4597)buffers);
-            WorldLyrics.renderWorld(new class_4587(), (class_4597)buffers);
-            buffers.method_22993();
+            LegacyBufferSource.BufferSource buffers = LegacyBufferSource.current();
+            Hud.renderWorldSky(new PoseStack(), (LegacyBufferSource)buffers);
+            WorldLyrics.renderWorld(new PoseStack(), (LegacyBufferSource)buffers);
+            buffers.endBatch();
         }
         catch (Throwable t) {
             SkyLyrics.LOG.debug("late lyrics draw failed", t);
@@ -145,25 +145,25 @@ public final class Chroma {
         }
     }
 
-    public static void capture(class_4184 camera, Matrix4f view, Matrix4f projection, GpuBufferSlice fog) {
+    public static void capture(Camera camera, Matrix4f view, Matrix4f projection, GpuBufferSlice fog) {
         FOG = fog;
         if (camera == null || view == null || projection == null) {
             return;
         }
         VIEW.set((Matrix4fc)view);
         PROJ.set((Matrix4fc)projection);
-        class_243 p = camera.method_71156();
-        camX = p.field_1352;
-        camY = p.field_1351;
-        camZ = p.field_1350;
+        Vec3 p = camera.position();
+        camX = p.x;
+        camY = p.y;
+        camZ = p.z;
         haveMatrices = true;
     }
 
-    public static void apply(class_9922 pool) {
+    public static void apply(GraphicsResourceAllocator pool) {
         boolean on;
         LFConfig c = ConfigManager.get();
-        class_310 mc = class_310.method_1551();
-        boolean bl = on = c.enabled && c.chroma && !failed && mc.field_1687 != null && mc.field_1724 != null;
+        Minecraft mc = Minecraft.getInstance();
+        boolean bl = on = c.enabled && c.chroma && !failed && mc.level != null && mc.player != null;
         if (on && !wasOn) {
             radius = 70.0f;
             strength = 1.0f;
@@ -176,11 +176,11 @@ public final class Chroma {
         } else if ((radius += (70.0f - radius) * (1.0f - (float)Math.exp(-dt * 2.5f))) > 68.0f) {
             strength = 0.0f;
         }
-        if (strength <= 0.0f || failed || !haveMatrices || mc.field_1687 == null || mc.field_1724 == null) {
+        if (strength <= 0.0f || failed || !haveMatrices || mc.level == null || mc.player == null) {
             return;
         }
         try {
-            class_279 chain = mc.method_62887().method_62941(SkyLyrics.id("chroma"), class_9960.field_53902);
+            PostChain chain = mc.getShaderManager().getPostChain(SkyLyrics.id("chroma"), LevelTargetBundle.MAIN_TARGETS);
             if (chain == null) {
                 return;
             }
@@ -191,7 +191,7 @@ public final class Chroma {
                 return;
             }
             Chroma.writeUniforms(mc, c);
-            chain.method_1258(mc.method_1522(), pool);
+            chain.process(mc.gameRenderer.mainRenderTarget(), pool);
         }
         catch (Throwable t) {
             failed = true;
@@ -199,9 +199,9 @@ public final class Chroma {
         }
     }
 
-    private static void hook(class_279 chain) {
+    private static void hook(PostChain chain) {
         hooked = chain;
-        for (class_283 pass : ((PostChainAccessor)chain).lyricsflow$passes()) {
+        for (PostPass pass : ((PostChainAccessor)chain).lyricsflow$passes()) {
             GpuBuffer old;
             Map<String, GpuBuffer> map = ((PostPassAccessor)pass).lyricsflow$uniforms();
             if (!map.containsKey("ChromaConfig") || (old = map.put("ChromaConfig", ubo = RenderSystem.getDevice().createBuffer(() -> "SkyLyrics Chroma", 136, 256L))) == null || old == ubo) continue;
@@ -209,10 +209,10 @@ public final class Chroma {
         }
     }
 
-    private static void writeUniforms(class_310 mc, LFConfig c) {
-        float pt = mc.method_61966().method_60637(false);
-        class_1297 e = mc.method_1560() != null ? mc.method_1560() : mc.field_1724;
-        class_243 pp = e.method_30950(pt);
+    private static void writeUniforms(Minecraft mc, LFConfig c) {
+        float pt = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        Entity e = mc.getCameraEntity() != null ? mc.getCameraEntity() : mc.player;
+        Vec3 pp = e.getPosition(pt);
         double bx = Math.floor(camX);
         double by = Math.floor(camY);
         double bz = Math.floor(camZ);
@@ -222,7 +222,7 @@ public final class Chroma {
             Std140Builder b = Std140Builder.onStack((MemoryStack)stack, (int)256);
             b.putMat4f((Matrix4fc)INV);
             b.putVec4((float)(camX - bx), (float)(camY - by), (float)(camZ - bz), 0.0f);
-            b.putVec4((float)(pp.field_1352 - bx), (float)(pp.field_1351 - by), (float)(pp.field_1350 - bz), radius);
+            b.putVec4((float)(pp.x - bx), (float)(pp.y - by), (float)(pp.z - bz), radius);
             b.putVec4(0.5f, look[6], strength, (float)Math.floorMod((long)bx, 256L));
             b.putVec4(look[0], look[1], look[2], (float)Math.floorMod((long)by, 256L));
             b.putVec4(look[3], look[4], look[5], (float)Math.floorMod((long)bz, 256L));
@@ -238,4 +238,3 @@ public final class Chroma {
         INV = new Matrix4f();
     }
 }
-

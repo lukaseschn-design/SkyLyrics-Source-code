@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_243
- *  net.minecraft.class_2561
- *  net.minecraft.class_310
- *  net.minecraft.class_327
- *  net.minecraft.class_327$class_6415
- *  net.minecraft.class_4597
+ *  net.minecraft.world.phys.Vec3
+ *  net.minecraft.network.chat.Component
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.Font
+ *  net.minecraft.client.gui.Font$DisplayMode
+ *  dev.lyricsflow.compat.LegacyBufferSource
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  */
@@ -26,11 +26,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-import net.minecraft.class_243;
-import net.minecraft.class_2561;
-import net.minecraft.class_310;
-import net.minecraft.class_327;
-import net.minecraft.class_4597;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import dev.lyricsflow.compat.LegacyBufferSource;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 
@@ -46,7 +46,7 @@ public final class FloatWords {
     private static int prevSlot = -1;
     private static String[] chunks = new String[0];
     private static int[] chunkOf = new int[0];
-    private static final Map<String, class_2561> COMP = new HashMap<String, class_2561>();
+    private static final Map<String, Component> COMP = new HashMap<String, Component>();
     private static final Matrix4f M0 = new Matrix4f();
     private static final Matrix4f TMP = new Matrix4f();
     private static final Matrix4f WM = new Matrix4f();
@@ -61,9 +61,9 @@ public final class FloatWords {
         lastChunk = -1;
     }
 
-    public static void renderWorld(class_310 mc, Config c, class_4597 buffers, Matrix4f base, class_243 cam, float pt, boolean through) {
+    public static void renderWorld(Minecraft mc, Config c, LegacyBufferSource buffers, Matrix4f base, Vec3 cam, float pt, boolean through) {
         if (mc != null && c != null && base != null && cam != null) {
-            if (c.lyricsSky && c.lyricsStyle == 1 && !mc.field_1690.field_1842 && mc.field_1724 != null && mc.field_1687 != null) {
+            if (c.lyricsSky && c.lyricsStyle == 1 && !mc.gui.hud.isHidden() && mc.player != null && mc.level != null) {
                 long now = System.currentTimeMillis();
                 boolean live = false;
                 NowPlaying np = SpotifyClient.now();
@@ -96,7 +96,7 @@ public final class FloatWords {
         }
     }
 
-    private static boolean update(class_310 mc, Config c, NowPlaying np, int li, long progress, class_243 cam, float pt, long now) {
+    private static boolean update(Minecraft mc, Config c, NowPlaying np, int li, long progress, Vec3 cam, float pt, long now) {
         NowPlaying.Line line = np.lines.get(li);
         String text = line.text();
         if (text != null && !text.isBlank()) {
@@ -140,12 +140,12 @@ public final class FloatWords {
         return c.lyricsSize / 1.7f;
     }
 
-    private static void spawn(String text, class_310 mc, Config c, class_243 cam, float pt, long now) {
+    private static void spawn(String text, Minecraft mc, Config c, Vec3 cam, float pt, long now) {
         if (text != null && !text.isEmpty()) {
             double nz;
             double nx;
-            float yaw = mc.field_1724.method_5705(pt);
-            float el0 = -mc.field_1724.method_5695(pt) + 12.0f;
+            float yaw = mc.player.getViewYRot(pt);
+            float el0 = -mc.player.getViewXRot(pt) + 12.0f;
             String txt = text.toUpperCase(Locale.ROOT);
             int widthPx = Gfx.w(txt, Gfx.LYRICS);
             double bestScore = Double.MAX_VALUE;
@@ -186,9 +186,9 @@ public final class FloatWords {
             double dx = -Math.sin(bAz) * Math.cos(bEl);
             double dy = Math.sin(bEl);
             double dz = Math.cos(bAz) * Math.cos(bEl);
-            double x = cam.field_1352 + dx * bDist;
-            double y = cam.field_1351 + dy * bDist;
-            double z = cam.field_1350 + dz * bDist;
+            double x = cam.x + dx * bDist;
+            double y = cam.y + dy * bDist;
+            double z = cam.z + dz * bDist;
             double h = Math.sqrt(dx * dx + dz * dz);
             if (h < 1.0E-4) {
                 double yr = Math.toRadians(yaw);
@@ -213,14 +213,14 @@ public final class FloatWords {
         }
     }
 
-    private static double overlapScore(double az, double el, double dist, double hw, double hh, class_243 cam) {
+    private static double overlapScore(double az, double el, double dist, double hw, double hh, Vec3 cam) {
         double score = 0.0;
         double angW = hw / dist;
         double angH = hh / dist;
         for (Word o : WORDS) {
-            double ex = o.x - cam.field_1352;
-            double ey = o.y - cam.field_1351;
-            double ez = o.z - cam.field_1350;
+            double ex = o.x - cam.x;
+            double ey = o.y - cam.y;
+            double ez = o.z - cam.z;
             double d = Math.sqrt(ex * ex + ey * ey + ez * ez);
             if (d < 0.5) continue;
             double oAz = Math.atan2(-ex, ez);
@@ -290,24 +290,24 @@ public final class FloatWords {
         return 1.0f - u * u * u;
     }
 
-    private static class_2561 comp(String s, int fontIdx) {
+    private static Component comp(String s, int fontIdx) {
         if (COMP.size() > 600) {
             COMP.clear();
         }
         return COMP.computeIfAbsent(fontIdx + "|" + s, k -> Gfx.comp(s, Gfx.LYRICS));
     }
 
-    private static void draw(class_310 mc, Config c, class_4597 buffers, Matrix4f base, class_243 cam, float pt, long now, float fadeMs, boolean through, NowPlaying np) {
+    private static void draw(Minecraft mc, Config c, LegacyBufferSource buffers, Matrix4f base, Vec3 cam, float pt, long now, float fadeMs, boolean through, NowPlaying np) {
         if (!WORDS.isEmpty()) {
-            class_327 font = mc.field_1772;
+            Font font = mc.font;
             int fontIdx = c.lyricsFont;
             int baseCol = c.lyricsColor >= 0 ? WorldSky.LYRIC_COLORS[Math.floorMod(c.lyricsColor, WorldSky.LYRIC_COLORS.length)] : 0xFFFFFF;
             boolean glow = c.lyricsGlow && AutoPerf.allow(3);
             int q = AutoPerf.quality();
             int glowN = q <= 0 ? 0 : (q == 1 ? 2 : 3);
-            class_327.class_6415 mode = through ? class_327.class_6415.field_33994 : class_327.class_6415.field_33993;
-            double yr = Math.toRadians(mc.field_1724.method_5705(pt));
-            double pr = Math.toRadians(mc.field_1724.method_5695(pt));
+            Font.DisplayMode mode = through ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL;
+            double yr = Math.toRadians(mc.player.getViewYRot(pt));
+            double pr = Math.toRadians(mc.player.getViewXRot(pt));
             double vfx = -Math.sin(yr) * Math.cos(pr);
             double vfy = -Math.sin(pr);
             double vfz = Math.cos(yr) * Math.cos(pr);
@@ -333,7 +333,7 @@ public final class FloatWords {
                     a *= 1.0f - k * k;
                     bright = 1.0f - 0.5f * FloatWords.easeOut(FloatWords.clamp01((float)(now - w.gone) / 240.0f));
                 }
-                if (a < 0.03f || (rx = w.x - cam.field_1352) * vfx + (ry = w.y + (drift = Math.min((double)age / 1000.0 * 0.25, 1.0)) - cam.field_1351) * vfy + (rz = w.z - cam.field_1350) * vfz < 0.3) continue;
+                if (a < 0.03f || (rx = w.x - cam.x) * vfx + (ry = w.y + (drift = Math.min((double)age / 1000.0 * 0.25, 1.0)) - cam.y) * vfy + (rz = w.z - cam.z) * vfz < 0.3) continue;
                 double ct = Math.cos(w.tilt);
                 double st = Math.sin(w.tilt);
                 double nx = w.nx * ct - w.nz * st;
@@ -375,7 +375,7 @@ public final class FloatWords {
                 int width = Gfx.w(txt, Gfx.LYRICS);
                 int shownLen = txt.length();
                 shownLen = Math.max(1, (int)Math.ceil((float)txt.length() * FloatWords.clamp01((float)age / 230.0f)));
-                class_2561 shown = FloatWords.comp(txt.substring(0, shownLen), fontIdx);
+                Component shown = FloatWords.comp(txt.substring(0, shownLen), fontIdx);
                 Matrix4f m = WM.set((Matrix4fc)m0);
                 if (current && beat > 0.01f) {
                     float bs = 1.0f + 0.06f * beat;
@@ -402,10 +402,10 @@ public final class FloatWords {
         }
     }
 
-    private static void put(class_327 font, class_4597 buffers, Matrix4f m, class_2561 text, float x, float y, float z, int rgb, float a, class_327.class_6415 mode) {
+    private static void put(Font font, LegacyBufferSource buffers, Matrix4f m, Component text, float x, float y, float z, int rgb, float a, Font.DisplayMode mode) {
         if (!(a <= 0.03f)) {
             Matrix4f mm = SCR.set((Matrix4fc)m).translate(x, y, z);
-            font.method_27522(text, 0.0f, 0.0f, Gfx.argbRaw(rgb, a), false, mm, buffers, mode, 0, 0xF000F0);
+            buffers.drawText(text, 0.0f, 0.0f, Gfx.argbRaw(rgb, a), false, mm, mode, 0, 0xF000F0);
         }
     }
 
@@ -442,4 +442,3 @@ public final class FloatWords {
         }
     }
 }
-

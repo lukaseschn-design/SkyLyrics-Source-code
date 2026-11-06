@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1074
- *  net.minecraft.class_11905
- *  net.minecraft.class_11908
- *  net.minecraft.class_304
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- *  net.minecraft.class_3675
- *  net.minecraft.class_3675$class_306
+ *  net.minecraft.client.resources.language.I18n
+ *  net.minecraft.client.input.CharacterEvent
+ *  net.minecraft.client.input.KeyEvent
+ *  net.minecraft.client.KeyMapping
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.GuiGraphicsExtractor
+ *  com.mojang.blaze3d.platform.InputConstants
+ *  com.mojang.blaze3d.platform.InputConstants$Key
  */
 package dev.lyricsflow.gui;
 
@@ -38,13 +38,13 @@ import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Supplier;
-import net.minecraft.class_1074;
-import net.minecraft.class_11905;
-import net.minecraft.class_11908;
-import net.minecraft.class_304;
-import net.minecraft.class_310;
-import net.minecraft.class_332;
-import net.minecraft.class_3675;
+import net.minecraft.client.resources.language.I18n;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import com.mojang.blaze3d.platform.InputConstants;
 
 public final class Ui {
     public static final int BG = -233697255;
@@ -67,7 +67,7 @@ public final class Ui {
     }
 
     public static String tr(String key, Object ... args) {
-        return class_1074.method_4662((String)key, (Object[])args);
+        return I18n.get((String)key, (Object[])args);
     }
 
     public static boolean inside(double mx, double my, float x, float y, float w, float h) {
@@ -116,7 +116,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             this.painter.paint(g, ox + this.x, oy + this.y, this.w, this.h, mx, my, a);
         }
 
@@ -126,7 +126,7 @@ public final class Ui {
         }
 
         public static interface Painter {
-            public void paint(class_332 var1, float var2, float var3, float var4, float var5, double var6, double var8, float var10);
+            public void paint(GuiGraphicsExtractor var1, float var2, float var3, float var4, float var5, double var6, double var8, float var10);
         }
 
         public static interface Clicker {
@@ -155,7 +155,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             this.drawHover(g, ox, oy, mx, my, a);
             Gfx.text(g, Ui.tr(this.label, new Object[0]), FB, ox + this.x + 2.0f, oy + this.y + 4.0f, 8.4f, Col.alpha(-856070, a));
             if (this.desc != null) {
@@ -172,7 +172,7 @@ public final class Ui {
             String shown = empty ? Ui.tr(this.placeholder, new Object[0]) : v;
             float tw = Gfx.textWidth(shown, F, 7.4f);
             float off = Math.max(0.0f, tw - (fw - 12.0f));
-            g.method_44379((int)fx + 1, (int)fy, (int)(fx + fw - 1.0f), (int)(fy + fh));
+            g.enableScissor((int)fx + 1, (int)fy, (int)(fx + fw - 1.0f), (int)(fy + fh));
             if (this.focused && this.all && !empty) {
                 Gfx.round(g, fx + 5.0f - off, fy + 2.5f, tw + 2.0f, fh - 5.0f, 2.0f, Col.alpha(Themes.accent(), a * 0.55f));
             }
@@ -181,7 +181,7 @@ public final class Ui {
                 float cx = fx + 6.0f - off + (empty ? 0.0f : tw) + 0.5f;
                 Gfx.rect(g, cx, fy + 3.5f, 0.8f, 8.0f, Col.alpha(-856070, a));
             }
-            g.method_44380();
+            g.disableScissor();
         }
 
         @Override
@@ -201,43 +201,43 @@ public final class Ui {
         }
 
         @Override
-        public boolean key(class_11908 e) {
+        public boolean key(KeyEvent e) {
             boolean ctrl;
             if (!this.focused) {
                 return false;
             }
             String v = this.get.get();
-            boolean bl = ctrl = (e.comp_4797() & 0xA) != 0;
-            if (ctrl && e.comp_4795() == 65) {
+            boolean bl = ctrl = (e.modifiers() & 0xA) != 0;
+            if (ctrl && e.key() == 65) {
                 this.all = true;
                 return true;
             }
-            if (ctrl && (e.comp_4795() == 67 || e.comp_4795() == 88)) {
-                class_310.method_1551().field_1774.method_1455(v);
-                if (e.comp_4795() == 88) {
+            if (ctrl && (e.key() == 67 || e.key() == 88)) {
+                Minecraft.getInstance().keyboardHandler.setClipboard(v);
+                if (e.key() == 88) {
                     this.set.accept("");
                     this.all = false;
                 }
-            } else if (e.comp_4795() == 259 || e.comp_4795() == 261) {
+            } else if (e.key() == 259 || e.key() == 261) {
                 if (this.all || ctrl) {
                     this.set.accept("");
                 } else if (!v.isEmpty()) {
                     this.set.accept(v.substring(0, v.length() - 1));
                 }
                 this.all = false;
-            } else if (e.comp_4795() == 86 && ctrl) {
-                String clip = class_310.method_1551().field_1774.method_1460();
+            } else if (e.key() == 86 && ctrl) {
+                String clip = Minecraft.getInstance().keyboardHandler.getClipboard();
                 this.set.accept(((this.all ? "" : v) + clip.trim()).replaceAll("[\\r\\n]", ""));
                 this.all = false;
             } else {
-                if (e.comp_4795() == 263 || e.comp_4795() == 262 || e.comp_4795() == 269 || e.comp_4795() == 268) {
+                if (e.key() == 263 || e.key() == 262 || e.key() == 269 || e.key() == 268) {
                     this.all = false;
                     return true;
                 }
-                if (e.comp_4795() == 257 || e.comp_4795() == 256 || e.comp_4795() == 258) {
+                if (e.key() == 257 || e.key() == 256 || e.key() == 258) {
                     this.focused = false;
                 } else {
-                    return e.comp_4795() != 256;
+                    return e.key() != 256;
                 }
             }
             Ui.save();
@@ -245,11 +245,11 @@ public final class Ui {
         }
 
         @Override
-        public boolean chr(class_11905 e) {
+        public boolean chr(CharacterEvent e) {
             if (!this.focused) {
                 return false;
             }
-            String s = e.method_74226();
+            String s = e.codepointAsString();
             if (s.isEmpty() || Character.isISOControl(s.charAt(0))) {
                 return true;
             }
@@ -267,34 +267,34 @@ public final class Ui {
 
     public static class KeyBind
     extends Row {
-        private final class_304 mapping;
+        private final KeyMapping mapping;
         private boolean listening;
 
-        public KeyBind(String label, String desc, class_304 mapping) {
+        public KeyBind(String label, String desc, KeyMapping mapping) {
             super(label, desc);
             this.mapping = mapping;
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             String s;
             this.drawHover(g, ox, oy, mx, my, a);
-            String string = s = this.listening ? Ui.tr("lyricsflow.menu.press_key", new Object[0]) : this.mapping.method_16007().getString();
-            if (this.mapping.method_1415() && !this.listening) {
+            String string = s = this.listening ? Ui.tr("lyricsflow.menu.press_key", new Object[0]) : this.mapping.getTranslatedKeyMessage().getString();
+            if (this.mapping.isUnbound() && !this.listening) {
                 s = Ui.tr("lyricsflow.menu.unbound", new Object[0]);
             }
             float kw = Math.max(26.0f, Gfx.textWidth(s, FB, 7.6f) + 14.0f);
             float kh = 15.0f;
             float kx = ox + this.x + this.w - kw - 2.0f;
             float ky = oy + this.y + (this.h - kh) / 2.0f;
-            boolean custom = !this.mapping.method_1427();
+            boolean custom = !this.mapping.isDefault();
             float rx = kx - 18.0f;
             float ry = oy + this.y + this.h / 2.0f;
             this.drawLabel(g, ox, oy, a, this.w - kw - (float)(custom ? 30 : 12));
             int bg = this.listening ? Col.lerp(-13883584, Themes.accent(), (float)(0.5 + 0.5 * Math.sin(Anim.seconds() * 6.0))) : -13883584;
             Gfx.round(g, kx, ky, kw, kh, 5.0f, Col.alpha(bg, a));
             Gfx.roundOutline(g, kx, ky, kw, kh, 5.0f, 0.5f, Col.alpha(0x30FFFFFF, a));
-            Gfx.textCentered(g, s, FB, kx + kw / 2.0f, ky + (kh - 7.6f) / 2.0f - 0.3f, 7.6f, Col.alpha(this.mapping.method_1415() && !this.listening ? -6515020 : -856070, a));
+            Gfx.textCentered(g, s, FB, kx + kw / 2.0f, ky + (kh - 7.6f) / 2.0f - 0.3f, 7.6f, Col.alpha(this.mapping.isUnbound() && !this.listening ? -6515020 : -856070, a));
             if (custom) {
                 boolean over = Ui.inside(mx, my, rx - 7.0f, ry - 7.0f, 14.0f, 14.0f);
                 Gfx.circle(g, rx, ry, 7.0f, Col.alpha(over ? 0x38FFFFFF : 0x1CFFFFFF, a));
@@ -307,8 +307,8 @@ public final class Ui {
 
         private float keyBoxX(float ox) {
             String s;
-            String string = s = this.listening ? Ui.tr("lyricsflow.menu.press_key", new Object[0]) : this.mapping.method_16007().getString();
-            if (this.mapping.method_1415() && !this.listening) {
+            String string = s = this.listening ? Ui.tr("lyricsflow.menu.press_key", new Object[0]) : this.mapping.getTranslatedKeyMessage().getString();
+            if (this.mapping.isUnbound() && !this.listening) {
                 s = Ui.tr("lyricsflow.menu.unbound", new Object[0]);
             }
             float kw = Math.max(26.0f, Gfx.textWidth(s, FB, 7.6f) + 14.0f);
@@ -323,10 +323,10 @@ public final class Ui {
                 this.listening = false;
                 return false;
             }
-            if (!this.mapping.method_1427() && !this.listening && Ui.inside(mx, my, (rx = this.keyBoxX(ox) - 18.0f) - 7.0f, (ry = oy + this.y + this.h / 2.0f) - 7.0f, 14.0f, 14.0f)) {
-                this.mapping.method_1422(this.mapping.method_1429());
-                class_304.method_1426();
-                class_310.method_1551().field_1690.method_1640();
+            if (!this.mapping.isDefault() && !this.listening && Ui.inside(mx, my, (rx = this.keyBoxX(ox) - 18.0f) - 7.0f, (ry = oy + this.y + this.h / 2.0f) - 7.0f, 14.0f, 14.0f)) {
+                this.mapping.setKey(this.mapping.getDefaultKey());
+                KeyMapping.resetMapping();
+                Minecraft.getInstance().options.save();
                 UiSounds.play(UiSounds.TOGGLE_ON, 1.1f);
                 return true;
             }
@@ -342,16 +342,16 @@ public final class Ui {
         }
 
         @Override
-        public boolean key(class_11908 e) {
+        public boolean key(KeyEvent e) {
             if (!this.listening) {
                 return false;
             }
-            class_310 mc = class_310.method_1551();
-            boolean clear = e.comp_4795() == 256 || e.comp_4795() == 259;
-            class_3675.class_306 k = clear ? class_3675.field_16237 : class_3675.method_15985((class_11908)e);
-            this.mapping.method_1422(k);
-            class_304.method_1426();
-            mc.field_1690.method_1640();
+            Minecraft mc = Minecraft.getInstance();
+            boolean clear = e.key() == 256 || e.key() == 259;
+            InputConstants.Key k = clear ? InputConstants.UNKNOWN : InputConstants.getKey((KeyEvent)e);
+            this.mapping.setKey(k);
+            KeyMapping.resetMapping();
+            mc.options.save();
             this.listening = false;
             UiSounds.play(UiSounds.TOGGLE_ON, 1.1f);
             return true;
@@ -390,7 +390,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             this.drawHover(g, ox, oy, mx, my, a);
             float dw = this.dotsW();
             this.drawLabel(g, ox, oy, a, this.w - dw - 10.0f);
@@ -456,7 +456,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             for (int i = 0; i < this.lines.size(); ++i) {
                 Gfx.text(g, this.lines.get(i), F, ox + this.x + 2.0f, oy + this.y + 3.0f + (float)i * 10.5f, 7.2f, Col.alpha(-6515020, a));
             }
@@ -487,7 +487,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             Gfx.text(g, Gfx.ellipsize(this.text.get(), FB, 8.6f, this.w - 30.0f), FB, ox + this.x + 2.0f, oy + this.y + 6.0f, 8.6f, Col.alpha(-856070, a));
             String s = this.sub.get();
             if (s != null) {
@@ -521,7 +521,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             int col;
             this.drawHover(g, ox, oy, mx, my, a);
             float bw = this.bw();
@@ -602,7 +602,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             this.drawHover(g, ox, oy, mx, my, a);
             double v = this.get.getAsDouble();
             float p = (float)((v - this.min) / (this.max - this.min));
@@ -706,7 +706,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             float cw = this.cw();
             int s = this.sel.getAsInt();
             for (int i = 0; i < 5; ++i) {
@@ -795,7 +795,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             float cw = this.cellW();
             int sel = this.get.getAsInt();
             for (int i = 0; i < this.ids.length; ++i) {
@@ -887,7 +887,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             float cw = this.cellW();
             float ph = this.picH();
             float ch = this.cellH();
@@ -1013,7 +1013,7 @@ public final class Ui {
         }
 
         @Override
-        protected void drawLabel(class_332 g, float ox, float oy, float a, float maxW) {
+        protected void drawLabel(GuiGraphicsExtractor g, float ox, float oy, float a, float maxW) {
             float ly = oy + this.y + 5.0f;
             Gfx.text(g, Gfx.ellipsize(Ui.tr(this.label, new Object[0]), FB, 8.4f, this.w - 4.0f), FB, ox + this.x + 2.0f, ly, 8.4f, Col.alpha(-856070, a));
             if (this.desc != null) {
@@ -1022,7 +1022,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             this.drawHover(g, ox, oy, mx, my, a);
             this.drawLabel(g, ox, oy, a, this.w);
             if (this.cx == null) {
@@ -1050,11 +1050,11 @@ public final class Ui {
                 boolean ro = Ui.inside(mx, my, rx, ry, 16.0f, 16.0f);
                 this.spin = Anim.approach(this.spin, 0.0f, 6.0f);
                 Gfx.round(g, rx, ry, 16.0f, 16.0f, 8.0f, Col.alpha(ro ? -13883584 : -15659240, a));
-                g.method_51448().pushMatrix();
-                g.method_51448().translate(rx + 8.0f, ry + 8.0f);
-                g.method_51448().rotate(-this.spin * 6.28f);
+                g.pose().pushMatrix();
+                g.pose().translate(rx + 8.0f, ry + 8.0f);
+                g.pose().rotate(-this.spin * 6.28f);
                 Icons.draw(g, "refresh", 0.0f, 0.0f, 8.0f, Col.alpha(ro ? -856070 : -9541498, a));
-                g.method_51448().popMatrix();
+                g.pose().popMatrix();
             }
         }
 
@@ -1128,7 +1128,7 @@ public final class Ui {
         }
 
         @Override
-        protected void drawLabel(class_332 g, float ox, float oy, float a, float maxW) {
+        protected void drawLabel(GuiGraphicsExtractor g, float ox, float oy, float a, float maxW) {
             if (!this.stacked) {
                 super.drawLabel(g, ox, oy, a, maxW);
                 return;
@@ -1141,7 +1141,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             this.drawHover(g, ox, oy, mx, my, a);
             int n = this.options.length;
             this.ox0 = new float[n];
@@ -1249,7 +1249,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             this.drawHover(g, ox, oy, mx, my, a);
             String v = this.value.get();
             String vf = this.valueFont != null && this.valueFont.get() != null ? this.valueFont.get() : FB;
@@ -1266,11 +1266,11 @@ public final class Ui {
                 boolean ro = Ui.inside(mx, my, this.rx, by, 16.0f, 16.0f);
                 this.spin = Anim.approach(this.spin, 0.0f, 6.0f);
                 Gfx.round(g, this.rx, by, 16.0f, 16.0f, 8.0f, Col.alpha(ro ? -13883584 : -15659240, a));
-                g.method_51448().pushMatrix();
-                g.method_51448().translate(this.rx + 8.0f, by + 8.0f);
-                g.method_51448().rotate(-this.spin * 6.28f);
+                g.pose().pushMatrix();
+                g.pose().translate(this.rx + 8.0f, by + 8.0f);
+                g.pose().rotate(-this.spin * 6.28f);
                 Icons.draw(g, "refresh", 0.0f, 0.0f, 8.0f, Col.alpha(ro ? -856070 : -9541498, a));
-                g.method_51448().popMatrix();
+                g.pose().popMatrix();
             }
             this.drawLabel(g, ox, oy, a, this.w - this.bw - 12.0f - extra);
             this.flash = Anim.approach(this.flash, 0.0f, 8.0f);
@@ -1329,7 +1329,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             this.drawHover(g, ox, oy, mx, my, a);
             boolean on = this.get.getAsBoolean();
             if (this.knob < 0.0f) {
@@ -1392,7 +1392,7 @@ public final class Ui {
             return true;
         }
 
-        protected void drawLabel(class_332 g, float ox, float oy, float a, float maxW) {
+        protected void drawLabel(GuiGraphicsExtractor g, float ox, float oy, float a, float maxW) {
             float ly = oy + this.y + (this.desc != null ? 6.0f : 7.5f);
             Gfx.text(g, Gfx.ellipsize(Ui.tr(this.label, new Object[0]), FB, 8.4f, maxW), FB, ox + this.x + 2.0f, ly, 8.4f, Col.alpha(-856070, a));
             if (this.desc != null) {
@@ -1400,7 +1400,7 @@ public final class Ui {
             }
         }
 
-        protected void drawHover(class_332 g, float ox, float oy, double mx, double my, float a) {
+        protected void drawHover(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             double age;
             boolean over = Ui.inside(mx, my, ox + this.x - 6.0f, oy + this.y, this.w + 12.0f, this.h);
             this.updateHover(over);
@@ -1410,9 +1410,9 @@ public final class Ui {
             if ((age = Anim.seconds() - this.rippleAt) < 0.45) {
                 float p = (float)(age / 0.45);
                 float r = 8.0f + p * 60.0f;
-                g.method_44379((int)(ox + this.x - 6.0f), (int)(oy + this.y), (int)Math.ceil(ox + this.x + this.w + 6.0f), (int)Math.ceil(oy + this.y + this.h));
+                g.enableScissor((int)(ox + this.x - 6.0f), (int)(oy + this.y), (int)Math.ceil(ox + this.x + this.w + 6.0f), (int)Math.ceil(oy + this.y + this.h));
                 Gfx.circle(g, (float)this.rippleX, (float)this.rippleY, r, Col.alpha(Themes.accent(), a * 0.16f * (1.0f - p)));
-                g.method_44380();
+                g.disableScissor();
             }
             this.pressT = Anim.approach(this.pressT, 0.0f, 10.0f);
         }
@@ -1457,7 +1457,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             Gfx.round(g, ox + this.x, oy + this.y, this.w, this.h, 9.0f, Col.alpha(-15001562, a));
             Gfx.roundOutline(g, ox + this.x, oy + this.y, this.w, this.h, 9.0f, 0.5f, Col.alpha(0x10FFFFFF, a));
             for (int i = 0; i < this.rows.size(); ++i) {
@@ -1492,7 +1492,7 @@ public final class Ui {
         }
 
         @Override
-        public boolean key(class_11908 e) {
+        public boolean key(KeyEvent e) {
             for (Widget r : this.rows) {
                 if (!r.key(e)) continue;
                 return true;
@@ -1501,7 +1501,7 @@ public final class Ui {
         }
 
         @Override
-        public boolean chr(class_11905 e) {
+        public boolean chr(CharacterEvent e) {
             for (Widget r : this.rows) {
                 if (!r.chr(e)) continue;
                 return true;
@@ -1533,7 +1533,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
         }
     }
 
@@ -1551,7 +1551,7 @@ public final class Ui {
         }
 
         @Override
-        public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
+        public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
             String s = Ui.tr(this.key, new Object[0]).toUpperCase(Locale.ROOT);
             Gfx.text(g, s, FB, ox + this.x + 2.0f, oy + this.y + 8.0f, 6.4f, Col.alpha(-6515020, a));
         }
@@ -1575,7 +1575,7 @@ public final class Ui {
 
         protected abstract float measure(float var1);
 
-        public abstract void render(class_332 var1, float var2, float var3, double var4, double var6, float var8);
+        public abstract void render(GuiGraphicsExtractor var1, float var2, float var3, double var4, double var6, float var8);
 
         protected boolean interactive() {
             return false;
@@ -1599,11 +1599,11 @@ public final class Ui {
         public void release() {
         }
 
-        public boolean key(class_11908 e) {
+        public boolean key(KeyEvent e) {
             return false;
         }
 
-        public boolean chr(class_11905 e) {
+        public boolean chr(CharacterEvent e) {
             return false;
         }
 

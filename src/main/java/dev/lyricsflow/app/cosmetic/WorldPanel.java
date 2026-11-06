@@ -2,26 +2,26 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  com.mojang.blaze3d.pipeline.RenderPipeline
- *  net.minecraft.class_10799
- *  net.minecraft.class_1109
- *  net.minecraft.class_1113
- *  net.minecraft.class_12247
- *  net.minecraft.class_12249
- *  net.minecraft.class_1921
- *  net.minecraft.class_243
- *  net.minecraft.class_2561
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_327
- *  net.minecraft.class_327$class_6415
- *  net.minecraft.class_3414
- *  net.minecraft.class_3417
- *  net.minecraft.class_4184
- *  net.minecraft.class_437
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
+ *  com.mojang.renderpearl.api.pipeline.RenderPipeline
+ *  net.minecraft.client.renderer.RenderPipelines
+ *  net.minecraft.client.resources.sounds.SimpleSoundInstance
+ *  net.minecraft.client.resources.sounds.SoundInstance
+ *  net.minecraft.client.renderer.rendertype.RenderSetup
+ *  net.minecraft.client.renderer.rendertype.RenderTypes
+ *  net.minecraft.client.renderer.rendertype.RenderType
+ *  net.minecraft.world.phys.Vec3
+ *  net.minecraft.network.chat.Component
+ *  net.minecraft.resources.Identifier
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.Font
+ *  net.minecraft.client.gui.Font$DisplayMode
+ *  net.minecraft.sounds.SoundEvent
+ *  net.minecraft.sounds.SoundEvents
+ *  net.minecraft.client.Camera
+ *  net.minecraft.client.gui.screens.Screen
+ *  com.mojang.blaze3d.vertex.VertexConsumer
+ *  dev.lyricsflow.compat.LegacyBufferSource
+ *  dev.lyricsflow.compat.LegacyBufferSource$BufferSource
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  *  org.joml.Vector3f
@@ -29,7 +29,7 @@
  */
 package dev.lyricsflow.app.cosmetic;
 
-import com.mojang.blaze3d.pipeline.RenderPipeline;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import dev.lyricsflow.SkyLyrics;
 import dev.lyricsflow.app.Core;
 import dev.lyricsflow.app.config.Config;
@@ -57,23 +57,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.IntConsumer;
-import net.minecraft.class_10799;
-import net.minecraft.class_1109;
-import net.minecraft.class_1113;
-import net.minecraft.class_12247;
-import net.minecraft.class_12249;
-import net.minecraft.class_1921;
-import net.minecraft.class_243;
-import net.minecraft.class_2561;
-import net.minecraft.class_2960;
-import net.minecraft.class_310;
-import net.minecraft.class_327;
-import net.minecraft.class_3414;
-import net.minecraft.class_3417;
-import net.minecraft.class_4184;
-import net.minecraft.class_437;
-import net.minecraft.class_4588;
-import net.minecraft.class_4597;
+import net.minecraft.client.renderer.RenderPipelines;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.resources.sounds.SoundInstance;
+import net.minecraft.client.renderer.rendertype.RenderSetup;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.client.Camera;
+import net.minecraft.client.gui.screens.Screen;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.lyricsflow.compat.LegacyBufferSource;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Vector3f;
@@ -95,8 +95,8 @@ final class WorldPanel {
     private static final int TOP = 1709620;
     private static final int BOTTOM = 723479;
     private static final int LIGHT = 0xF000F0;
-    private static class_1921 flat;
-    private final class_243 pos;
+    private static RenderType flat;
+    private final Vec3 pos;
     private final float rx;
     private final float rz;
     private final float nx;
@@ -122,7 +122,7 @@ final class WorldPanel {
     private Matrix4f m;
     private float ox;
     private float oy;
-    private class_4588 q;
+    private VertexConsumer q;
     private final List<Runnable> late = new ArrayList<Runnable>();
     private int fontPage;
 
@@ -148,33 +148,33 @@ final class WorldPanel {
         c.setSlot(4, id);
     }
 
-    private static class_1921 flat() {
+    private static RenderType flat() {
         if (flat == null) {
-            flat = class_1921.method_75940((String)"lyricsflow_panel", (class_12247)class_12247.method_75927((RenderPipeline)class_10799.field_56865).method_75938());
+            flat = RenderType.create((String)"lyricsflow_panel", (RenderSetup)RenderSetup.builder((RenderPipeline)RenderPipelines.DEBUG_QUADS).createRenderSetup());
         }
         return flat;
     }
 
     private static String tr(String key) {
-        return class_2561.method_43471((String)("lyricsflow.wp." + key)).getString();
+        return Component.translatable((String)("lyricsflow.wp." + key)).getString();
     }
 
-    WorldPanel(class_310 mc) {
-        class_4184 cam = mc.field_1773.method_19418();
-        Vector3fc f = cam.method_19335();
+    WorldPanel(Minecraft mc) {
+        Camera cam = mc.gameRenderer.mainCamera();
+        Vector3fc f = cam.forwardVector();
         double fl = Math.sqrt(f.x() * f.x() + f.z() * f.z());
         float fx = fl < 1.0E-4 ? 0.0f : (float)((double)f.x() / fl);
         float fz = fl < 1.0E-4 ? 1.0f : (float)((double)f.z() / fl);
-        class_243 c = cam.method_71156();
-        this.pos = new class_243(c.field_1352 + (double)fx * 3.2, c.field_1351 - 0.05, c.field_1350 + (double)fz * 3.2);
+        Vec3 c = cam.position();
+        this.pos = new Vec3(c.x + (double)fx * 3.2, c.y - 0.05, c.z + (double)fz * 3.2);
         this.nx = -fx;
         this.nz = -fz;
         this.rx = -fz;
         this.rz = fx;
-        WorldPanel.play(mc, class_3417.field_26980, 1.3f, 0.8f);
+        WorldPanel.play(mc, SoundEvents.AMETHYST_BLOCK_CHIME, 1.3f, 0.8f);
     }
 
-    class_243 pos() {
+    Vec3 pos() {
         return this.pos;
     }
 
@@ -204,37 +204,37 @@ final class WorldPanel {
         return this.closing < 0L ? -1.0f : (float)(System.currentTimeMillis() - this.closing);
     }
 
-    void tick(class_310 mc) {
+    void tick(Minecraft mc) {
         if (!this.sndLand && this.age() > 860.0f) {
             this.sndLand = true;
-            WorldPanel.play(mc, class_3417.field_14891, 1.8f, 0.3f);
+            WorldPanel.play(mc, SoundEvents.BEACON_POWER_SELECT, 1.8f, 0.3f);
         }
         if (!this.sndClose && this.closing >= 0L && this.closeAge() > 360.0f) {
             this.sndClose = true;
-            WorldPanel.play(mc, class_3417.field_26980, 1.0f, 0.7f);
+            WorldPanel.play(mc, SoundEvents.AMETHYST_BLOCK_CHIME, 1.0f, 0.7f);
         }
     }
 
-    private static void play(class_310 mc, class_3414 ev, float pitch, float vol) {
+    private static void play(Minecraft mc, SoundEvent ev, float pitch, float vol) {
         try {
-            mc.method_1483().method_4873((class_1113)class_1109.method_4757((class_3414)ev, (float)pitch, (float)vol));
+            mc.getSoundManager().play((SoundInstance)SimpleSoundInstance.forUI((SoundEvent)ev, (float)pitch, (float)vol));
         }
         catch (Throwable throwable) {
             // empty catch block
         }
     }
 
-    private void aim(class_4184 cam) {
+    private void aim(Camera cam) {
         this.hovered = false;
         if (!(this.age() < 1200.0f) && this.closing < 0L) {
             double t;
-            class_243 o = cam.method_71156();
-            Vector3fc d = cam.method_19335();
+            Vec3 o = cam.position();
+            Vector3fc d = cam.forwardVector();
             double denom = d.x() * this.nx + d.z() * this.nz;
-            if (!(denom > -1.0E-4 || (t = ((this.pos.field_1352 - o.field_1352) * (double)this.nx + (this.pos.field_1350 - o.field_1350) * (double)this.nz) / denom) <= 0.0 || t > 14.0)) {
-                double px = o.field_1352 + (double)d.x() * t - this.pos.field_1352;
-                double py = o.field_1351 + (double)d.y() * t - this.pos.field_1351;
-                double pz = o.field_1350 + (double)d.z() * t - this.pos.field_1350;
+            if (!(denom > -1.0E-4 || (t = ((this.pos.x - o.x) * (double)this.nx + (this.pos.z - o.z) * (double)this.nz) / denom) <= 0.0 || t > 14.0)) {
+                double px = o.x + (double)d.x() * t - this.pos.x;
+                double py = o.y + (double)d.y() * t - this.pos.y;
+                double pz = o.z + (double)d.z() * t - this.pos.z;
                 float u = (float)((px * (double)this.rx + pz * (double)this.rz) / (double)0.0105f) + 190.0f;
                 float v = 111.0f - (float)(py / (double)0.0105f);
                 if (!(u < 14.0f || v < 0.0f || u > 380.0f || v > 222.0f)) {
@@ -278,12 +278,12 @@ final class WorldPanel {
         }
     }
 
-    void render(class_310 mc, class_4597 buffers, Matrix4f base) {
+    void render(Minecraft mc, LegacyBufferSource buffers, Matrix4f base) {
         float arm;
         float content;
         float slide;
         float fly;
-        class_4184 cam = mc.field_1773.method_19418();
+        Camera cam = mc.gameRenderer.mainCamera();
         this.aim(cam);
         long ns = System.nanoTime();
         this.dt = Math.min(0.1f, (float)(ns - this.lastNs) / 1.0E9f);
@@ -303,11 +303,11 @@ final class WorldPanel {
         }
         float w = 3.5f + 16.5f * (float)Math.exp(-t / 420.0f) + (c >= 0.0f ? 10.0f * WorldPanel.clamp(c / 600.0f) : 0.0f);
         this.spin += w * this.dt;
-        class_243 cp = cam.method_71156();
+        Vec3 cp = cam.position();
         float bob = (float)Math.sin((double)System.currentTimeMillis() / 1200.0) * 0.012f * slide;
         Matrix4f rot = new Matrix4f(this.rx, 0.0f, this.rz, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, this.nx, 0.0f, this.nz, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f);
-        Matrix4f panel = new Matrix4f((Matrix4fc)base).translate((float)(this.pos.field_1352 - cp.field_1352), (float)(this.pos.field_1351 - cp.field_1351) + bob, (float)(this.pos.field_1350 - cp.field_1350)).mul((Matrix4fc)rot);
-        this.q = buffers.method_73477(WorldPanel.flat());
+        Matrix4f panel = new Matrix4f((Matrix4fc)base).translate((float)(this.pos.x - cp.x), (float)(this.pos.y - cp.y) + bob, (float)(this.pos.z - cp.z)).mul((Matrix4fc)rot);
+        this.q = buffers.getBuffer(WorldPanel.flat());
         this.hits.clear();
         this.late.clear();
         Config cf = Core.cfg();
@@ -330,9 +330,9 @@ final class WorldPanel {
         }
         float recX = -0.96599996f;
         float recY = 0.0735f;
-        Vector3f end = new Vector3f(this.rx * recX, recY + bob, this.rz * recX).add((float)(this.pos.field_1352 - cp.field_1352), (float)(this.pos.field_1351 - cp.field_1351), (float)(this.pos.field_1350 - cp.field_1350));
-        Vector3fc f = cam.method_19335();
-        Vector3fc u = cam.method_19336();
+        Vector3f end = new Vector3f(this.rx * recX, recY + bob, this.rz * recX).add((float)(this.pos.x - cp.x), (float)(this.pos.y - cp.y), (float)(this.pos.z - cp.z));
+        Vector3fc f = cam.forwardVector();
+        Vector3fc u = cam.upVector();
         Vector3f start = new Vector3f(f).mul(0.9f).add((Vector3fc)new Vector3f(u).mul(-0.3f));
         Vector3f p = new Vector3f((Vector3fc)start).lerp((Vector3fc)end, fly).add(0.0f, (float)Math.sin(Math.PI * (double)fly) * 0.45f, 0.0f);
         float scale = 0.12f + 0.88f * WorldPanel.outCubic(fly);
@@ -351,9 +351,9 @@ final class WorldPanel {
             this.ring(this.hx, this.hy, 0.0f, 2.2f, 0.0f, 360.0f, 0xFFFFFF, 0.95f, 0xFFFFFF, 0.95f, 0.02f, 12);
             this.ring(this.hx, this.hy, 2.2f, 5.5f, 0.0f, 360.0f, 10321407, 0.35f, 10321407, 0.0f, 0.02f, 12);
         }
-        if (buffers instanceof class_4597.class_4598) {
-            class_4597.class_4598 bs = (class_4597.class_4598)buffers;
-            bs.method_22994(WorldPanel.flat());
+        if (buffers instanceof LegacyBufferSource.BufferSource) {
+            LegacyBufferSource.BufferSource bs = (LegacyBufferSource.BufferSource)buffers;
+            bs.endBatch(WorldPanel.flat());
         }
         for (Runnable r : this.late) {
             r.run();
@@ -396,14 +396,14 @@ final class WorldPanel {
         if (np.hasTrack()) {
             this.textAt(this.m, WorldPanel.fmt(pos), bx, 75.5f, 0.5f, 0xC5C5C5, 0.8f * a, false);
             String dur = WorldPanel.fmt(np.durationMs);
-            this.textAt(this.m, dur, bx + bw - (float)class_310.method_1551().field_1772.method_1727(dur) * 0.5f, 75.5f, 0.5f, 0xC5C5C5, 0.8f * a, false);
+            this.textAt(this.m, dur, bx + bw - (float)Minecraft.getInstance().font.width(dur) * 0.5f, 75.5f, 0.5f, 0xC5C5C5, 0.8f * a, false);
         }
         if ((tr = MediaManager.get().track()) != null && !tr.isEmpty()) {
             boolean spotify = "Spotify".equals(tr.sourceApp);
             String src = spotify ? "Spotify" : ("Browser".equals(tr.sourceApp) ? "YouTube" : tr.sourceApp);
             boolean ytm = "YT Music".equals(tr.sourceApp);
             boolean logo = spotify || ytm || "Browser".equals(tr.sourceApp);
-            float tw = (float)class_310.method_1551().field_1772.method_1727(src) * 0.6f;
+            float tw = (float)Minecraft.getInstance().font.width(src) * 0.6f;
             float sx = -(tw + (logo ? 15.0f : 0.0f)) / 2.0f;
             if (logo) {
                 this.image(SkyLyrics.id(spotify ? "textures/gui/logos/spotify.png" : (ytm ? "textures/gui/logos/ytmusic.png" : "textures/gui/logos/youtube.png")), sx - 2.0f, 82.0f, 10.0f, 10.0f, a);
@@ -418,7 +418,7 @@ final class WorldPanel {
         return s / 60L + ":" + String.format("%02d", s % 60L);
     }
 
-    private void body(class_310 mc, Config cf, NowPlaying np, float a) {
+    private void body(Minecraft mc, Config cf, NowPlaying np, float a) {
         float by = 207.0f;
         this.roundBtn("prev", 70.0f, by, 8.0f, "\u23ee", a, () -> SpotifyClient.control(SpotifyClient.Cmd.PREVIOUS));
         this.roundBtn("play", 98.0f, by, 10.0f, np.playing ? "\u23f8" : "\u25b6", a, () -> SpotifyClient.control(SpotifyClient.Cmd.PLAYPAUSE));
@@ -433,21 +433,21 @@ final class WorldPanel {
                 MediaManager.get().seek((long)(f * (float)tk.durationMs));
             }
         }));
-        class_327 font = class_310.method_1551().field_1772;
+        Font font = Minecraft.getInstance().font;
         this.text("SkyLyrics", 206.0f, 10.0f, 0.85f, 0xFFFFFF, a);
         float xh = this.hv("x", this.over(351.0f, 6.0f, 15.0f, 15.0f));
         this.ring(358.5f, 13.5f, 0.0f, 7.5f, 0.0f, 360.0f, Gfx.lerpColor(0xFFFFFF, 16734842, xh), (0.08f + 0.55f * xh) * a, Gfx.lerpColor(0xFFFFFF, 16734842, xh), (0.08f + 0.55f * xh) * a, 0.002f, 16);
         this.text("\u2715", 355.5f, 10.5f, 0.7f, 0xFFFFFF, a);
         this.hits.add(new Hit(351.0f, 6.0f, 15.0f, 15.0f, this::close));
         String nl = WorldPanel.tr("normal");
-        float nw = (float)font.method_1727(nl) * 0.62f + 12.0f;
+        float nw = (float)font.width(nl) * 0.62f + 12.0f;
         float nhv = this.hv("nrm", this.over(346.0f - nw, 6.0f, nw, 15.0f));
         this.round(346.0f - nw, 6.0f, nw, 15.0f, 7.5f, 0xFFFFFF, 0xFFFFFF, (0.07f + 0.12f * nhv) * a, 0.002f);
         this.text(nl, 352.0f - nw, 10.5f, 0.62f, 0xFFFFFF, (0.8f + 0.2f * nhv) * a);
         this.hits.add(new Hit(346.0f - nw, 6.0f, nw, 15.0f, () -> {
             cf.menuMode = 0;
             PhoneMenu.closeNow();
-            mc.method_1507((class_437)new SkyLyricsScreen());
+            mc.gui.setScreen((Screen)new SkyLyricsScreen());
         }));
         float tabW = (160.0f - 3.0f * (float)(TABS.length - 1)) / (float)TABS.length;
         for (int i = 0; i < TABS.length; ++i) {
@@ -461,7 +461,7 @@ final class WorldPanel {
                 this.round(x, 203.0f, tabW, 14.0f, 7.0f, 0xFFFFFF, 0xFFFFFF, (0.05f + 0.08f * h) * a, 0.002f);
             }
             String lbl = WorldPanel.ellip(WorldPanel.tr(TABS[i]), tabW - 6.0f, 0.62f);
-            this.text(lbl, x + (tabW - (float)font.method_1727(lbl) * 0.62f) / 2.0f, 207.0f, 0.62f, 0xFFFFFF, (on ? 1.0f : 0.7f + 0.3f * h) * a);
+            this.text(lbl, x + (tabW - (float)font.width(lbl) * 0.62f) / 2.0f, 207.0f, 0.62f, 0xFFFFFF, (on ? 1.0f : 0.7f + 0.3f * h) * a);
             this.hits.add(new Hit(x, 203.0f, tabW, 14.0f, () -> this.go(k)));
         }
         String song = np.hasTrack() ? "\u266a  " + np.title + "  \u00b7  " + np.artist : "\u266a  " + WorldPanel.tr("nomusic");
@@ -517,13 +517,13 @@ final class WorldPanel {
             } else if (h > 0.01f) {
                 this.round(x - 1.5f, y - 1.5f - lift, tw + 3.0f, th + 3.0f, 5.5f, 0xFFFFFF, 0xFFFFFF, 0.5f * h * a, 0.002f);
             }
-            class_2960 img = SkyThumbs.texture(p);
+            Identifier img = SkyThumbs.texture(p);
             if (img != null) {
                 this.image(img, x, y - lift, tw, th, a);
             } else {
                 this.round(x, y - lift, tw, th, 4.0f, p.top, p.horizon, a, 0.003f);
             }
-            this.text(WorldPanel.ellip(class_2561.method_43471((String)p.key()).getString(), tw, 0.56f), x + 1.0f, y + th + 3.0f, 0.56f, 0xFFFFFF, a * (on ? 1.0f : 0.75f + 0.25f * h));
+            this.text(WorldPanel.ellip(Component.translatable((String)p.key()).getString(), tw, 0.56f), x + 1.0f, y + th + 3.0f, 0.56f, 0xFFFFFF, a * (on ? 1.0f : 0.75f + 0.25f * h));
             this.hits.add(new Hit(x - 1.0f, y - 1.0f, tw + 2.0f, th + 12.0f, () -> {
                 cf.lastSky = cf.sky = p.ordinal();
             }));
@@ -577,10 +577,10 @@ final class WorldPanel {
 
     private void offset(float y, float a) {
         LFConfig c = WorldPanel.lf();
-        class_327 font = class_310.method_1551().field_1772;
+        Font font = Minecraft.getInstance().font;
         this.text(WorldPanel.tr("offset"), 206.0f, y, 0.66f, 0xFFFFFF, 0.85f * a);
         String v = (c.syncOffsetMs > 0 ? "+" : "") + c.syncOffsetMs + " ms";
-        float vw = (float)font.method_1727(v) * 0.66f;
+        float vw = (float)font.width(v) * 0.66f;
         this.text(v, 330.0f - vw / 2.0f, y, 0.66f, 0xFFFFFF, a);
         float lh = this.hv("offl", this.over(294.0f, y - 4.0f, 14.0f, 14.0f));
         float rh = this.hv("offr", this.over(352.0f, y - 4.0f, 14.0f, 14.0f));
@@ -660,7 +660,8 @@ final class WorldPanel {
         this.hatPage = Math.floorMod(this.hatPage, pages);
         this.text(WorldPanel.tr("hat"), 206.0f, 45.0f, 0.62f, 0xFFFFFF, 0.55f * a);
         for (int i2 = 0; i2 < per && (idx = this.hatPage * per + i2) < ids.length; ++i2) {
-            this.option("hat" + idx, 206.0f + (float)(i2 % 2 * 82), 54 + i2 / 2 * 18, 78.0f, 15.0f, class_2561.method_43471((String)("lyricsflow.cosmetic." + ids[idx])).getString(), WorldPanel.lf().worn().contains(ids[idx]) || "none".equals(ids[idx]) && WorldPanel.lf().worn().isEmpty(), () -> WorldPanel.wear(ids[idx]), a);
+            String id = ids[idx];
+            this.option("hat" + idx, 206.0f + (float)(i2 % 2 * 82), 54 + i2 / 2 * 18, 78.0f, 15.0f, Component.translatable((String)("lyricsflow.cosmetic." + id)).getString(), WorldPanel.lf().worn().contains(id) || "none".equals(id) && WorldPanel.lf().worn().isEmpty(), () -> WorldPanel.wear(id), a);
         }
         this.pager("ht", 108.0f, this.hatPage, pages, d -> this.hatPage += d, a);
         this.text(WorldPanel.tr("death"), 206.0f, 125.0f, 0.62f, 0xFFFFFF, 0.55f * a);
@@ -670,16 +671,16 @@ final class WorldPanel {
         this.pager("dp", 123.0f, this.deathPage, dpages, d -> this.deathPage += d, a);
         for (int j = 0; j < dper && (i = this.deathPage * dper + j) < 7; ++j) {
             int k = i;
-            this.option("de" + i, 206.0f + (float)(j % 2 * 82), 134 + j / 2 * 18, 78.0f, 15.0f, class_2561.method_43471((String)("lyricsflow.ui.death." + i)).getString(), cf.deathFx == i, () -> {
+            this.option("de" + i, 206.0f + (float)(j % 2 * 82), 134 + j / 2 * 18, 78.0f, 15.0f, Component.translatable((String)("lyricsflow.ui.death." + i)).getString(), cf.deathFx == i, () -> {
                 cf.deathFx = k;
             }, a);
         }
-        this.toggle2("dot", 206.0f, 174.0f, 160.0f, class_2561.method_43471((String)"lyricsflow.ui.style.deathothers").getString(), cf.deathOthers, () -> {
+        this.toggle2("dot", 206.0f, 174.0f, 160.0f, Component.translatable((String)"lyricsflow.ui.style.deathothers").getString(), cf.deathOthers, () -> {
             cf.deathOthers = !cf.deathOthers;
         }, a);
     }
 
-    private void more(class_310 mc, Config cf, float a) {
+    private void more(Minecraft mc, Config cf, float a) {
         LFConfig c = WorldPanel.lf();
         this.toggle(0, WorldPanel.tr("island"), c.showTopBar, () -> {
             c.showTopBar = !c.showTopBar;
@@ -701,7 +702,7 @@ final class WorldPanel {
         }, a);
         this.option("m0", 206.0f, 128.0f, 160.0f, 15.0f, "\u2197  " + WorldPanel.tr("bigmenu"), false, () -> {
             PhoneMenu.closeNow();
-            mc.method_1507((class_437)new SkyLyricsScreen());
+            mc.gui.setScreen((Screen)new SkyLyricsScreen());
         }, a);
         this.toggle2("m1", 206.0f, 145.0f, 160.0f, WorldPanel.tr("random"), cf.skyShuffle, () -> {
             boolean bl = cf.skyShuffle = !cf.skyShuffle;
@@ -762,7 +763,7 @@ final class WorldPanel {
     private void roundBtn(String id, float cx, float cy, float r, String icon, float a, Runnable run, int textCol) {
         float hh = this.hv(id, this.over(cx - r, cy - r, 2.0f * r, 2.0f * r));
         this.ring(cx, cy, 0.0f, r, 0.0f, 360.0f, Gfx.lerpColor(2762309, 10321407, hh), a, Gfx.lerpColor(1841460, 8018664, hh), a, 0.002f, 20);
-        float tw = (float)class_310.method_1551().field_1772.method_1727(icon) * 0.75f;
+        float tw = (float)Minecraft.getInstance().font.width(icon) * 0.75f;
         this.text(icon, cx - tw / 2.0f, cy - 3.0f, 0.75f, textCol, a);
         this.hits.add(new Hit(cx - r, cy - r, 2.0f * r, 2.0f * r, run));
     }
@@ -790,7 +791,7 @@ final class WorldPanel {
     }
 
     private void vert(float x, float y, float z, int col) {
-        this.q.method_22918((Matrix4fc)this.m, this.lx(x), this.ly(y), z).method_39415(col);
+        this.q.addVertex((Matrix4fc)this.m, this.lx(x), this.ly(y), z).setColor(col);
     }
 
     private void quad(float x, float y, float w, float h, int cTop, float aTop, int cBot, float aBot, float z) {
@@ -849,7 +850,7 @@ final class WorldPanel {
         }
     }
 
-    private void image(class_2960 tex, float x, float y, float w, float h, float a) {
+    private void image(Identifier tex, float x, float y, float w, float h, float a) {
         Matrix4f mm = new Matrix4f((Matrix4fc)this.m);
         float x0 = this.lx(x);
         float x1 = this.lx(x + w);
@@ -858,11 +859,11 @@ final class WorldPanel {
         float z = 0.005f;
         int col = Gfx.argbRaw(0xFFFFFF, a);
         this.late.add(() -> {
-            class_4588 v = class_310.method_1551().method_22940().method_23000().method_73477(class_12249.method_76022((class_2960)tex));
-            v.method_22918((Matrix4fc)mm, x0, y0, z).method_39415(col).method_22913(0.0f, 0.0f).method_60803(0xF000F0);
-            v.method_22918((Matrix4fc)mm, x0, y1, z).method_39415(col).method_22913(0.0f, 1.0f).method_60803(0xF000F0);
-            v.method_22918((Matrix4fc)mm, x1, y1, z).method_39415(col).method_22913(1.0f, 1.0f).method_60803(0xF000F0);
-            v.method_22918((Matrix4fc)mm, x1, y0, z).method_39415(col).method_22913(1.0f, 0.0f).method_60803(0xF000F0);
+            VertexConsumer v = LegacyBufferSource.current().getBuffer(RenderTypes.text((Identifier)tex));
+            v.addVertex((Matrix4fc)mm, x0, y0, z).setColor(col).setUv(0.0f, 0.0f).setLight(0xF000F0);
+            v.addVertex((Matrix4fc)mm, x0, y1, z).setColor(col).setUv(0.0f, 1.0f).setLight(0xF000F0);
+            v.addVertex((Matrix4fc)mm, x1, y1, z).setColor(col).setUv(1.0f, 1.0f).setLight(0xF000F0);
+            v.addVertex((Matrix4fc)mm, x1, y0, z).setColor(col).setUv(1.0f, 0.0f).setLight(0xF000F0);
         });
     }
 
@@ -872,24 +873,24 @@ final class WorldPanel {
 
     private void textAt(Matrix4f mat, String s, float px, float py, float scale, int rgb, float a, boolean centered) {
         if (!(a <= 0.01f) && !s.isEmpty()) {
-            class_327 f = class_310.method_1551().field_1772;
-            float x = centered ? px - (float)f.method_1727(s) * scale / 2.0f : px;
+            Font f = Minecraft.getInstance().font;
+            float x = centered ? px - (float)f.width(s) * scale / 2.0f : px;
             Matrix4f tm = new Matrix4f((Matrix4fc)mat).translate(x * 0.0105f, -py * 0.0105f, 0.012f).scale(0.0105f * scale, -0.0105f * scale, 0.0105f);
             int col = Gfx.argbRaw(rgb, a);
             this.late.add(() -> {
-                class_310 mc = class_310.method_1551();
-                mc.field_1772.method_27522((class_2561)class_2561.method_43470((String)s), 0.0f, 0.0f, col, false, tm, (class_4597)mc.method_22940().method_23000(), class_327.class_6415.field_33993, 0, 0xF000F0);
+                Minecraft mc = Minecraft.getInstance();
+                LegacyBufferSource.current().drawText((Component)Component.literal((String)s), 0.0f, 0.0f, col, false, tm, Font.DisplayMode.NORMAL, 0, 0xF000F0);
             });
         }
     }
 
     private static String ellip(String s, float maxPx, float scale) {
-        class_327 f = class_310.method_1551().field_1772;
-        if ((float)f.method_1727(s) * scale <= maxPx) {
+        Font f = Minecraft.getInstance().font;
+        if ((float)f.width(s) * scale <= maxPx) {
             return s;
         }
         String t = s;
-        while (t.length() > 1 && (float)f.method_1727(t + "...") * scale > maxPx) {
+        while (t.length() > 1 && (float)f.width(t + "...") * scale > maxPx) {
             t = t.substring(0, t.length() - 1);
         }
         return t + "...";
@@ -915,4 +916,3 @@ final class WorldPanel {
     private record Hit(float x, float y, float w, float h, Runnable run) {
     }
 }
-

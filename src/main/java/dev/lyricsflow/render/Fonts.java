@@ -2,14 +2,14 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_11719
- *  net.minecraft.class_11719$class_11721
- *  net.minecraft.class_2561
- *  net.minecraft.class_2583
- *  net.minecraft.class_2960
- *  net.minecraft.class_327
- *  net.minecraft.class_5250
- *  net.minecraft.class_5348
+ *  net.minecraft.network.chat.FontDescription
+ *  net.minecraft.network.chat.FontDescription$Resource
+ *  net.minecraft.network.chat.Component
+ *  net.minecraft.network.chat.Style
+ *  net.minecraft.resources.Identifier
+ *  net.minecraft.client.gui.Font
+ *  net.minecraft.network.chat.MutableComponent
+ *  net.minecraft.network.chat.FormattedText
  */
 package dev.lyricsflow.render;
 
@@ -20,13 +20,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.class_11719;
-import net.minecraft.class_2561;
-import net.minecraft.class_2583;
-import net.minecraft.class_2960;
-import net.minecraft.class_327;
-import net.minecraft.class_5250;
-import net.minecraft.class_5348;
+import net.minecraft.network.chat.FontDescription;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.gui.Font;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.FormattedText;
 
 public final class Fonts {
     public static final float SIZE = 16.0f;
@@ -34,7 +34,7 @@ public final class Fonts {
     public static final List<LyricFont> UI = List.of(new LyricFont("outfit", "Outfit"), new LyricFont("syne", "Syne"), new LyricFont("quicksand", "Quicksand"), new LyricFont("minecraft", "Minecraft"));
     public static final String UI_REGULAR = "outfit";
     public static final String UI_BOLD = "outfit_bold";
-    private static final Map<String, class_5250> TEXT_CACHE = new HashMap<String, class_5250>();
+    private static final Map<String, MutableComponent> TEXT_CACHE = new HashMap<String, MutableComponent>();
     private static final Map<String, Float> WIDTH_CACHE = new HashMap<String, Float>();
     private static final Map<String, Float> SHIFT = Map.ofEntries(Map.entry("alexbrush", Float.valueOf(0.35f)), Map.entry("allura", Float.valueOf(0.285f)), Map.entry("courgette", Float.valueOf(0.379f)), Map.entry("damion", Float.valueOf(0.326f)), Map.entry("dancing", Float.valueOf(0.326f)), Map.entry("grandhotel", Float.valueOf(0.348f)), Map.entry("greatvibes", Float.valueOf(0.354f)), Map.entry("kaushan", Float.valueOf(0.367f)), Map.entry("lyricsflow_script", Float.valueOf(0.367f)), Map.entry("marck", Float.valueOf(0.315f)), Map.entry("norican", Float.valueOf(0.35f)), Map.entry("outfit", Float.valueOf(0.357f)), Map.entry("outfit_bold", Float.valueOf(0.36f)), Map.entry("poppins", Float.valueOf(0.378f)), Map.entry("pacifico", Float.valueOf(0.399f)), Map.entry("parisienne", Float.valueOf(0.337f)), Map.entry("quicksand", Float.valueOf(0.37f)), Map.entry("sacramento", Float.valueOf(0.325f)), Map.entry("syne", Float.valueOf(0.349f)), Map.entry("yellowtail", Float.valueOf(0.354f)), Map.entry("yesteryear", Float.valueOf(0.329f)));
     private static final Map<String, float[]> CAPX = Map.ofEntries(Map.entry("alexbrush", new float[]{0.735f, 0.416f}), Map.entry("allura", new float[]{0.589f, 0.301f}), Map.entry("courgette", new float[]{0.759f, 0.505f}), Map.entry("damion", new float[]{0.705f, 0.35f}), Map.entry("dancing", new float[]{0.721f, 0.332f}), Map.entry("grandhotel", new float[]{0.75f, 0.393f}), Map.entry("greatvibes", new float[]{0.807f, 0.357f}), Map.entry("kaushan", new float[]{0.742f, 0.475f}), Map.entry("lyricsflow_script", new float[]{0.742f, 0.475f}), Map.entry("marck", new float[]{0.637f, 0.372f}), Map.entry("norican", new float[]{0.74f, 0.41f}), Map.entry("outfit", new float[]{0.7f, 0.48f}), Map.entry("outfit_bold", new float[]{0.706f, 0.486f}), Map.entry("pacifico", new float[]{0.877f, 0.47f}), Map.entry("parisienne", new float[]{0.745f, 0.353f}), Map.entry("poppins", new float[]{0.702f, 0.558f}), Map.entry("quicksand", new float[]{0.7f, 0.529f}), Map.entry("sacramento", new float[]{0.744f, 0.306f}), Map.entry("syne", new float[]{0.648f, 0.498f}), Map.entry("yellowtail", new float[]{0.721f, 0.444f}), Map.entry("yesteryear", new float[]{0.772f, 0.295f}), Map.entry("lobster", new float[]{0.75f, 0.557f}), Map.entry("caveatbrush", new float[]{0.66f, 0.412f}), Map.entry("righteous", new float[]{0.7f, 0.526f}), Map.entry("bebas", new float[]{0.7f, 0.7f}), Map.entry("fredoka", new float[]{0.69f, 0.499f}), Map.entry("comfortaa", new float[]{0.781f, 0.547f}));
@@ -56,35 +56,35 @@ public final class Fonts {
         return LYRICS.get(0);
     }
 
-    public static class_2583 style(String id) {
+    public static Style style(String id) {
         if (id == null || id.equals("minecraft")) {
-            return class_2583.field_24360;
+            return Style.EMPTY;
         }
-        class_2960 fid = SkyLyrics.id(id);
-        return class_2583.field_24360.method_27704((class_11719)new class_11719.class_11721(fid));
+        Identifier fid = SkyLyrics.id(id);
+        return Style.EMPTY.withFont((FontDescription)new FontDescription.Resource(fid));
     }
 
-    public static class_5250 text(String s, String fontId) {
+    public static MutableComponent text(String s, String fontId) {
         String key = fontId + "\u0000" + s;
-        class_5250 c = TEXT_CACHE.get(key);
+        MutableComponent c = TEXT_CACHE.get(key);
         if (c == null) {
             if (TEXT_CACHE.size() > 3000) {
                 TEXT_CACHE.clear();
             }
-            c = class_2561.method_43470((String)s).method_27696(Fonts.style(fontId));
+            c = Component.literal((String)s).withStyle(Fonts.style(fontId));
             TEXT_CACHE.put(key, c);
         }
         return c;
     }
 
-    public static float unitWidth(String s, String fontId, class_327 font) {
+    public static float unitWidth(String s, String fontId, Font font) {
         String key = fontId + "\u0000" + s;
         Float w = WIDTH_CACHE.get(key);
         if (w == null) {
             if (WIDTH_CACHE.size() > 3000) {
                 WIDTH_CACHE.clear();
             }
-            w = Float.valueOf(font.method_27527().method_27488((class_5348)Fonts.text(s, fontId)) / Fonts.height(fontId));
+            w = Float.valueOf(font.getSplitter().stringWidth((FormattedText)Fonts.text(s, fontId)) / Fonts.height(fontId));
             WIDTH_CACHE.put(key, w);
         }
         return w.floatValue();

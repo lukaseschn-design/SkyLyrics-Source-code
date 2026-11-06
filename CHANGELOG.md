@@ -2,6 +2,12 @@
 
 All notable changes to SkyLyrics will be documented in this file.
 
+## [1.0+26.3] - Unreleased
+
+### Compatibility
+- Updated the build target to Minecraft 26.3 and aligned Fabric Loader, Fabric API, Loom, and Java with the local Sodium 26.3 setup.
+- Added `releases/SkyLyrics-1.0+26.3.jar`; the Gradle build succeeds, but in-game behavior has not yet been verified.
+
 ## [1.0] - 2026-11-06
 
 ### 🎉 Initial Release
@@ -57,4 +63,3 @@ All notable changes to SkyLyrics will be documented in this file.
 - Modern Blaze3D rendering pipeline (no deprecated OpenGL calls)
 - Camera-relative coordinate system (no FP32 precision jitter)
 - Fog compensation for sky-distance lyrics rendering
-

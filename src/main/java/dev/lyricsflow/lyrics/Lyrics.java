@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_310
+ *  net.minecraft.client.Minecraft
  */
 package dev.lyricsflow.lyrics;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import net.minecraft.class_310;
+import net.minecraft.client.Minecraft;
 
 public final class Lyrics {
     private static final ThreadLocal<Double> SONG_RATE = ThreadLocal.withInitial(() -> 4.5);
@@ -30,7 +30,7 @@ public final class Lyrics {
         }
         Locale loc = Locale.ROOT;
         try {
-            String lang = class_310.method_1551().field_1690.field_1883;
+            String lang = Minecraft.getInstance().options.languageCode;
             if (lang != null && (lang.startsWith("tr") || lang.startsWith("az"))) {
                 loc = Locale.forLanguageTag("tr");
             }
@@ -69,9 +69,8 @@ public final class Lyrics {
         for (int i = 0; i < texts.size(); ++i) {
             String[] parts;
             long gap;
-            long e;
             long s = times.get(i)[0];
-            long l = times.get(i).length > 1 ? times.get(i)[1] : (e = i + 1 < texts.size() ? times.get(i + 1)[0] : -1L);
+            long e = times.get(i).length > 1 ? times.get(i)[1] : (i + 1 < texts.size() ? times.get(i + 1)[0] : -1L);
             if (e <= s || (gap = e - s) < 700L || gap > 8000L || (parts = texts.get(i).trim().split("\\s+")).length < 2) continue;
             int syl = 0;
             for (String p : parts) {
@@ -97,9 +96,8 @@ public final class Lyrics {
         SONG_RATE.set(Lyrics.songRate(times, texts, durationMs));
         for (int i = 0; i < texts.size(); ++i) {
             List<Word> w;
-            long e;
             long s = times.get(i)[0];
-            long l2 = times.get(i).length > 1 ? times.get(i)[1] : (i + 1 < texts.size() ? times.get(i + 1)[0] : (e = durationMs > s ? Math.min(durationMs, s + 6000L) : s + 5000L));
+            long e = times.get(i).length > 1 ? times.get(i)[1] : (i + 1 < texts.size() ? times.get(i + 1)[0] : (durationMs > s ? Math.min(durationMs, s + 6000L) : s + 5000L));
             if (e - s > 9000L) {
                 e = s + 9000L;
             }
@@ -250,4 +248,3 @@ public final class Lyrics {
         }
     }
 }
-

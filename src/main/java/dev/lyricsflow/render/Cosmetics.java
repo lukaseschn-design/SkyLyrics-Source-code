@@ -4,26 +4,26 @@
  * Could not load the following classes:
  *  com.google.gson.JsonObject
  *  com.google.gson.JsonParser
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1044
- *  net.minecraft.class_12249
- *  net.minecraft.class_1297
- *  net.minecraft.class_1304
- *  net.minecraft.class_1657
- *  net.minecraft.class_1921
- *  net.minecraft.class_243
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_3532
- *  net.minecraft.class_4050
- *  net.minecraft.class_4587
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
- *  net.minecraft.class_4608
- *  net.minecraft.class_5602
- *  net.minecraft.class_591
- *  net.minecraft.class_7833
+ *  com.mojang.blaze3d.platform.NativeImage
+ *  net.minecraft.client.renderer.texture.DynamicTexture
+ *  net.minecraft.client.renderer.texture.AbstractTexture
+ *  net.minecraft.client.renderer.rendertype.RenderTypes
+ *  net.minecraft.world.entity.Entity
+ *  net.minecraft.world.entity.EquipmentSlot
+ *  net.minecraft.world.entity.player.Player
+ *  net.minecraft.client.renderer.rendertype.RenderType
+ *  net.minecraft.world.phys.Vec3
+ *  net.minecraft.resources.Identifier
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.util.Mth
+ *  net.minecraft.world.entity.Pose
+ *  com.mojang.blaze3d.vertex.PoseStack
+ *  dev.lyricsflow.compat.LegacyBufferSource
+ *  dev.lyricsflow.compat.LegacyBufferSource$BufferSource
+ *  net.minecraft.client.renderer.texture.OverlayTexture
+ *  net.minecraft.client.model.geom.ModelLayers
+ *  net.minecraft.client.model.player.PlayerModel
+ *  com.mojang.math.Axis
  *  org.joml.Quaternionfc
  */
 package dev.lyricsflow.render;
@@ -41,35 +41,35 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.class_1011;
-import net.minecraft.class_1043;
-import net.minecraft.class_1044;
-import net.minecraft.class_12249;
-import net.minecraft.class_1297;
-import net.minecraft.class_1304;
-import net.minecraft.class_1657;
-import net.minecraft.class_1921;
-import net.minecraft.class_243;
-import net.minecraft.class_2960;
-import net.minecraft.class_310;
-import net.minecraft.class_3532;
-import net.minecraft.class_4050;
-import net.minecraft.class_4587;
-import net.minecraft.class_4597;
-import net.minecraft.class_4608;
-import net.minecraft.class_5602;
-import net.minecraft.class_591;
-import net.minecraft.class_7833;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Pose;
+import com.mojang.blaze3d.vertex.PoseStack;
+import dev.lyricsflow.compat.LegacyBufferSource;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.model.player.PlayerModel;
+import com.mojang.math.Axis;
 import org.joml.Quaternionfc;
 
 public final class Cosmetics {
     public static final String[] IDS = new String[]{"none", "kuz3y_wqq", "astronaut_helmet", "axolotl", "snorkel", "cat_ears", "pixel_glasses", "halo", "hair_bow", "cap_back", "devil_horns", "viking", "cat_headphones", "straw_hat", "pirate_hat", "spartan", "dragon_wings", "red_dragon_wings", "bat_wings", "captain_hat", "knight_helmet", "top_hat", "witch_hat", "jack_o_lantern", "cowboy_hat", "snapback", "ninja_band", "traffic_cone"};
     private static final float SCALE = 0.3f;
-    private static final class_2960 SKIN = SkyLyrics.id("cosmetic/buddy_skin");
-    static final class_2960 KUZ3Y = SkyLyrics.id("textures/cosmetic/kuz3y_wqq.png");
-    private static final Map<Integer, class_591> BUDDIES = new HashMap<Integer, class_591>();
-    private static class_591 wide;
-    private static class_591 slim;
+    private static final Identifier SKIN = SkyLyrics.id("cosmetic/buddy_skin");
+    static final Identifier KUZ3Y = SkyLyrics.id("textures/cosmetic/kuz3y_wqq.png");
+    private static final Map<Integer, PlayerModel> BUDDIES = new HashMap<Integer, PlayerModel>();
+    private static PlayerModel wide;
+    private static PlayerModel slim;
     private static String loadedName;
     private static String loadingName;
     private static boolean slimSkin;
@@ -78,26 +78,26 @@ public final class Cosmetics {
     private static int tries;
     private static String lastWanted;
 
-    static class_591 buddyFor(int entityId, double t, float headYaw, float headPitch) {
-        class_591 model;
+    static PlayerModel buddyFor(int entityId, double t, float headYaw, float headPitch) {
+        PlayerModel model;
         try {
             if (BUDDIES.size() > 32) {
                 BUDDIES.clear();
             }
-            model = BUDDIES.computeIfAbsent(entityId, k -> new class_591(class_310.method_1551().method_31974().method_32072(class_5602.field_27581), true));
+            model = BUDDIES.computeIfAbsent(entityId, k -> new PlayerModel(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.PLAYER_SLIM), true));
         }
         catch (Throwable e) {
             return null;
         }
         Cosmetics.pose(model, t);
-        model.field_3398.field_3675 = 0.0f;
-        model.field_3398.field_3654 = (float)Math.toRadians(class_3532.method_15363((float)headPitch, (float)-60.0f, (float)60.0f));
-        model.field_3398.field_3674 = -0.04f * (float)Math.sin(t * 7.0);
+        model.head.yRot = 0.0f;
+        model.head.xRot = (float)Math.toRadians(Mth.clamp((float)headPitch, (float)-60.0f, (float)60.0f));
+        model.head.zRot = -0.04f * (float)Math.sin(t * 7.0);
         return model;
     }
 
-    static class_591 buddy(double t) {
-        class_591 model = Cosmetics.model(true);
+    static PlayerModel buddy(double t) {
+        PlayerModel model = Cosmetics.model(true);
         if (model == null) {
             return null;
         }
@@ -105,45 +105,45 @@ public final class Cosmetics {
         return model;
     }
 
-    private static void pose(class_591 model, double t) {
-        model.method_63514();
-        model.method_2805(true);
-        model.field_3392.field_3654 = -1.35f;
-        model.field_3392.field_3675 = 0.18f;
-        model.field_3397.field_3654 = -1.35f;
-        model.field_3397.field_3675 = -0.18f;
-        model.field_3401.field_3654 = -0.15f;
-        model.field_3401.field_3674 = 2.55f + 0.38f * (float)Math.sin(t * 7.0);
-        model.field_27433.field_3654 = -0.55f;
-        model.field_27433.field_3674 = -0.12f;
-        model.field_3398.field_3675 = 0.25f * (float)Math.sin(t * 0.9);
-        model.field_3398.field_3654 = 0.08f + 0.05f * (float)Math.sin(t * 1.3);
-        model.field_3398.field_3674 = -0.06f * (float)Math.sin(t * 7.0);
+    private static void pose(PlayerModel model, double t) {
+        model.resetPose();
+        model.allParts().forEach(part -> part.visible = true);
+        model.rightLeg.xRot = -1.35f;
+        model.rightLeg.yRot = 0.18f;
+        model.leftLeg.xRot = -1.35f;
+        model.leftLeg.yRot = -0.18f;
+        model.rightArm.xRot = -0.15f;
+        model.rightArm.zRot = 2.55f + 0.38f * (float)Math.sin(t * 7.0);
+        model.leftArm.xRot = -0.55f;
+        model.leftArm.zRot = -0.12f;
+        model.head.yRot = 0.25f * (float)Math.sin(t * 0.9);
+        model.head.xRot = 0.08f + 0.05f * (float)Math.sin(t * 1.3);
+        model.head.zRot = -0.06f * (float)Math.sin(t * 7.0);
     }
 
     private Cosmetics() {
     }
 
-    public static void render(class_4587 ps, class_4597 buffers) {
-        class_310 mc = class_310.method_1551();
-        if (mc.field_1687 == null || buffers == null) {
+    public static void render(PoseStack ps, LegacyBufferSource buffers) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null || buffers == null) {
             return;
         }
-        for (class_1657 pl : mc.field_1687.method_18456()) {
-            if (!Cosmetics.wornBy(pl).contains("kuz3y_wqq") || pl == mc.field_1724 && mc.field_1690.method_31044().method_31034() || pl.method_5707(mc.field_1773.method_19418().method_71156()) > 4096.0) continue;
+        for (Player pl : mc.level.players()) {
+            if (!Cosmetics.wornBy(pl).contains("kuz3y_wqq") || pl == mc.player && mc.options.getCameraType().isFirstPerson() || pl.distanceToSqr(mc.gameRenderer.mainCamera().position()) > 4096.0) continue;
             Cosmetics.renderOne(ps, buffers, pl, "kuz3y_wqq");
         }
     }
 
-    public static List<String> wornBy(class_1657 p) {
-        class_310 mc = class_310.method_1551();
+    public static List<String> wornBy(Player p) {
+        Minecraft mc = Minecraft.getInstance();
         if (!ConfigManager.get().enabled) {
             return List.of();
         }
-        if (p == mc.field_1724) {
+        if (p == mc.player) {
             return ConfigManager.get().worn();
         }
-        String s = CosmeticSync.of(p.method_5667());
+        String s = CosmeticSync.of(p.getUUID());
         if (s == null || s.isEmpty() || "none".equals(s)) {
             return List.of();
         }
@@ -157,16 +157,16 @@ public final class Cosmetics {
 
     public static List<String> forEntity(int entityId) {
         List<String> list;
-        class_310 mc = class_310.method_1551();
-        if (mc.field_1687 == null) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null) {
             return List.of();
         }
-        if (mc.field_1724 != null && entityId == mc.field_1724.method_5628()) {
-            return Cosmetics.wornBy((class_1657)mc.field_1724);
+        if (mc.player != null && entityId == mc.player.getId()) {
+            return Cosmetics.wornBy((Player)mc.player);
         }
-        class_1297 class_12972 = mc.field_1687.method_8469(entityId);
-        if (class_12972 instanceof class_1657) {
-            class_1657 p = (class_1657)class_12972;
+        Entity class_12972 = mc.level.getEntity(entityId);
+        if (class_12972 instanceof Player) {
+            Player p = (Player)class_12972;
             list = Cosmetics.wornBy(p);
         } else {
             list = List.of();
@@ -174,21 +174,21 @@ public final class Cosmetics {
         return list;
     }
 
-    public static class_1657 playerOf(int entityId) {
-        class_1657 p;
-        class_310 mc = class_310.method_1551();
-        if (mc.field_1687 == null) {
+    public static Player playerOf(int entityId) {
+        Player p;
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.level == null) {
             return null;
         }
-        class_1297 class_12972 = mc.field_1687.method_8469(entityId);
-        return class_12972 instanceof class_1657 ? (p = (class_1657)class_12972) : null;
+        Entity class_12972 = mc.level.getEntity(entityId);
+        return class_12972 instanceof Player ? (p = (Player)class_12972) : null;
     }
 
-    private static void renderOne(class_4587 ps, class_4597 buffers, class_1657 pl, String name) {
+    private static void renderOne(PoseStack ps, LegacyBufferSource buffers, Player pl, String name) {
         double top;
         boolean isSlim;
-        class_2960 skinTex;
-        class_310 mc = class_310.method_1551();
+        Identifier skinTex;
+        Minecraft mc = Minecraft.getInstance();
         if ("kuz3y_wqq".equals(name)) {
             skinTex = KUZ3Y;
             isSlim = true;
@@ -200,73 +200,73 @@ public final class Cosmetics {
             skinTex = SKIN;
             isSlim = slimSkin;
         }
-        if (pl.method_5767()) {
+        if (pl.isInvisible()) {
             return;
         }
-        class_4050 pose = pl.method_18376();
-        if (pose != class_4050.field_18076 && pose != class_4050.field_18081) {
+        Pose pose = pl.getPose();
+        if (pose != Pose.STANDING && pose != Pose.CROUCHING) {
             return;
         }
-        class_591 model = Cosmetics.model(isSlim);
+        PlayerModel model = Cosmetics.model(isSlim);
         if (model == null) {
             return;
         }
-        float pt = mc.method_61966().method_60637(false);
-        class_243 cam = mc.field_1773.method_19418().method_71156();
-        class_243 p = pl.method_30950(pt);
-        float bodyDeg = class_3532.method_17821((float)pt, (float)pl.field_6220, (float)pl.field_6283);
+        float pt = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        Vec3 cam = mc.gameRenderer.mainCamera().position();
+        Vec3 p = pl.getPosition(pt);
+        float bodyDeg = Mth.rotLerp((float)pt, (float)pl.yBodyRotO, (float)pl.yBodyRot);
         double body = Math.toRadians(bodyDeg);
         double t = Anim.seconds();
         double side = 0.38;
-        double d = top = pl.method_18276() ? 1.12 : 1.4;
-        if (!pl.method_6118(class_1304.field_6174).method_7960()) {
+        double d = top = pl.isCrouching() ? 1.12 : 1.4;
+        if (!pl.getItemBySlot(EquipmentSlot.CHEST).isEmpty()) {
             side += 0.06;
             top += 0.09;
         }
-        double x = p.field_1352 - cam.field_1352 - Math.cos(body) * side;
-        double y = p.field_1351 - cam.field_1351 + top;
-        double z = p.field_1350 - cam.field_1350 - Math.sin(body) * side;
-        model.method_63514();
-        model.method_2805(true);
-        model.field_3392.field_3654 = -1.35f;
-        model.field_3392.field_3675 = 0.18f;
-        model.field_3397.field_3654 = -1.35f;
-        model.field_3397.field_3675 = -0.18f;
-        model.field_3401.field_3654 = -0.15f;
-        model.field_3401.field_3674 = 2.55f + 0.38f * (float)Math.sin(t * 7.0);
-        model.field_27433.field_3654 = -0.55f;
-        model.field_27433.field_3674 = -0.12f;
-        float headYaw = class_3532.method_15393((float)(class_3532.method_17821((float)pt, (float)pl.field_6259, (float)pl.field_6241) - bodyDeg));
-        float headPitch = class_3532.method_16439((float)pt, (float)pl.field_6004, (float)pl.method_36455());
-        model.field_3398.field_3675 = (float)Math.toRadians(class_3532.method_15363((float)headYaw, (float)-75.0f, (float)75.0f));
-        model.field_3398.field_3654 = (float)Math.toRadians(class_3532.method_15363((float)headPitch, (float)-60.0f, (float)60.0f));
-        model.field_3398.field_3674 = -0.04f * (float)Math.sin(t * 7.0);
-        int light = mc.method_1561().method_23839((class_1297)pl, pt);
-        ps.method_22903();
-        ps.method_22904(x, y, z);
-        ps.method_22907((Quaternionfc)class_7833.field_40716.rotationDegrees(180.0f - bodyDeg));
-        ps.method_22905(-0.3f, -0.3f, 0.3f);
-        ps.method_46416(0.0f, -0.75f, 0.0f);
-        class_1921 type = class_12249.method_76000((class_2960)skinTex);
-        model.method_60879(ps, buffers.method_73477(type), light, class_4608.field_21444);
-        ps.method_22909();
-        if (buffers instanceof class_4597.class_4598) {
-            class_4597.class_4598 bs = (class_4597.class_4598)buffers;
-            bs.method_22994(type);
+        double x = p.x - cam.x - Math.cos(body) * side;
+        double y = p.y - cam.y + top;
+        double z = p.z - cam.z - Math.sin(body) * side;
+        model.resetPose();
+        model.allParts().forEach(part -> part.visible = true);
+        model.rightLeg.xRot = -1.35f;
+        model.rightLeg.yRot = 0.18f;
+        model.leftLeg.xRot = -1.35f;
+        model.leftLeg.yRot = -0.18f;
+        model.rightArm.xRot = -0.15f;
+        model.rightArm.zRot = 2.55f + 0.38f * (float)Math.sin(t * 7.0);
+        model.leftArm.xRot = -0.55f;
+        model.leftArm.zRot = -0.12f;
+        float headYaw = Mth.wrapDegrees((float)(Mth.rotLerp((float)pt, (float)pl.yHeadRotO, (float)pl.yHeadRot) - bodyDeg));
+        float headPitch = Mth.lerp((float)pt, (float)pl.xRotO, (float)pl.getXRot());
+        model.head.yRot = (float)Math.toRadians(Mth.clamp((float)headYaw, (float)-75.0f, (float)75.0f));
+        model.head.xRot = (float)Math.toRadians(Mth.clamp((float)headPitch, (float)-60.0f, (float)60.0f));
+        model.head.zRot = -0.04f * (float)Math.sin(t * 7.0);
+        int light = mc.getEntityRenderDispatcher().getPackedLightCoords((Entity)pl, pt);
+        ps.pushPose();
+        ps.translate(x, y, z);
+        ps.rotate((Quaternionfc)Axis.YP.rotationDegrees(180.0f - bodyDeg));
+        ps.scale(-0.3f, -0.3f, 0.3f);
+        ps.translate(0.0f, -0.75f, 0.0f);
+        RenderType type = RenderTypes.entityTranslucent((Identifier)skinTex);
+        model.renderToBuffer(ps, buffers.getBuffer(type), light, OverlayTexture.NO_OVERLAY, -1);
+        ps.popPose();
+        if (buffers instanceof LegacyBufferSource.BufferSource) {
+            LegacyBufferSource.BufferSource bs = (LegacyBufferSource.BufferSource)buffers;
+            bs.endBatch(type);
         }
     }
 
-    private static class_591 model(boolean isSlim) {
+    private static PlayerModel model(boolean isSlim) {
         try {
-            class_310 mc = class_310.method_1551();
+            Minecraft mc = Minecraft.getInstance();
             if (isSlim) {
                 if (slim == null) {
-                    slim = new class_591(mc.method_31974().method_32072(class_5602.field_27581), true);
+                    slim = new PlayerModel(mc.getEntityModels().bakeLayer(ModelLayers.PLAYER_SLIM), true);
                 }
                 return slim;
             }
             if (wide == null) {
-                wide = new class_591(mc.method_31974().method_32072(class_5602.field_27577), false);
+                wide = new PlayerModel(mc.getEntityModels().bakeLayer(ModelLayers.PLAYER), false);
             }
             return wide;
         }
@@ -311,9 +311,9 @@ public final class Cosmetics {
                     if (png == null) {
                         throw new IllegalStateException("skin download");
                     }
-                    class_1011 img = Cosmetics.legacy(class_1011.method_49277((byte[])png));
-                    class_310.method_1551().execute(() -> {
-                        class_310.method_1551().method_1531().method_4616(SKIN, (class_1044)new class_1043(() -> "lyricsflow buddy skin", img));
+                    NativeImage img = Cosmetics.legacy(NativeImage.read((byte[])png));
+                    Minecraft.getInstance().execute(() -> {
+                        Minecraft.getInstance().getTextureManager().register(SKIN, (AbstractTexture)new DynamicTexture(() -> "lyricsflow buddy skin", img));
                         slimSkin = isSlim;
                         loadedName = name;
                         ready = true;
@@ -334,26 +334,25 @@ public final class Cosmetics {
         th.start();
     }
 
-    private static class_1011 legacy(class_1011 in) {
+    private static NativeImage legacy(NativeImage in) {
         int xx;
         int yy;
-        if (in.method_4323() != 32) {
+        if (in.getHeight() != 32) {
             return in;
         }
-        class_1011 out = new class_1011(64, 64, true);
+        NativeImage out = new NativeImage(64, 64, true);
         for (yy = 0; yy < 32; ++yy) {
             for (xx = 0; xx < 64; ++xx) {
-                out.method_61941(xx, yy, in.method_61940(xx, yy));
+                out.setPixel(xx, yy, in.getPixel(xx, yy));
             }
         }
         for (yy = 0; yy < 16; ++yy) {
             for (xx = 0; xx < 16; ++xx) {
-                out.method_61941(16 + xx, 48 + yy, in.method_61940(xx, 16 + yy));
-                out.method_61941(32 + xx, 48 + yy, in.method_61940(40 + xx, 16 + yy));
+                out.setPixel(16 + xx, 48 + yy, in.getPixel(xx, 16 + yy));
+                out.setPixel(32 + xx, 48 + yy, in.getPixel(40 + xx, 16 + yy));
             }
         }
         in.close();
         return out;
     }
 }
-

@@ -385,8 +385,7 @@ public final class LyricsFetcher {
                 best = o;
             }
             if (best == null) {
-                Iterator iterator = null;
-                return iterator;
+                return null;
             }
             long orig = (long)(best.get("duration").getAsDouble() * 1000.0);
             Lyrics l = LyricsFetcher.parseLrc(best.get("syncedLyrics").getAsString(), orig);
@@ -576,7 +575,7 @@ public final class LyricsFetcher {
                 JsonObject o = e.getAsJsonObject();
                 String name = LyricsFetcher.norm(LyricsFetcher.str(o, "name"));
                 if (!name.equals(wantTitle) && !name.startsWith(wantTitle) && !wantTitle.startsWith(name)) continue;
-                String[] arts = new StringBuilder();
+                StringBuilder arts = new StringBuilder();
                 if (o.has("artists")) {
                     for (JsonElement a : o.getAsJsonArray("artists")) {
                         arts.append(LyricsFetcher.norm(LyricsFetcher.str(a.getAsJsonObject(), "name"))).append('|');
@@ -909,4 +908,3 @@ public final class LyricsFetcher {
         WORD_TAG = Pattern.compile("<(\\d+):(\\d+)(?:\\.(\\d+))?>");
     }
 }
-

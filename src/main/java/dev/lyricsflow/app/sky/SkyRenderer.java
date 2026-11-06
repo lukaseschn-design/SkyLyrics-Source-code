@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_1937
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- *  net.minecraft.class_4063
- *  net.minecraft.class_7172
- *  net.minecraft.class_9779
+ *  net.minecraft.world.level.Level
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.GuiGraphicsExtractor
+ *  net.minecraft.client.CloudStatus
+ *  net.minecraft.client.OptionInstance
+ *  net.minecraft.client.DeltaTracker
  */
 package dev.lyricsflow.app.sky;
 
@@ -22,12 +22,12 @@ import dev.lyricsflow.config.ConfigManager;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import net.minecraft.class_1937;
-import net.minecraft.class_310;
-import net.minecraft.class_332;
-import net.minecraft.class_4063;
-import net.minecraft.class_7172;
-import net.minecraft.class_9779;
+import net.minecraft.world.level.Level;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.CloudStatus;
+import net.minecraft.client.OptionInstance;
+import net.minecraft.client.DeltaTracker;
 
 public final class SkyRenderer {
     private static float sw;
@@ -61,13 +61,13 @@ public final class SkyRenderer {
     private SkyRenderer() {
     }
 
-    private static void setupCamera(class_332 g, class_310 mc, float pt) {
-        sw = g.method_51421();
-        sh = g.method_51443();
-        double fov = Math.toRadians(((Integer)mc.field_1690.method_41808().method_41753()).intValue());
+    private static void setupCamera(GuiGraphicsExtractor g, Minecraft mc, float pt) {
+        sw = g.guiWidth();
+        sh = g.guiHeight();
+        double fov = Math.toRadians(((Integer)mc.options.fov().get()).intValue());
         focal = (float)((double)sh / 2.0 / Math.tan(fov / 2.0));
-        camYaw = mc.field_1724.method_5705(pt);
-        camPitch = mc.field_1724.method_5695(pt);
+        camYaw = mc.player.getViewYRot(pt);
+        camPitch = mc.player.getViewXRot(pt);
         double y = Math.toRadians(camYaw);
         double p = Math.toRadians(camPitch);
         fx = -Math.sin(y) * Math.cos(p);
@@ -113,45 +113,45 @@ public final class SkyRenderer {
         }
     }
 
-    public static void tick(class_310 mc) {
+    public static void tick(Minecraft mc) {
         SkyPreset p;
         Config c = Core.cfg();
         if (c.sky != lastSky) {
-            if (lastSky != -99 && mc.field_1724 != null) {
+            if (lastSky != -99 && mc.player != null) {
                 p = SkyPreset.get(c.sky);
                 Island.notify(p == null ? Fx.t("lyricsflow.sky.off", new Object[0]) : Fx.t("lyricsflow.sky.enabled", Fx.t(p.key(), new Object[0])), p != null);
             }
             lastSky = c.sky;
         }
-        if (mc.field_1687 == null) {
+        if (mc.level == null) {
             forcedRain = false;
         } else {
             boolean wantRain;
             SkyRenderer.updateClouds(mc, c);
             p = SkyPreset.get(c.sky);
-            boolean bl = wantRain = p != null && c.realWeather && (p.weather == SkyPreset.Weather.RAIN || p.weather == SkyPreset.Weather.THUNDER) && Core.skyWorld((class_1937)mc.field_1687);
+            boolean bl = wantRain = p != null && c.realWeather && (p.weather == SkyPreset.Weather.RAIN || p.weather == SkyPreset.Weather.THUNDER) && Core.skyWorld((Level)mc.level);
             if (wantRain) {
-                mc.field_1687.method_8519(1.0f);
-                mc.field_1687.method_8496(p.weather == SkyPreset.Weather.THUNDER ? 1.0f : 0.0f);
+                mc.level.setRainLevel(1.0f);
+                mc.level.setThunderLevel(p.weather == SkyPreset.Weather.THUNDER ? 1.0f : 0.0f);
                 forcedRain = true;
             } else if (forcedRain) {
-                mc.field_1687.method_8519(0.0f);
-                mc.field_1687.method_8496(0.0f);
+                mc.level.setRainLevel(0.0f);
+                mc.level.setThunderLevel(0.0f);
                 forcedRain = false;
             }
         }
     }
 
-    private static void updateClouds(class_310 mc, Config c) {
+    private static void updateClouds(Minecraft mc, Config c) {
         boolean hide = c.hideClouds && c.sky >= 0;
-        class_7172 opt = mc.field_1690.method_42528();
-        if (hide && opt.method_41753() != class_4063.field_18162) {
-            c.cloudsBefore = ((class_4063)opt.method_41753()).name();
-            opt.method_41748((Object)class_4063.field_18162);
+        OptionInstance opt = mc.options.cloudStatus();
+        if (hide && opt.get() != CloudStatus.OFF) {
+            c.cloudsBefore = ((CloudStatus)opt.get()).name();
+            opt.set((Object)CloudStatus.OFF);
             Core.saveConfig();
         } else if (!hide && !c.cloudsBefore.isEmpty()) {
             try {
-                opt.method_41748((Object)class_4063.valueOf((String)c.cloudsBefore));
+                opt.set((Object)CloudStatus.valueOf((String)c.cloudsBefore));
             }
             catch (Exception exception) {
                 // empty catch block
@@ -161,20 +161,20 @@ public final class SkyRenderer {
         }
     }
 
-    public static void render(class_332 g, class_9779 delta) {
+    public static void render(GuiGraphicsExtractor g, DeltaTracker delta) {
         if (ConfigManager.get().enabled) {
-            class_310 mc = class_310.method_1551();
-            if (!mc.field_1690.field_1842 && mc.field_1724 != null && mc.field_1687 != null) {
+            Minecraft mc = Minecraft.getInstance();
+            if (!mc.gui.hud.isHidden() && mc.player != null && mc.level != null) {
                 Config c = Core.cfg();
                 long nowNs = System.nanoTime();
                 float dt = Math.min(0.1f, (float)(nowNs - lastNanos) / 1.0E9f);
                 lastNanos = nowNs;
-                float pt = delta.method_60637(false);
+                float pt = delta.getGameTimeDeltaPartialTick(false);
                 SkyRenderer.setupCamera(g, mc, pt);
                 SkyPreset p = SkyPreset.get(c.sky);
                 float old = Gfx.alpha;
                 Gfx.alpha = 1.0f;
-                if (p != null && p.weather == SkyPreset.Weather.THUNDER && Core.skyWorld((class_1937)mc.field_1687)) {
+                if (p != null && p.weather == SkyPreset.Weather.THUNDER && Core.skyWorld((Level)mc.level)) {
                     SkyRenderer.drawLightning(g);
                 }
                 Gfx.alpha = old;
@@ -182,7 +182,7 @@ public final class SkyRenderer {
         }
     }
 
-    private static void drawLightning(class_332 g) {
+    private static void drawLightning(GuiGraphicsExtractor g) {
         long age;
         long now = System.currentTimeMillis();
         if (now > nextFlash) {
@@ -210,4 +210,3 @@ public final class SkyRenderer {
         lastSky = -99;
     }
 }
-

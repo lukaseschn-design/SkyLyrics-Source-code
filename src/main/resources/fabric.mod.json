@@ -3,7 +3,7 @@
   "id": "lyricsflow",
   "version": "1.0+1.21.11",
   "name": "SkyLyrics",
-  "description": "Synced live lyrics from Spotify or YouTube, glowing in the sky or floating smoothly in the air.\ndc: i.am.maximus",
+  "description": "Synced live lyrics from Spotify or YouTube, glowing in the sky or floating smoothly in the air. dc: i.am.maximus",
   "authors": [
     "Maximus"
   ],
@@ -20,7 +20,8 @@
     ]
   },
   "mixins": [
-    "lyricsflow.mixins.json"
+    "lyricsflow.mixins.json",
+    "lumiclient.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.17.0",
@@ -30,5 +31,28 @@
   },
   "suggests": {
     "modmenu": "*"
-  }
+  },
+  "jars": [
+    {
+      "file": "META-INF/jars/lwjgl-nanovg-3.3.3-natives-linux-arm64.jar"
+    },
+    {
+      "file": "META-INF/jars/lwjgl-nanovg-3.3.3-natives-linux.jar"
+    },
+    {
+      "file": "META-INF/jars/lwjgl-nanovg-3.3.3-natives-macos-arm64.jar"
+    },
+    {
+      "file": "META-INF/jars/lwjgl-nanovg-3.3.3-natives-macos.jar"
+    },
+    {
+      "file": "META-INF/jars/lwjgl-nanovg-3.3.3-natives-windows-arm64.jar"
+    },
+    {
+      "file": "META-INF/jars/lwjgl-nanovg-3.3.3-natives-windows.jar"
+    },
+    {
+      "file": "META-INF/jars/lwjgl-nanovg-3.3.3.jar"
+    }
+  ]
 }

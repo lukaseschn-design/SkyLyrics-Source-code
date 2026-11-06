@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_11905
- *  net.minecraft.class_11908
- *  net.minecraft.class_11909
- *  net.minecraft.class_2561
- *  net.minecraft.class_332
- *  net.minecraft.class_437
+ *  net.minecraft.client.input.CharacterEvent
+ *  net.minecraft.client.input.KeyEvent
+ *  net.minecraft.client.input.MouseButtonEvent
+ *  net.minecraft.network.chat.Component
+ *  net.minecraft.client.gui.GuiGraphicsExtractor
+ *  net.minecraft.client.gui.screens.Screen
  */
 package dev.lyricsflow.gui;
 
@@ -27,15 +27,15 @@ import dev.lyricsflow.util.Anim;
 import dev.lyricsflow.util.Col;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.class_11905;
-import net.minecraft.class_11908;
-import net.minecraft.class_11909;
-import net.minecraft.class_2561;
-import net.minecraft.class_332;
-import net.minecraft.class_437;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.Screen;
 
 public class PlayerScreen
-extends class_437 {
+extends Screen {
     private float openT;
     private boolean closing;
     private float scroll = -1.0f;
@@ -52,7 +52,7 @@ extends class_437 {
     private float lw;
     private float ly;
     private float lh;
-    private final class_437 parent;
+    private final Screen parent;
     private final boolean blur;
     private float barX;
     private float barY;
@@ -85,27 +85,27 @@ extends class_437 {
         this(null, false);
     }
 
-    public PlayerScreen(class_437 parent, boolean blur) {
-        super((class_2561)class_2561.method_43471((String)"lyricsflow.player.title"));
+    public PlayerScreen(Screen parent, boolean blur) {
+        super((Component)Component.translatable((String)"lyricsflow.player.title"));
         this.parent = parent;
         this.blur = blur;
     }
 
-    protected void method_25426() {
+    protected void init() {
         UiSounds.play(UiSounds.OPEN, 0.9f);
     }
 
-    public boolean method_25421() {
+    public boolean isPauseScreen() {
         return false;
     }
 
-    public void method_25420(class_332 g, int mx, int my, float pt) {
+    public void extractBackground(GuiGraphicsExtractor g, int mx, int my, float pt) {
         if (this.blur) {
-            this.method_57734(g);
+            this.extractBlurredBackground(g);
         }
     }
 
-    public void method_25394(class_332 g, int mouseX, int mouseY, float pt) {
+    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float pt) {
         float frac;
         Anim.frame();
         this.openT = Anim.approach(this.openT, this.closing ? 0.0f : 1.0f, this.closing ? 16.0f : 9.0f);
@@ -119,11 +119,11 @@ extends class_437 {
         Track t = mm.track();
         Lyrics l = mm.lyrics();
         long pos = mm.positionRaw();
-        Gfx.gradientV(g, 0.0f, 0.0f, this.field_22789, this.field_22790, Col.alpha(Col.withAlpha(Col.darken(th.skyTop(), 0.3f), 224), a), Col.alpha(-267778032, a));
-        this.pw = Math.min(680, this.field_22789 - 30);
-        this.ph = Math.min(380, this.field_22790 - 30);
-        this.px = ((float)this.field_22789 - this.pw) / 2.0f;
-        this.py = ((float)this.field_22790 - this.ph) / 2.0f + (1.0f - a) * 12.0f;
+        Gfx.gradientV(g, 0.0f, 0.0f, this.width, this.height, Col.alpha(Col.withAlpha(Col.darken(th.skyTop(), 0.3f), 224), a), Col.alpha(-267778032, a));
+        this.pw = Math.min(680, this.width - 30);
+        this.ph = Math.min(380, this.height - 30);
+        this.px = ((float)this.width - this.pw) / 2.0f;
+        this.py = ((float)this.height - this.ph) / 2.0f + (1.0f - a) * 12.0f;
         Gfx.shadow(g, this.px, this.py, this.pw, this.ph, 18.0f, 16.0f, Col.alpha(-16777216, a * 0.6f));
         Gfx.roundGradient(g, this.px, this.py, this.pw, this.ph, 18.0f, Col.alpha(Col.lerp(th.skyTop(), -15593447, 0.4f), a), Col.alpha(-15856620, a));
         float leftW = Math.min(230.0f, this.pw * 0.38f);
@@ -244,20 +244,20 @@ extends class_437 {
         this.ly = this.py + 16.0f;
         this.lh = this.ph - 32.0f;
         Gfx.round(g, this.lx, this.ly, this.lw, this.lh, 12.0f, Col.alpha(0x40000000, a));
-        g.method_44379((int)this.lx, (int)this.ly, (int)Math.ceil(this.lx + this.lw), (int)Math.ceil(this.ly + this.lh));
+        g.enableScissor((int)this.lx, (int)this.ly, (int)Math.ceil(this.lx + this.lw), (int)Math.ceil(this.ly + this.lh));
         if (l == null || l.lines.isEmpty()) {
             String s = t == null ? Ui.tr("lyricsflow.hero.preview_idle", new Object[0]) : Ui.tr(mm.lyricsState() == MediaManager.LyricsState.SEARCHING ? "lyricsflow.lyrics.searching" : "lyricsflow.lyrics.not_found", new Object[0]);
             Gfx.textCentered(g, s, Ui.FB, this.lx + this.lw / 2.0f, this.ly + this.lh / 2.0f - 5.0f, 10.0f, Col.alpha(-6515020, a));
         } else {
             this.drawLyrics(g, l, pos, mouseX, mouseY, a, th);
         }
-        g.method_44380();
+        g.disableScissor();
         Gfx.gradientV(g, this.lx, this.ly, this.lw, 14.0f, Col.alpha(0x60000000, a), 0);
         Gfx.gradientV(g, this.lx, this.ly + this.lh - 14.0f, this.lw, 14.0f, 0, Col.alpha(0x60000000, a));
         Gfx.text(g, Ui.tr("lyricsflow.player.hint", new Object[0]), Ui.F, this.px + 14.0f, this.py + this.ph - 11.0f, 5.6f, Col.alpha(-9541498, a));
     }
 
-    private void drawLyrics(class_332 g, Lyrics l, long pos, double mx, double my, float a, Themes.Theme th) {
+    private void drawLyrics(GuiGraphicsExtractor g, Lyrics l, long pos, double mx, double my, float a, Themes.Theme th) {
         float target;
         float size = 11.0f;
         float gap = 7.0f;
@@ -286,11 +286,10 @@ extends class_437 {
         }
         this.scroll = Anim.approach(this.scroll, target, 5.0f);
         for (int i = 0; i < lines.size(); ++i) {
-            int col;
+            int col = i == ci ? -1 : (i < ci ? -7567706 : -11054484);
             float yy = this.ly + 16.0f + this.lineY[i] - this.scroll;
             if (yy > this.ly + this.lh || yy + (this.lineY[i + 1] - this.lineY[i]) < this.ly) continue;
             boolean over = Ui.inside(mx, my, this.lx, yy - 2.0f, this.lw, this.lineY[i + 1] - this.lineY[i] - gap + 4.0f);
-            int n = i == ci ? -1 : (col = i < ci ? -7567706 : -11054484);
             if (over && i != ci) {
                 col = Col.lerp(col, -1, 0.5f);
             }
@@ -310,7 +309,7 @@ extends class_437 {
         return String.format("%d:%02d", s / 60L, s % 60L);
     }
 
-    private void button(class_332 g, int i, float x, float y, float r, String icon, boolean primary, double mx, double my, float a) {
+    private void button(GuiGraphicsExtractor g, int i, float x, float y, float r, String icon, boolean primary, double mx, double my, float a) {
         boolean over = Ui.inside(mx, my, x - r, y - r, r * 2.0f, r * 2.0f);
         if (over && this.btnHover[i] < 0.05f) {
             UiSounds.play(UiSounds.HOVER, 1.2f);
@@ -328,9 +327,9 @@ extends class_437 {
         }
     }
 
-    public boolean method_25402(class_11909 e, boolean dbl) {
-        double mx = e.comp_4798();
-        double my = e.comp_4799();
+    public boolean mouseClicked(MouseButtonEvent e, boolean dbl) {
+        double mx = e.x();
+        double my = e.y();
         MediaManager mm = MediaManager.get();
         float by = this.ctlY;
         float mid = this.ctlMid;
@@ -405,7 +404,7 @@ extends class_437 {
                 return true;
             }
         }
-        return super.method_25402(e, dbl);
+        return super.mouseClicked(e, dbl);
     }
 
     private void jump(long ms) {
@@ -438,11 +437,11 @@ extends class_437 {
         }
     }
 
-    public boolean method_25400(class_11905 e) {
+    public boolean charTyped(CharacterEvent e) {
         if (!this.editing) {
-            return super.method_25400(e);
+            return super.charTyped(e);
         }
-        String c = e.method_74226();
+        String c = e.codepointAsString();
         if (c.length() == 1 && (Character.isDigit(c.charAt(0)) || c.charAt(0) == ':' || c.charAt(0) == '.') && this.timeText.length() < 8) {
             this.timeText = this.timeText + c;
             UiSounds.play(UiSounds.SLIDER, 1.3f);
@@ -450,9 +449,9 @@ extends class_437 {
         return true;
     }
 
-    public boolean method_25403(class_11909 e, double dx, double dy) {
+    public boolean mouseDragged(MouseButtonEvent e, double dx, double dy) {
         if (this.volDrag) {
-            float nf = (float)Math.max(0.0, Math.min(1.0, (e.comp_4798() - (double)this.vX) / (double)this.vW));
+            float nf = (float)Math.max(0.0, Math.min(1.0, (e.x() - (double)this.vX) / (double)this.vW));
             if (Math.abs(nf - this.volShown) > 0.01f) {
                 this.volShown = nf;
                 AppVolume.set(nf);
@@ -461,17 +460,17 @@ extends class_437 {
             return true;
         }
         if (this.seeking) {
-            float nf = (float)Math.max(0.0, Math.min(1.0, (e.comp_4798() - (double)this.barX) / (double)this.barW));
+            float nf = (float)Math.max(0.0, Math.min(1.0, (e.x() - (double)this.barX) / (double)this.barW));
             if (Math.abs(nf - this.seekFrac) > 0.004f) {
                 UiSounds.play(UiSounds.SLIDER, 0.9f + nf * 0.4f);
             }
             this.seekFrac = nf;
             return true;
         }
-        return super.method_25403(e, dx, dy);
+        return super.mouseDragged(e, dx, dy);
     }
 
-    public boolean method_25406(class_11909 e) {
+    public boolean mouseReleased(MouseButtonEvent e) {
         if (this.volDrag) {
             this.volDrag = false;
             return true;
@@ -486,10 +485,10 @@ extends class_437 {
             }
             return true;
         }
-        return super.method_25406(e);
+        return super.mouseReleased(e);
     }
 
-    public boolean method_25401(double x, double y, double h, double v) {
+    public boolean mouseScrolled(double x, double y, double h, double v) {
         if (Anim.seconds() - this.lastUserScroll >= 3.0) {
             this.userScroll = this.scroll;
         }
@@ -498,9 +497,9 @@ extends class_437 {
         return true;
     }
 
-    public boolean method_25404(class_11908 e) {
+    public boolean keyPressed(KeyEvent e) {
         if (this.editing) {
-            if (e.comp_4795() == 257 || e.comp_4795() == 335) {
+            if (e.key() == 257 || e.key() == 335) {
                 long ms = PlayerScreen.parseTime(this.timeText);
                 Track tr = MediaManager.get().track();
                 if (ms >= 0L && tr != null) {
@@ -511,44 +510,44 @@ extends class_437 {
                     UiSounds.play(UiSounds.TOGGLE_ON, 1.1f);
                 }
                 this.editing = false;
-            } else if (e.comp_4795() == 259) {
+            } else if (e.key() == 259) {
                 if (!this.timeText.isEmpty()) {
                     this.timeText = this.timeText.substring(0, this.timeText.length() - 1);
                 }
-            } else if (e.comp_4795() == 256) {
+            } else if (e.key() == 256) {
                 this.editing = false;
             }
             return true;
         }
-        if (e.comp_4795() == 265 || e.comp_4795() == 264) {
+        if (e.key() == 265 || e.key() == 264) {
             float v = AppVolume.get();
             if (v >= 0.0f) {
-                AppVolume.set(v + (e.comp_4795() == 265 ? 0.05f : -0.05f));
+                AppVolume.set(v + (e.key() == 265 ? 0.05f : -0.05f));
                 UiSounds.play(UiSounds.SLIDER, 1.0f);
             }
             return true;
         }
-        if (e.comp_4795() == 256 || Keys.openPlayer != null && Keys.openPlayer.method_1417(e)) {
-            this.method_25419();
+        if (e.key() == 256 || Keys.openPlayer != null && Keys.openPlayer.matches(e)) {
+            this.onClose();
             return true;
         }
-        if (e.comp_4795() == 32) {
+        if (e.key() == 32) {
             MediaManager.get().playPause();
             UiSounds.play(UiSounds.CLICK);
             return true;
         }
-        if (e.comp_4795() == 262) {
+        if (e.key() == 262) {
             MediaManager.get().next();
             return true;
         }
-        if (e.comp_4795() == 263) {
+        if (e.key() == 263) {
             MediaManager.get().previous();
             return true;
         }
-        return super.method_25404(e);
+        return super.keyPressed(e);
     }
 
-    public void method_25419() {
+    public void onClose() {
         if (this.closing) {
             return;
         }
@@ -556,18 +555,17 @@ extends class_437 {
         UiSounds.play(UiSounds.CLOSE, 0.95f);
     }
 
-    public void method_25432() {
-        super.method_25432();
+    public void removed() {
+        super.removed();
     }
 
     private void finish() {
-        if (this.field_22787 != null) {
-            this.field_22787.method_1507(this.parent);
+        if (this.minecraft != null) {
+            this.minecraft.gui.setScreen(this.parent);
         }
     }
 
-    public boolean method_25422() {
+    public boolean shouldCloseOnEsc() {
         return false;
     }
 }
-

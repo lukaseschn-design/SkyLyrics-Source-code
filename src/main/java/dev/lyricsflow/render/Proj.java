@@ -2,16 +2,16 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_243
- *  net.minecraft.class_310
- *  net.minecraft.class_4184
+ *  net.minecraft.world.phys.Vec3
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.Camera
  *  org.joml.Vector3fc
  */
 package dev.lyricsflow.render;
 
-import net.minecraft.class_243;
-import net.minecraft.class_310;
-import net.minecraft.class_4184;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.Camera;
 import org.joml.Vector3fc;
 
 public final class Proj {
@@ -39,19 +39,19 @@ public final class Proj {
     }
 
     public static void update(float guiWidth, float guiHeight) {
-        class_310 mc = class_310.method_1551();
-        class_4184 cam = mc.field_1773.method_19418();
-        class_243 p = cam.method_71156();
-        cx = p.field_1352;
-        cy = p.field_1351;
-        cz = p.field_1350;
-        yaw = cam.method_19330();
-        pitch = cam.method_19329();
+        Minecraft mc = Minecraft.getInstance();
+        Camera cam = mc.gameRenderer.mainCamera();
+        Vec3 p = cam.position();
+        cx = p.x;
+        cy = p.y;
+        cz = p.z;
+        yaw = cam.yRot();
+        pitch = cam.xRot();
         width = guiWidth;
         height = guiHeight;
-        Vector3fc f = cam.method_19335();
-        Vector3fc u = cam.method_19336();
-        Vector3fc l = cam.method_35689();
+        Vector3fc f = cam.forwardVector();
+        Vector3fc u = cam.upVector();
+        Vector3fc l = cam.leftVector();
         fx = f.x();
         fy = f.y();
         fz = f.z();
@@ -63,10 +63,10 @@ public final class Proj {
         rz = -l.z();
         float fov = fovFromRenderer;
         if (Float.isNaN(fov) || fov < 1.0f || fov > 179.0f) {
-            fov = ((Integer)mc.field_1690.method_41808().method_41753()).intValue();
+            fov = ((Integer)mc.options.fov().get()).intValue();
         }
         focal = (double)guiHeight / 2.0 / Math.tan(Math.toRadians(fov) / 2.0);
-        focalBase = (double)guiHeight / 2.0 / Math.tan(Math.toRadians(((Integer)mc.field_1690.method_41808().method_41753()).intValue()) / 2.0);
+        focalBase = (double)guiHeight / 2.0 / Math.tan(Math.toRadians(((Integer)mc.options.fov().get()).intValue()) / 2.0);
     }
 
     public static double focal() {

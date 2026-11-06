@@ -2,23 +2,23 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_12249
- *  net.minecraft.class_1297
- *  net.minecraft.class_1299
- *  net.minecraft.class_1538
- *  net.minecraft.class_1937
- *  net.minecraft.class_243
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_3414
- *  net.minecraft.class_3417
- *  net.minecraft.class_3419
- *  net.minecraft.class_3730
- *  net.minecraft.class_4587
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_4608
- *  net.minecraft.class_9944
+ *  net.minecraft.client.renderer.rendertype.RenderTypes
+ *  net.minecraft.world.entity.Entity
+ *  net.minecraft.world.entity.EntityType
+ *  net.minecraft.world.entity.LightningBolt
+ *  net.minecraft.world.level.Level
+ *  net.minecraft.world.phys.Vec3
+ *  net.minecraft.resources.Identifier
+ *  net.minecraft.client.Minecraft
+ *  net.minecraft.sounds.SoundEvent
+ *  net.minecraft.sounds.SoundEvents
+ *  net.minecraft.sounds.SoundSource
+ *  net.minecraft.world.entity.EntitySpawnReason
+ *  com.mojang.blaze3d.vertex.PoseStack
+ *  com.mojang.blaze3d.vertex.VertexConsumer
+ *  dev.lyricsflow.compat.LegacyBufferSource
+ *  net.minecraft.client.renderer.texture.OverlayTexture
+ *  net.minecraft.client.model.object.chest.ChestModel
  *  org.joml.Matrix3f
  *  org.joml.Matrix3fc
  *  org.joml.Matrix4f
@@ -32,23 +32,23 @@ import dev.lyricsflow.app.cosmetic.DeathHard;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import net.minecraft.class_12249;
-import net.minecraft.class_1297;
-import net.minecraft.class_1299;
-import net.minecraft.class_1538;
-import net.minecraft.class_1937;
-import net.minecraft.class_243;
-import net.minecraft.class_2960;
-import net.minecraft.class_310;
-import net.minecraft.class_3414;
-import net.minecraft.class_3417;
-import net.minecraft.class_3419;
-import net.minecraft.class_3730;
-import net.minecraft.class_4587;
-import net.minecraft.class_4588;
-import net.minecraft.class_4597;
-import net.minecraft.class_4608;
-import net.minecraft.class_9944;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.resources.Identifier;
+import net.minecraft.client.Minecraft;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.EntitySpawnReason;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import dev.lyricsflow.compat.LegacyBufferSource;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.client.model.object.chest.ChestModel;
 import org.joml.Matrix3f;
 import org.joml.Matrix3fc;
 import org.joml.Matrix4f;
@@ -79,8 +79,8 @@ final class DeathMore {
     static final int VEIN = 12095615;
     static final int SLEEVE = 2828339;
     static final int CUFF = 1841698;
-    static final class_2960 CHEST_TEX = class_2960.method_60656((String)"textures/entity/chest/normal.png");
-    private static class_9944 chestModel;
+    static final Identifier CHEST_TEX = Identifier.withDefaultNamespace((String)"textures/entity/chest/normal.png");
+    private static ChestModel chestModel;
 
     private DeathMore() {
     }
@@ -93,7 +93,7 @@ final class DeathMore {
         return new S(f.kind, r);
     }
 
-    static void draw(class_310 mc, class_4597 buffers, Matrix4f base, class_243 cam, DeathFx.Fx f, float t) {
+    static void draw(Minecraft mc, LegacyBufferSource buffers, Matrix4f base, Vec3 cam, DeathFx.Fx f, float t) {
         float dt;
         S s;
         block9: {
@@ -111,9 +111,9 @@ final class DeathMore {
         c.f = f;
         c.s = s;
         c.t = t;
-        c.m = new Matrix4f((Matrix4fc)base).translate((float)(f.ox - cam.field_1352), (float)(f.oy - cam.field_1351), (float)(f.oz - cam.field_1350)).rotateY(-f.yaw);
+        c.m = new Matrix4f((Matrix4fc)base).translate((float)(f.ox - cam.x), (float)(f.oy - cam.y), (float)(f.oz - cam.z)).rotateY(-f.yaw);
         c.light = DeathFx.light(mc, f.ox, f.oy + 1.0, f.oz);
-        c.fp = f.self && mc.field_1690.method_31044().method_31034();
+        c.fp = f.self && mc.options.getCameraType().isFirstPerson();
         float f2 = dt = s.lastT < 0.0f ? 0.0f : t - s.lastT;
         if (dt < 0.0f || dt > 0.25f) {
             dt = 0.0f;
@@ -142,20 +142,20 @@ final class DeathMore {
         float t = c.t;
         if (s.once(0, true)) {
             try {
-                class_1538 lb = (class_1538)class_1299.field_6112.method_5883((class_1937)c.mc.field_1687, class_3730.field_16461);
+                LightningBolt lb = (LightningBolt)net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getValue(Identifier.withDefaultNamespace("lightning_bolt")).create((Level)c.mc.level, EntitySpawnReason.TRIGGERED);
                 if (lb != null) {
-                    lb.method_5838(-1000000 - s.r.nextInt(1000000));
-                    lb.method_29498(true);
-                    lb.method_5814(c.f.ox, c.f.oy, c.f.oz);
-                    c.mc.field_1687.method_53875((class_1297)lb);
+                    lb.setId(-1000000 - s.r.nextInt(1000000));
+                    lb.setVisualOnly(true);
+                    lb.setPos(c.f.ox, c.f.oy, c.f.oz);
+                    c.mc.level.addEntity((Entity)lb);
                 }
             }
             catch (Throwable lb) {
                 // empty catch block
             }
-            c.sound(class_3417.field_14865, 3.0f, 0.9f);
-            c.sound(class_3417.field_14956, 2.0f, 0.8f);
-            c.sound((class_3414)class_3417.field_15152.comp_349(), 1.0f, 1.2f);
+            c.sound(SoundEvents.LIGHTNING_BOLT_THUNDER, 3.0f, 0.9f);
+            c.sound(SoundEvents.LIGHTNING_BOLT_IMPACT, 2.0f, 0.8f);
+            c.sound((SoundEvent)SoundEvents.GENERIC_EXPLODE.value(), 1.0f, 1.2f);
             for (int i = 0; i < 300; ++i) {
                 int part = DeathMore.pickPart(s.r);
                 P p = DeathMore.inPart(s.r, part);
@@ -172,14 +172,14 @@ final class DeathMore {
             }
         }
         if (s.once(5, t > 0.35f)) {
-            c.sound(class_3417.field_14956, 2.0f, 1.1f);
+            c.sound(SoundEvents.LIGHTNING_BOLT_IMPACT, 2.0f, 1.1f);
         }
         if (s.once(1, t > 1.15f)) {
-            c.sound(class_3417.field_15102, 1.0f, 0.6f);
+            c.sound(SoundEvents.FIRE_EXTINGUISH, 1.0f, 0.6f);
         }
         if (s.once(2, t > 1.6f)) {
-            c.sound(class_3417.field_15074, 1.0f, 0.6f);
-            c.sound(class_3417.field_21949, 1.0f, 0.5f);
+            c.sound(SoundEvents.SAND_BREAK, 1.0f, 0.6f);
+            c.sound(SoundEvents.SOUL_SAND_BREAK, 1.0f, 0.5f);
         }
         float fade = 1.0f - DeathFx.sm(DeathMore.end(4) - 1.5f, DeathMore.end(4) - 0.2f, t);
         DeathFx.disc(c.glow(), c.m, 0.0f, 0.012f, 0.0f, 0.0f, 1.05f, 1314828, 0.8f * DeathFx.sm(0.0f, 0.3f, t) * fade, 1314828, 0.0f, 26);
@@ -207,7 +207,7 @@ final class DeathMore {
             g.armRZ = 0.45f * shock + jit;
             g.armLZ = 0.45f * shock - jit;
             g.headX = -0.35f * shock;
-            class_4588 v = c.skin();
+            VertexConsumer v = c.skin();
             Matrix4f[] pm = g.mats(new Matrix4f((Matrix4fc)c.m).translate(0.0f, 0.703f, 0.0f));
             for (int i = 0; i < 6; ++i) {
                 float cy = STAND[i][1];
@@ -218,7 +218,7 @@ final class DeathMore {
                 DeathMore.part(v, mm, i, c.skinTint(tint), c.light);
             }
             if (burn > 0.3f) {
-                class_4588 w = c.white();
+                VertexConsumer w = c.white();
                 for (int i = 0; i < 14; ++i) {
                     float hy = 0.15f + DeathFx.hashF(i * 7 + 1) * 1.7f;
                     if (hy > front) continue;
@@ -248,7 +248,7 @@ final class DeathMore {
     }
 
     static void drawBolt(C c, float[][] p) {
-        class_4588 g = c.glow();
+        VertexConsumer g = c.glow();
         int i = 0;
         while (i + 1 < p.length) {
             DeathHard.gline(g, c.m, p[i][0], p[i][1], p[i][2], p[i + 1][0], p[i + 1][1], p[i + 1][2], 1.1f, 8363263, 0.25f);
@@ -256,7 +256,7 @@ final class DeathMore {
             DeathHard.gline(g, c.m, p[i][0], p[i][1], p[i][2], p[i + 1][0], p[i + 1][1], p[i + 1][2], 0.1f, 0xFFFFFF, 1.0f);
             ++i;
         }
-        class_4588 v = c.buf.method_73477(class_12249.method_76003());
+        VertexConsumer v = c.buf.getBuffer(RenderTypes.lightning());
         int i2 = 0;
         while (i2 + 1 < p.length) {
             for (int layer = 0; layer < 3; ++layer) {
@@ -268,16 +268,16 @@ final class DeathMore {
         }
     }
 
-    static void beam(class_4588 v, Matrix4f m, float[] a, float[] b, float w, int argb) {
+    static void beam(VertexConsumer v, Matrix4f m, float[] a, float[] b, float w, int argb) {
         float h = w / 2.0f;
-        v.method_22918((Matrix4fc)m, a[0] - h, a[1], a[2]).method_39415(argb);
-        v.method_22918((Matrix4fc)m, a[0] + h, a[1], a[2]).method_39415(argb);
-        v.method_22918((Matrix4fc)m, b[0] + h, b[1], b[2]).method_39415(argb);
-        v.method_22918((Matrix4fc)m, b[0] - h, b[1], b[2]).method_39415(argb);
-        v.method_22918((Matrix4fc)m, a[0], a[1], a[2] - h).method_39415(argb);
-        v.method_22918((Matrix4fc)m, a[0], a[1], a[2] + h).method_39415(argb);
-        v.method_22918((Matrix4fc)m, b[0], b[1], b[2] + h).method_39415(argb);
-        v.method_22918((Matrix4fc)m, b[0], b[1], b[2] - h).method_39415(argb);
+        v.addVertex((Matrix4fc)m, a[0] - h, a[1], a[2]).setColor(argb);
+        v.addVertex((Matrix4fc)m, a[0] + h, a[1], a[2]).setColor(argb);
+        v.addVertex((Matrix4fc)m, b[0] + h, b[1], b[2]).setColor(argb);
+        v.addVertex((Matrix4fc)m, b[0] - h, b[1], b[2]).setColor(argb);
+        v.addVertex((Matrix4fc)m, a[0], a[1], a[2] - h).setColor(argb);
+        v.addVertex((Matrix4fc)m, a[0], a[1], a[2] + h).setColor(argb);
+        v.addVertex((Matrix4fc)m, b[0], b[1], b[2] + h).setColor(argb);
+        v.addVertex((Matrix4fc)m, b[0], b[1], b[2] - h).setColor(argb);
     }
 
     static float handY(float t) {
@@ -307,17 +307,17 @@ final class DeathMore {
         boolean hit = t >= 2.24f;
         float press = hit ? 1.0f - DeathFx.sm(3.4f, 3.9f, t) : 0.0f;
         if (s.once(0, t > 0.05f)) {
-            c.sound(class_3417.field_38831, 1.0f, 0.45f);
+            c.sound(SoundEvents.WARDEN_SONIC_CHARGE, 1.0f, 0.45f);
         }
         if (s.once(1, t > 1.8f)) {
-            c.sound(class_3417.field_38068, 1.0f, 0.6f);
+            c.sound(SoundEvents.WARDEN_HEARTBEAT, 1.0f, 0.6f);
         }
         if (s.once(2, hit)) {
-            c.sound(class_3417.field_14833, 1.0f, 0.45f);
-            c.sound((class_3414)class_3417.field_15152.comp_349(), 0.7f, 1.5f);
-            c.sound(class_3417.field_21872, 1.0f, 0.5f);
-            c.sound(class_3417.field_15194, 1.0f, 0.5f);
-            c.sound(class_3417.field_15115, 1.0f, 0.6f);
+            c.sound(SoundEvents.ANVIL_LAND, 1.0f, 0.45f);
+            c.sound((SoundEvent)SoundEvents.GENERIC_EXPLODE.value(), 0.7f, 1.5f);
+            c.sound(SoundEvents.BONE_BLOCK_BREAK, 1.0f, 0.5f);
+            c.sound(SoundEvents.SLIME_BLOCK_BREAK, 1.0f, 0.5f);
+            c.sound(SoundEvents.PLAYER_HURT, 1.0f, 0.6f);
             for (int i = 0; i < 230; ++i) {
                 double a = s.r.nextDouble() * Math.PI * 2.0;
                 P p = DeathMore.blood(s, (float)Math.cos(a) * 0.25f, 0.12f, 0.2f + (float)Math.sin(a) * 0.25f);
@@ -336,13 +336,13 @@ final class DeathMore {
             DeathMore.squirt(s, (float)Math.cos(a) * 0.85f, 0.1f, (float)Math.sin(a) * 0.85f, (float)Math.cos(a) * 1.4f, 0.0f, (float)Math.sin(a) * 1.4f, 5);
         }
         if (s.once(3, t > 3.4f)) {
-            c.sound(class_3417.field_21070, 1.0f, 0.5f);
+            c.sound(SoundEvents.HONEY_BLOCK_BREAK, 1.0f, 0.5f);
         }
         if (s.once(4, t > 4.4f)) {
-            c.sound(class_3417.field_38831, 0.6f, 0.7f);
+            c.sound(SoundEvents.WARDEN_SONIC_CHARGE, 0.6f, 0.7f);
         }
         float fade = 1.0f - DeathFx.sm(DeathMore.end(5) - 1.2f, DeathMore.end(5) - 0.1f, t);
-        class_4588 g = c.glow();
+        VertexConsumer g = c.glow();
         float near = DeathFx.cl(1.0f - hy / 22.0f);
         DeathFx.disc(g, c.m, 0.0f, 0.014f, 0.2f, 0.0f, 1.0f + 1.3f * near, 0, 0.6f * near * near, 0, 0.0f, 28);
         if (hit) {
@@ -377,12 +377,12 @@ final class DeathMore {
             float K = 7.0f;
             float len = 12.0f * K * 0.05859375f;
             Matrix4f am = new Matrix4f((Matrix4fc)c.m).translate(tremble, hy + len / 2.0f, 0.0f).rotateY(grind).scale(K);
-            class_4588 sk = c.skin();
+            VertexConsumer sk = c.skin();
             tint = c.skinTint(0xFFFFFF);
             DeathFx.skinBox(sk, am, 4.0f, 12.0f, 4.0f, 0.0f, 40, 16, tint, hl);
             DeathFx.skinBox(sk, am, 4.0f, 12.0f, 4.0f, 0.25f, 40, 32, tint, hl);
             if (hit) {
-                class_4588 w = c.white();
+                VertexConsumer w = c.white();
                 float hw = 2.0f * K * 0.05859375f;
                 for (int i = 0; i < 12; ++i) {
                     float bx = (DeathFx.hashF(i * 5 + 1) - 0.5f) * hw * 1.6f;
@@ -397,7 +397,7 @@ final class DeathMore {
         }
     }
 
-    static void drawHand(class_4588 w, Matrix4f m, float spread, float curl, float t, int li, boolean bloody) {
+    static void drawHand(VertexConsumer w, Matrix4f m, float spread, float curl, float t, int li, boolean bloody) {
         int sk = -1857150;
         int sd = -3568022;
         int sl = -998492;
@@ -482,23 +482,23 @@ final class DeathMore {
         float open = t < 1.25f ? 0.0f : (t < 1.37f ? DeathFx.eo((t - 1.25f) / 0.12f) : (t < 2.1f ? 1.0f : (t < 2.18f ? 1.0f - DeathFx.ei((t - 2.1f) / 0.08f) : (t < 2.9f ? 0.18f * Math.max(0.0f, (float)Math.sin((t - 2.18f) * 9.0f)) * (1.0f - DeathFx.sm(2.5f, 2.9f, t)) : 0.0f))));
         boolean bl = cutOff = t >= 2.18f;
         if (s.once(0, true)) {
-            c.sound(class_3417.field_28601, 1.0f, 0.8f);
+            c.sound(SoundEvents.ROOTED_DIRT_BREAK, 1.0f, 0.8f);
             DeathMore.dirt(s, 0.0f, cz, 26, 0.9f);
         }
         if (s.once(1, t > 1.25f)) {
-            c.sound(class_3417.field_14982, 1.0f, 0.7f);
-            c.sound(class_3417.field_38831, 0.5f, 1.6f);
+            c.sound(SoundEvents.CHEST_OPEN, 1.0f, 0.7f);
+            c.sound(SoundEvents.WARDEN_SONIC_CHARGE, 0.5f, 1.6f);
         }
         if (s.once(2, t > 1.6f)) {
-            c.sound(class_3417.field_14879, 1.0f, 0.5f);
+            c.sound(SoundEvents.ENDERMAN_TELEPORT, 1.0f, 0.5f);
         }
         if (s.once(3, t > 2.1f)) {
-            c.sound(class_3417.field_14823, 1.0f, 0.55f);
+            c.sound(SoundEvents.CHEST_CLOSE, 1.0f, 0.55f);
         }
         if (s.once(4, cutOff)) {
-            c.sound(class_3417.field_14742, 0.6f, 1.2f);
-            c.sound(class_3417.field_15194, 1.0f, 0.6f);
-            c.sound(class_3417.field_15115, 1.0f, 0.7f);
+            c.sound(SoundEvents.ZOMBIE_BREAK_WOODEN_DOOR, 0.6f, 1.2f);
+            c.sound(SoundEvents.SLIME_BLOCK_BREAK, 1.0f, 0.6f);
+            c.sound(SoundEvents.PLAYER_HURT, 1.0f, 0.7f);
             for (int i = 0; i < 2; ++i) {
                 P p = new P();
                 p.part = i == 0 ? 4 : 5;
@@ -518,7 +518,7 @@ final class DeathMore {
             DeathMore.pool(s, 0.0f, cz - 0.7f, 0.7f, 2.2f);
         }
         if (s.once(5, t > 3.0f)) {
-            c.sound(class_3417.field_28601, 1.0f, 0.6f);
+            c.sound(SoundEvents.ROOTED_DIRT_BREAK, 1.0f, 0.6f);
             DeathMore.dirt(s, 0.0f, cz, 30, 0.8f);
         }
         if (t > 2.2f && t < 3.0f && s.r.nextFloat() < c.dt * 30.0f) {
@@ -562,27 +562,27 @@ final class DeathMore {
             int li = DeathFx.light(c.mc, c.f.ox, c.f.oy + 0.8, c.f.oz);
             try {
                 if (chestModel == null) {
-                    chestModel = new class_9944(class_9944.method_62070().method_32109());
+                    chestModel = new ChestModel(ChestModel.createSingleBodyLayer().bakeRoot());
                 }
-                chestModel.method_62069(Float.valueOf(open));
-                class_4587 ps = new class_4587();
-                ps.method_23760().method_23761().set((Matrix4fc)new Matrix4f((Matrix4fc)cm).translate(-0.5f, 0.0f, -0.5f));
-                ps.method_23760().method_23762().set((Matrix3fc)new Matrix3f((Matrix4fc)cm).normal());
-                chestModel.method_60879(ps, c.buf.method_73477(class_12249.method_75994((class_2960)CHEST_TEX)), li, class_4608.field_21444);
+                chestModel.setupAnim(Float.valueOf(open));
+                PoseStack ps = new PoseStack();
+                ps.last().pose().set((Matrix4fc)new Matrix4f((Matrix4fc)cm).translate(-0.5f, 0.0f, -0.5f));
+                ps.last().normal().set((Matrix3fc)new Matrix3f((Matrix4fc)cm).normal());
+                chestModel.renderToBuffer(ps, c.buf.getBuffer(RenderTypes.entityCutout((Identifier)CHEST_TEX)), li, OverlayTexture.NO_OVERLAY, -1);
             }
             catch (Throwable e) {
-                class_4588 w = c.white();
+                VertexConsumer w = c.white();
                 DeathFx.cube(w, cm, -0.44f, 0.0f, -0.44f, 0.44f, 0.62f, 0.44f, -6658766, li);
             }
             if (open > 0.02f || t > 1.25f && t < 2.2f) {
-                class_4588 w = c.white();
+                VertexConsumer w = c.white();
                 DeathFx.cube(w, cm, -0.375f, 0.627f, -0.375f, 0.375f, 0.633f, 0.375f, -16777216, 0);
                 DeathFx.disc(c.glow(), cm, 0.0f, 0.64f, 0.0f, 0.0f, 0.4f, 2755130, 0.5f * open, 0, 0.0f, 16);
             }
         }
     }
 
-    static void part(class_4588 v, Matrix4f m, int i, int tint, int light) {
+    static void part(VertexConsumer v, Matrix4f m, int i, int tint, int light) {
         int[] p = PT[i];
         DeathFx.skinBox(v, m, p[0], p[1], p[2], 0.0f, p[3], p[4], tint, light);
         DeathFx.skinBox(v, m, p[0], p[1], p[2], INFL[i], p[5], p[6], tint, light);
@@ -675,7 +675,7 @@ final class DeathMore {
         float t = c.t;
         float dt = c.dt;
         if (!s.pools.isEmpty()) {
-            class_4588 g = c.glow();
+            VertexConsumer g = c.glow();
             float a = 1.0f - DeathFx.sm(fadeAt, fadeAt + 1.3f, t);
             for (float[] fArray : s.pools) {
                 float k = DeathFx.eo(DeathFx.cl((t - fArray[3]) / 1.4f));
@@ -685,7 +685,7 @@ final class DeathMore {
         if (s.ps.isEmpty()) {
             return;
         }
-        class_4588 w = c.white();
+        VertexConsumer w = c.white();
         int extraPools = 0;
         for (P p : s.ps) {
             float h;
@@ -725,7 +725,7 @@ final class DeathMore {
             break;
         }
         if (any && !c.fp) {
-            class_4588 class_45882 = c.skin();
+            VertexConsumer class_45882 = c.skin();
             for (P p : s.ps) {
                 if (p.part < 0 || !p.alive) continue;
                 float half = p.part == 0 ? 0.24f : 0.12f;
@@ -734,7 +734,7 @@ final class DeathMore {
                 pm = new Matrix4f((Matrix4fc)c.m).translate(p.x, p.y - sink, p.z).rotateXYZ(p.rx, p.ry, p.rz);
                 DeathMore.part(class_45882, pm, p.part, c.skinTint(DeathFx.mix(p.col, 0xFFFFFF, 0.0f)), c.light);
             }
-            class_4588 w2 = c.white();
+            VertexConsumer w2 = c.white();
             for (P p : s.ps) {
                 if (p.part < 0 || !p.alive || p.part == 0) continue;
                 float sink = DeathFx.sm(fadeAt + 0.2f, fadeAt + 1.4f, t) * 0.5f;
@@ -833,8 +833,8 @@ final class DeathMore {
     }
 
     static final class C {
-        class_310 mc;
-        class_4597 buf;
+        Minecraft mc;
+        LegacyBufferSource buf;
         Matrix4f m;
         DeathFx.Fx f;
         S s;
@@ -846,25 +846,25 @@ final class DeathMore {
         C() {
         }
 
-        class_4588 white() {
-            return this.buf.method_73477(class_12249.method_75994((class_2960)Accessories.WHITE));
+        VertexConsumer white() {
+            return this.buf.getBuffer(RenderTypes.entityCutout((Identifier)Accessories.WHITE));
         }
 
-        class_4588 skin() {
-            return this.buf.method_73477(class_12249.method_75994((class_2960)(this.f.skin != null ? this.f.skin : Accessories.WHITE)));
+        VertexConsumer skin() {
+            return this.buf.getBuffer(RenderTypes.entityCutout((Identifier)(this.f.skin != null ? this.f.skin : Accessories.WHITE)));
         }
 
         int skinTint(int rgb) {
             return this.f.skin != null ? 0xFF000000 | rgb : 0xFF000000 | DeathMore.mul(rgb, 0x8A8A8A);
         }
 
-        class_4588 glow() {
-            return this.buf.method_73477(class_12249.method_76023());
+        VertexConsumer glow() {
+            return this.buf.getBuffer(RenderTypes.debugQuads());
         }
 
-        void sound(class_3414 e, float vol, float pitch) {
+        void sound(SoundEvent e, float vol, float pitch) {
             try {
-                this.mc.field_1687.method_8486(this.f.ox, this.f.oy + 1.0, this.f.oz, e, class_3419.field_15248, vol, pitch, false);
+                this.mc.level.playLocalSound(this.f.ox, this.f.oy + 1.0, this.f.oz, e, SoundSource.PLAYERS, vol, pitch, false);
             }
             catch (Throwable throwable) {
                 // empty catch block
@@ -922,7 +922,7 @@ final class DeathMore {
             return o;
         }
 
-        void draw(class_4588 v, Matrix4f hip, int tint, int light) {
+        void draw(VertexConsumer v, Matrix4f hip, int tint, int light) {
             Matrix4f[] o = this.mats(hip);
             for (int i = 0; i < 6; ++i) {
                 if ((this.only & 1 << i) == 0) continue;
@@ -931,4 +931,3 @@ final class DeathMore {
         }
     }
 }
-

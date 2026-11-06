@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.class_2960
+ *  net.minecraft.resources.Identifier
  *  org.slf4j.Logger
  *  org.slf4j.LoggerFactory
  */
 package dev.lyricsflow;
 
-import net.minecraft.class_2960;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +24,8 @@ public final class SkyLyrics {
     private SkyLyrics() {
     }
 
-    public static class_2960 id(String path) {
-        return class_2960.method_60655((String)MOD_ID, (String)path);
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath((String)MOD_ID, (String)path);
     }
 }
 
