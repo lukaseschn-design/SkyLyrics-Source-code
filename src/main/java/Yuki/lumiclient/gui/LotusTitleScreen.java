@@ -557,18 +557,43 @@ public class LotusTitleScreen extends TitleScreen implements NvgDrawable {
     }
 
     private static void drawSkyLyricsEmblem(NVGRenderer nvg, float cx, float cy, float radius, float pulse) {
-        nvg.circleGlow(cx, cy, radius + 4f + pulse, 16f, Colors.withAlpha(ACCENT_CYAN, 0.45f));
+        // Multi-Layer Outer Bloom Glow
+        nvg.circleGlow(cx, cy, radius + 4f + pulse, 18f, Colors.withAlpha(ACCENT_CYAN, 0.45f));
         nvg.circleGlow(cx, cy, radius, 8f, Colors.withAlpha(0xFFE0F7FF, 0.60f));
 
-        nvg.circle(cx, cy, radius, 0x65102030);
+        // Frosted Glass Disk
+        nvg.circle(cx, cy, radius, 0x750E1826);
         nvg.circleOutline(cx, cy, radius, 1.4f, ACCENT_CYAN);
 
-        nvg.circle(cx, cy, radius * 0.72f, 0x307FE6FF);
-        nvg.circleOutline(cx, cy, radius * 0.72f, 1.0f, 0x809FE2FF);
+        // Inner glowing ring
+        nvg.circle(cx, cy, radius * 0.78f, 0x301D88E5);
+        nvg.circleOutline(cx, cy, radius * 0.78f, 1.0f, 0x807FE6FF);
 
-        float fontSz = radius * 1.15f;
-        float nw = nvg.textWidth("♪", fontSz);
-        nvg.text("♪", cx - nw / 2f, cy, fontSz, 0xFFFFFFFF);
+        // Vector Beamed Musical Note (♫) - 100% gestochen scharf, kein Font-Glyph-Fehler
+        float r = radius;
+        // Left notehead
+        nvg.circle(cx - r * 0.28f, cy + r * 0.22f, r * 0.20f, 0xFFFFFFFF);
+        nvg.circle(cx - r * 0.23f, cy + r * 0.16f, r * 0.15f, 0xFF7FE6FF);
+
+        // Right notehead
+        nvg.circle(cx + r * 0.22f, cy + r * 0.10f, r * 0.20f, 0xFFFFFFFF);
+        nvg.circle(cx + r * 0.27f, cy + r * 0.04f, r * 0.15f, 0xFF7FE6FF);
+
+        // Left stem
+        nvg.rect(cx - r * 0.14f, cy - r * 0.38f, r * 0.09f, r * 0.60f, r * 0.04f, 0xFFFFFFFF);
+
+        // Right stem
+        nvg.rect(cx + r * 0.36f, cy - r * 0.50f, r * 0.09f, r * 0.60f, r * 0.04f, 0xFFFFFFFF);
+
+        // Connecting Beam
+        nvg.rect(cx - r * 0.14f, cy - r * 0.48f, r * 0.59f, r * 0.16f, r * 0.05f, 0xFFFFFFFF);
+        nvg.rect(cx - r * 0.14f, cy - r * 0.48f, r * 0.59f, r * 0.06f, 0.5f, 0xFF7FE6FF);
+
+        // Sparkle Star (top right)
+        float sx = cx + r * 0.46f, sy = cy - r * 0.22f;
+        nvg.glow(sx - 1.5f, sy - 1.5f, 3f, 3f, 1f, 4f, 0xCC7FE6FF);
+        nvg.rect(sx - 0.7f, sy - 3f, 1.4f, 6f, 0.5f, 0xFFFFFFFF);
+        nvg.rect(sx - 3f, sy - 0.7f, 6f, 1.4f, 0.5f, 0xFFFFFFFF);
     }
 
     private static void drawBoxGlow(NVGRenderer nvg, float x, float y, float w, float h, float radius, float blur, int argb) {
