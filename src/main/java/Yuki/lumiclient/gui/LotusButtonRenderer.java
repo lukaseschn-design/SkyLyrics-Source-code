@@ -2,14 +2,14 @@ package Yuki.lumiclient.gui;
 
 import Yuki.lumiclient.util.Colors;
 import Yuki.lumiclient.util.UiSounds;
-import net.minecraft.class_11876;
-import net.minecraft.class_2561;
-import net.minecraft.class_310;
-import net.minecraft.class_327;
-import net.minecraft.class_332;
-import net.minecraft.class_339;
-import net.minecraft.class_357;
-import net.minecraft.class_4264;
+import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.AbstractSliderButton;
+import net.minecraft.client.gui.components.AbstractButton;
 import org.joml.Matrix3x2fStack;
 
 import java.util.WeakHashMap;
@@ -37,25 +37,25 @@ public final class LotusButtonRenderer {
     public static final int TEXT_DISABLED = 0xFF6A7B8C;
 
     // Animations- und Sound-Status pro Widget
-    private static final WeakHashMap<class_339, Float> HOVER_MAP = new WeakHashMap<>();
-    private static final WeakHashMap<class_339, Boolean> SOUND_STATE_MAP = new WeakHashMap<>();
+    private static final WeakHashMap<AbstractWidget, Float> HOVER_MAP = new WeakHashMap<>();
+    private static final WeakHashMap<AbstractWidget, Boolean> SOUND_STATE_MAP = new WeakHashMap<>();
 
     private LotusButtonRenderer() {}
 
     // ── Button Rendering ──────────────────────────────────────────────────
-    public static void renderButton(class_4264 button, class_332 g, int mouseX, int mouseY, float delta) {
-        int x = button.method_46426();
-        int y = button.method_46427();
-        int w = button.method_25368();
-        int h = button.method_25364();
-        boolean active = button.field_22763;
-        boolean hovered = button.method_25367(); // isHoveredOrFocused
+    public static void renderButton(AbstractButton button, GuiGraphicsExtractor g, int mouseX, int mouseY, float delta) {
+        int x = button.getX();
+        int y = button.getY();
+        int w = button.getWidth();
+        int h = button.getHeight();
+        boolean active = button.active;
+        boolean hovered = button.isHoveredOrFocused(); // isHoveredOrFocused
 
         float hover = updateHover(button, active && hovered);
 
         if (active && hovered) {
             try {
-                g.method_74037(class_11876.field_62455);
+                g.requestCursor(CursorTypes.POINTING_HAND);
             } catch (Throwable ignored) {}
         }
 
@@ -86,30 +86,30 @@ public final class LotusButtonRenderer {
         drawRoundedBorder(g, x, y, w, h, border);
 
         // 5. Zentrierter Text (IMMER sichtbar, sanftes Aufleuchten bei Hover)
-        class_310 client = class_310.method_1551();
-        class_327 font = client != null ? client.field_1772 : null;
+        Minecraft client = Minecraft.getInstance();
+        Font font = client != null ? client.font : null;
         if (font != null) {
-            class_2561 msg = button.method_25369();
+            Component msg = button.getMessage();
             int textColor = !active ? TEXT_DISABLED : Colors.lerp(TEXT_IDLE, TEXT_WHITE, hover);
             drawCenteredButtonText(g, font, msg, x, y, w, h, textColor);
         }
     }
 
     // ── Slider Rendering ──────────────────────────────────────────────────
-    public static void renderSlider(class_357 slider, class_332 g, int mouseX, int mouseY, float delta, double value) {
-        int x = slider.method_46426();
-        int y = slider.method_46427();
-        int w = slider.method_25368();
-        int h = slider.method_25364();
-        boolean active = slider.field_22763;
-        boolean hovered = slider.method_25367(); // isHoveredOrFocused
+    public static void renderSlider(AbstractSliderButton slider, GuiGraphicsExtractor g, int mouseX, int mouseY, float delta, double value) {
+        int x = slider.getX();
+        int y = slider.getY();
+        int w = slider.getWidth();
+        int h = slider.getHeight();
+        boolean active = slider.active;
+        boolean hovered = slider.isHoveredOrFocused(); // isHoveredOrFocused
 
         float hover = updateHover(slider, active && hovered);
         double clampedVal = Math.clamp(value, 0.0, 1.0);
 
         if (active && hovered) {
             try {
-                g.method_74037(class_11876.field_62455);
+                g.requestCursor(CursorTypes.POINTING_HAND);
             } catch (Throwable ignored) {}
         }
 
@@ -151,17 +151,17 @@ public final class LotusButtonRenderer {
         drawHandle(g, hx, hy, hw, hh, handleBg, handleBorder, hovered && active);
 
         // 6. Zentrierter Text (IMMER sichtbar)
-        class_310 client = class_310.method_1551();
-        class_327 font = client != null ? client.field_1772 : null;
+        Minecraft client = Minecraft.getInstance();
+        Font font = client != null ? client.font : null;
         if (font != null) {
-            class_2561 msg = slider.method_25369();
+            Component msg = slider.getMessage();
             int textColor = !active ? TEXT_DISABLED : Colors.lerp(TEXT_IDLE, TEXT_WHITE, hover);
             drawCenteredButtonText(g, font, msg, x, y, w, h, textColor);
         }
     }
 
     // ── Animations-Helper ─────────────────────────────────────────────────
-    private static float updateHover(class_339 widget, boolean isHovered) {
+    private static float updateHover(AbstractWidget widget, boolean isHovered) {
         float target = isHovered ? 1.0f : 0.0f;
         Float currentObj = HOVER_MAP.get(widget);
         float current = currentObj != null ? currentObj : target;
@@ -184,114 +184,114 @@ public final class LotusButtonRenderer {
     }
 
     // ── Glow & Sheen Rendering ────────────────────────────────────────────
-    private static void drawOuterGlow(class_332 g, int x, int y, int w, int h, float hover) {
+    private static void drawOuterGlow(GuiGraphicsExtractor g, int x, int y, int w, int h, float hover) {
         int alpha = (int) (0x35 * hover);
         if (alpha <= 0) return;
         int glowColor = (alpha << 24) | 0x7FE6FF;
 
         // Horizontale Außenränder (vollständig außerhalb des Buttons)
-        g.method_25294(x + 2, y - 1, x + w - 2, y, glowColor);
-        g.method_25294(x + 2, y + h, x + w - 2, y + h + 1, glowColor);
+        g.fill(x + 2, y - 1, x + w - 2, y, glowColor);
+        g.fill(x + 2, y + h, x + w - 2, y + h + 1, glowColor);
 
         // Vertikale Außenränder
-        g.method_25294(x - 1, y + 2, x, y + h - 2, glowColor);
-        g.method_25294(x + w, y + 2, x + w + 1, y + h - 2, glowColor);
+        g.fill(x - 1, y + 2, x, y + h - 2, glowColor);
+        g.fill(x + w, y + 2, x + w + 1, y + h - 2, glowColor);
 
         // Abgeschlossene äußere Ecken
-        g.method_25294(x, y - 1, x + 2, y, glowColor);
-        g.method_25294(x - 1, y, x, y + 2, glowColor);
+        g.fill(x, y - 1, x + 2, y, glowColor);
+        g.fill(x - 1, y, x, y + 2, glowColor);
 
-        g.method_25294(x + w - 2, y - 1, x + w, y, glowColor);
-        g.method_25294(x + w, y, x + w + 1, y + 2, glowColor);
+        g.fill(x + w - 2, y - 1, x + w, y, glowColor);
+        g.fill(x + w, y, x + w + 1, y + 2, glowColor);
 
-        g.method_25294(x, y + h, x + 2, y + h + 1, glowColor);
-        g.method_25294(x - 1, y + h - 2, x, y + h, glowColor);
+        g.fill(x, y + h, x + 2, y + h + 1, glowColor);
+        g.fill(x - 1, y + h - 2, x, y + h, glowColor);
 
-        g.method_25294(x + w - 2, y + h, x + w, y + h + 1, glowColor);
-        g.method_25294(x + w, y + h - 2, x + w + 1, y + h, glowColor);
+        g.fill(x + w - 2, y + h, x + w, y + h + 1, glowColor);
+        g.fill(x + w, y + h - 2, x + w + 1, y + h, glowColor);
     }
 
-    private static void drawGlassSheen(class_332 g, int x, int y, int w, int h, float hover) {
+    private static void drawGlassSheen(GuiGraphicsExtractor g, int x, int y, int w, int h, float hover) {
         int sheenTop = Colors.withAlpha(0xFFFFFF, 0.12f + 0.08f * hover);
         int sheenBot = Colors.withAlpha(0xFFFFFF, 0.01f);
         int halfH = Math.max(2, (h - 2) / 2);
-        g.method_25296(x + 2, y + 1, x + w - 2, y + 1 + halfH, sheenTop, sheenBot);
+        g.fillGradient(x + 2, y + 1, x + w - 2, y + 1 + halfH, sheenTop, sheenBot);
 
         int specColor = Colors.withAlpha(0xFFFFFF, 0.20f + 0.18f * hover);
-        g.method_25294(x + 3, y + 1, x + w - 3, y + 2, specColor);
+        g.fill(x + 3, y + 1, x + w - 3, y + 2, specColor);
     }
 
     // ── Pixel-Perfekte Abgerundete Geometrie (Absolut Nahtlos & Ohne Überlappung) ──
-    public static void drawRoundedFill(class_332 g, int x, int y, int w, int h, int color) {
+    public static void drawRoundedFill(GuiGraphicsExtractor g, int x, int y, int w, int h, int color) {
         if (w <= 0 || h <= 0) return;
         if (w < 8 || h < 8) {
-            g.method_25294(x, y, x + w, y + h, color);
+            g.fill(x, y, x + w, y + h, color);
             return;
         }
 
         // Komplett disjunkte horizontale Zeilen: Kein einziger Pixel wird doppelt gezeichnet!
-        g.method_25294(x + 2, y + 1, x + w - 2, y + 2, color);
-        g.method_25294(x + 1, y + 2, x + w - 1, y + h - 2, color);
-        g.method_25294(x + 2, y + h - 2, x + w - 2, y + h - 1, color);
+        g.fill(x + 2, y + 1, x + w - 2, y + 2, color);
+        g.fill(x + 1, y + 2, x + w - 1, y + h - 2, color);
+        g.fill(x + 2, y + h - 2, x + w - 2, y + h - 1, color);
     }
 
-    public static void drawRoundedBorder(class_332 g, int x, int y, int w, int h, int color) {
+    public static void drawRoundedBorder(GuiGraphicsExtractor g, int x, int y, int w, int h, int color) {
         if (w <= 0 || h <= 0) return;
         if (w < 8 || h < 8) {
-            g.method_73198(x, y, w, h, color);
+            g.outline(x, y, w, h, color);
             return;
         }
 
         // Horizontale Außenkanten
-        g.method_25294(x + 2, y, x + w - 2, y + 1, color);
-        g.method_25294(x + 2, y + h - 1, x + w - 2, y + h, color);
+        g.fill(x + 2, y, x + w - 2, y + 1, color);
+        g.fill(x + 2, y + h - 1, x + w - 2, y + h, color);
 
         // Vertikale Außenkanten
-        g.method_25294(x, y + 2, x + 1, y + h - 2, color);
-        g.method_25294(x + w - 1, y + 2, x + w, y + h - 2, color);
+        g.fill(x, y + 2, x + 1, y + h - 2, color);
+        g.fill(x + w - 1, y + 2, x + w, y + h - 2, color);
 
         // Verbindende Eck-Pixel (perfekt geschlossener 1px Radius)
-        g.method_25294(x + 1, y + 1, x + 2, y + 2, color);
-        g.method_25294(x + w - 2, y + 1, x + w - 1, y + 2, color);
-        g.method_25294(x + 1, y + h - 2, x + 2, y + h - 1, color);
-        g.method_25294(x + w - 2, y + h - 2, x + w - 1, y + h - 1, color);
+        g.fill(x + 1, y + 1, x + 2, y + 2, color);
+        g.fill(x + w - 2, y + 1, x + w - 1, y + 2, color);
+        g.fill(x + 1, y + h - 2, x + 2, y + h - 1, color);
+        g.fill(x + w - 2, y + h - 2, x + w - 1, y + h - 1, color);
     }
 
-    private static void drawProgressFill(class_332 g, int x, int y, int pw, int h, int color) {
+    private static void drawProgressFill(GuiGraphicsExtractor g, int x, int y, int pw, int h, int color) {
         if (pw <= 2) return;
-        g.method_25294(x + 2, y + 1, x + pw, y + 2, color);
-        g.method_25294(x + 1, y + 2, x + pw, y + h - 2, color);
-        g.method_25294(x + 2, y + h - 2, x + pw, y + h - 1, color);
+        g.fill(x + 2, y + 1, x + pw, y + 2, color);
+        g.fill(x + 1, y + 2, x + pw, y + h - 2, color);
+        g.fill(x + 2, y + h - 2, x + pw, y + h - 1, color);
     }
 
-    private static void drawHandle(class_332 g, int x, int y, int w, int h, int fill, int border, boolean hovered) {
+    private static void drawHandle(GuiGraphicsExtractor g, int x, int y, int w, int h, int fill, int border, boolean hovered) {
         if (hovered) {
-            g.method_25294(x - 1, y, x + w + 1, y + h, Colors.withAlpha(ACCENT_CYAN, 0.30f));
+            g.fill(x - 1, y, x + w + 1, y + h, Colors.withAlpha(ACCENT_CYAN, 0.30f));
         }
-        g.method_25294(x + 1, y, x + w - 1, y + 1, border);
-        g.method_25294(x + 1, y + h - 1, x + w - 1, y + h, border);
-        g.method_25294(x, y + 1, x + 1, y + h - 1, border);
-        g.method_25294(x + w - 1, y + 1, x + w, y + h - 1, border);
+        g.fill(x + 1, y, x + w - 1, y + 1, border);
+        g.fill(x + 1, y + h - 1, x + w - 1, y + h, border);
+        g.fill(x, y + 1, x + 1, y + h - 1, border);
+        g.fill(x + w - 1, y + 1, x + w, y + h - 1, border);
 
-        g.method_25294(x + 1, y + 1, x + w - 1, y + h - 1, fill);
-        g.method_25294(x + 2, y + 2, x + w - 2, y + 3, Colors.withAlpha(0xFFFFFF, 0.45f));
+        g.fill(x + 1, y + 1, x + w - 1, y + h - 1, fill);
+        g.fill(x + 2, y + 2, x + w - 2, y + 3, Colors.withAlpha(0xFFFFFF, 0.45f));
     }
 
     // ── Zentrierter & Garantiert Sichtbarer Button-Text ───────────────────
-    public static void drawCenteredButtonText(class_332 g, class_327 font, class_2561 text, int x, int y, int w, int h, int color) {
+    public static void drawCenteredButtonText(GuiGraphicsExtractor g, Font font, Component text, int x, int y, int w, int h, int color) {
         if (text == null) return;
-        int textW = font.method_27525(text);
+        int textW = font.width(text);
         int cx = x + w / 2;
         int cy = y + (h - 8) / 2; // Exakte Minecraft Text-Zentrierung
         if (textW <= w - 6) {
-            g.method_27534(font, text, cx, cy, color);
+            g.centeredText(font, text, cx, cy, color);
         } else {
             float scale = (float) (w - 6) / (float) textW;
-            Matrix3x2fStack matrices = g.method_51448();
+            Matrix3x2fStack matrices = g.pose();
             matrices.pushMatrix();
             matrices.translate((float) cx, (float) (y + h / 2));
             matrices.scale(scale, scale);
-            g.method_51439(font, text, -textW / 2, -4, color, true);
+            g.text(font, text, -textW / 2, -4, color, true);
             matrices.popMatrix();
         }
     }

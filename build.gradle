@@ -11,6 +11,8 @@ base {
 }
 
 repositories {
+    mavenCentral()
+
     // Modrinth Maven (for dependency mods published on Modrinth)
     maven {
         name = 'Modrinth'
@@ -36,6 +38,16 @@ dependencies {
 
     // Mod Menu API (optional at runtime)
     compileOnly "com.terraformersmc:modmenu:21.0.0"
+
+    // NanoVG classes are nested in the built mod but must be present on the compile classpath.
+    compileOnly "org.lwjgl:lwjgl-nanovg:3.3.3"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-linux-arm64"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-linux"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-macos-arm64"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-macos"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-windows-arm64"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-windows"
 }
 
 processResources {

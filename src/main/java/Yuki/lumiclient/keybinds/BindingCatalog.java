@@ -1,10 +1,10 @@
 package Yuki.lumiclient.keybinds;
 
 import Yuki.lumiclient.mixin.KeyMappingAccessor;
-import net.minecraft.class_2561;
-import net.minecraft.class_304;
-import net.minecraft.class_310;
-import net.minecraft.class_3675;
+import net.minecraft.network.chat.Component;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.platform.InputConstants;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -12,79 +12,79 @@ import java.util.List;
 import java.util.Locale;
 
 public final class BindingCatalog {
-    private final List<class_304> mappings;
+    private final List<KeyMapping> mappings;
 
-    public BindingCatalog(class_304[] mappings) {
+    public BindingCatalog(KeyMapping[] mappings) {
         this.mappings = List.copyOf(Arrays.asList(mappings));
     }
 
-    public static class_3675.class_306 getKey(class_304 mapping) {
+    public static InputConstants.Key getKey(KeyMapping mapping) {
         return ((KeyMappingAccessor) mapping).lumiclient$getKey();
     }
 
-    public List<class_304> onKey(class_3675.class_306 key) {
+    public List<KeyMapping> onKey(InputConstants.Key key) {
         return this.mappings.stream()
-                .filter(mapping -> !mapping.method_1436() && getKey(mapping).equals(key))
+                .filter(mapping -> !mapping.consumeClick() && getKey(mapping).equals(key))
                 .toList();
     }
 
-    public boolean conflict(class_304 mapping) {
-        return !mapping.method_1436() && this.mappings.stream().anyMatch(other -> other != mapping && !other.method_1436() && mapping.method_1435(other));
+    public boolean conflict(KeyMapping mapping) {
+        return !mapping.consumeClick() && this.mappings.stream().anyMatch(other -> other != mapping && !other.consumeClick() && mapping.same(other));
     }
 
     public long conflictKeys() {
         return this.mappings.stream()
                 .filter(this::conflict)
-                .map(mapping -> getKey(mapping).method_1441())
+                .map(mapping -> getKey(mapping).getName())
                 .distinct()
                 .count();
     }
 
-    public List<class_304> search(class_3675.class_306 key, boolean onlyThisKey, String query) {
+    public List<KeyMapping> search(InputConstants.Key key, boolean onlyThisKey, String query) {
         String needle = query.strip().toLowerCase(Locale.ROOT);
         return this.mappings.stream()
-                .filter(mapping -> !onlyThisKey || (!mapping.method_1436() && getKey(mapping).equals(key)))
-                .filter(mapping -> (name(mapping) + " " + category(mapping) + " " + mapping.method_16007().getString() + " " + mapping.method_1431()).toLowerCase(Locale.ROOT).contains(needle))
+                .filter(mapping -> !onlyThisKey || (!mapping.consumeClick() && getKey(mapping).equals(key)))
+                .filter(mapping -> (name(mapping) + " " + category(mapping) + " " + mapping.getTranslatedKeyMessage().getString() + " " + mapping.getName()).toLowerCase(Locale.ROOT).contains(needle))
                 .sorted(Comparator.comparing(BindingCatalog::name, String.CASE_INSENSITIVE_ORDER))
                 .toList();
     }
 
-    public static String name(class_304 mapping) {
-        return class_2561.method_43469(mapping.method_1431()).getString();
+    public static String name(KeyMapping mapping) {
+        return Component.translatable(mapping.getName()).getString();
     }
 
-    public static String category(class_304 mapping) {
-        return class_2561.method_43469(mapping.method_1428()).getString();
+    public static String category(KeyMapping mapping) {
+        return Component.translatable(mapping.saveString()).getString();
     }
 
-    public static void rebind(class_304 mapping, class_3675.class_306 key) {
-        mapping.method_1422(key);
+    public static void rebind(KeyMapping mapping, InputConstants.Key key) {
+        mapping.setKey(key);
         refreshMappings();
     }
 
-    public static void reset(class_304 mapping) {
-        mapping.method_1422(mapping.method_1429());
+    public static void reset(KeyMapping mapping) {
+        mapping.setKey(mapping.getDefaultKey());
         refreshMappings();
     }
 
     private static void refreshMappings() {
-        class_304.method_1437();
-        class_304.method_1424();
+        KeyMapping.releaseAll();
+        KeyMapping.setAll();
     }
 
-    public static void save(class_304 mapping, class_3675.class_306 key) {
+    public static void save(KeyMapping mapping, InputConstants.Key key) {
         rebind(mapping, key);
-        class_310 mc = class_310.method_1551();
-        if (mc != null && mc.field_1690 != null) {
-            mc.field_1690.method_1640();
+        Minecraft mc = Minecraft.getInstance();
+        if (mc != null && mc.options != null) {
+            mc.options.save();
         }
     }
 
-    public static void saveDefault(class_304 mapping) {
+    public static void saveDefault(KeyMapping mapping) {
         reset(mapping);
-        class_310 mc = class_310.method_1551();
-        if (mc != null && mc.field_1690 != null) {
-            mc.field_1690.method_1640();
+        Minecraft mc = Minecraft.getInstance();
+        if (mc != null && mc.options != null) {
+            mc.options.save();
         }
     }
 }

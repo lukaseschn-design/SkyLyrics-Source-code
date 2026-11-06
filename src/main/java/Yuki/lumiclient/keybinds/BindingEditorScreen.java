@@ -1,30 +1,30 @@
 package Yuki.lumiclient.keybinds;
 
-import net.minecraft.class_2561;
-import net.minecraft.class_304;
-import net.minecraft.class_327;
-import net.minecraft.class_332;
-import net.minecraft.class_342;
-import net.minecraft.class_3675;
-import net.minecraft.class_4185;
-import net.minecraft.class_437;
-import net.minecraft.class_5250;
-import net.minecraft.class_7919;
+import net.minecraft.network.chat.Component;
+import net.minecraft.client.KeyMapping;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.EditBox;
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.client.gui.components.Tooltip;
 
 import java.util.ArrayList;
 import java.util.List;
 
-final class BindingEditorScreen extends class_437 {
-    private final class_437 parent;
-    private final class_3675.class_306 target;
+final class BindingEditorScreen extends Screen {
+    private final Screen parent;
+    private final InputConstants.Key target;
     private BindingCatalog catalog;
     private EditorLayout layout;
-    private class_342 search;
+    private EditBox search;
     private boolean onlyThisKey = true;
     private String query = "";
     private int page;
-    private class_304 selected;
-    private List<class_304> filtered = List.of();
+    private KeyMapping selected;
+    private List<KeyMapping> filtered = List.of();
     private final List<ActionRow> rows = new ArrayList<>();
     private SmoothButton assignedTab;
     private SmoothButton allTab;
@@ -36,41 +36,41 @@ final class BindingEditorScreen extends class_437 {
     private SmoothButton reset;
     private long opened;
 
-    BindingEditorScreen(class_437 parent, class_3675.class_306 target) {
-        super(Theme.tr("edit_title", target.method_27445().getString()));
+    BindingEditorScreen(Screen parent, InputConstants.Key target) {
+        super(Theme.tr("edit_title", target.getDisplayName().getString()));
         this.parent = parent;
         this.target = target;
     }
 
     @Override
-    protected void method_25426() { // init
+    protected void init() { // init
         this.opened = System.nanoTime();
-        this.catalog = new BindingCatalog(this.field_22787.field_1690.field_1839);
-        this.layout = EditorLayout.of(this.field_22789, this.field_22790);
+        this.catalog = new BindingCatalog(this.minecraft.options.keyMappings);
+        this.layout = EditorLayout.of(this.width, this.height);
         KeyboardLayout.Rect p = this.layout.panel();
         int inner = p.width() - 24;
         int half = (inner - 6) / 2;
         this.rows.clear();
 
-        this.assignedTab = this.method_37063(new SmoothButton(p.x() + 12, p.y() + 29, half, 20, Theme.tr("on_key"), b -> this.switchTab(true)));
-        this.allTab = this.method_37063(new SmoothButton(p.x() + 18 + half, p.y() + 29, half, 20, Theme.tr("all_actions"), b -> this.switchTab(false)));
+        this.assignedTab = this.addRenderableWidget(new SmoothButton(p.x() + 12, p.y() + 29, half, 20, Theme.tr("on_key"), b -> this.switchTab(true)));
+        this.allTab = this.addRenderableWidget(new SmoothButton(p.x() + 18 + half, p.y() + 29, half, 20, Theme.tr("all_actions"), b -> this.switchTab(false)));
 
-        this.search = this.method_37063(new class_342(this.field_22793, p.x() + 12, p.y() + 56, inner, 20, Theme.tr("search")));
-        this.search.method_1880(128); // setMaxLength
-        this.search.method_47404(Theme.tr("search")); // setPlaceholder
-        this.search.method_1852(this.query); // setText
-        this.search.method_1863(value -> { // setChangedListener
+        this.search = this.addRenderableWidget(new EditBox(this.font, p.x() + 12, p.y() + 56, inner, 20, Theme.tr("search")));
+        this.search.setMaxLength(128); // setMaxLength
+        this.search.setHint(Theme.tr("search")); // setPlaceholder
+        this.search.setValue(this.query); // setText
+        this.search.setResponder(value -> { // setChangedListener
             this.query = value;
             this.page = 0;
             this.refresh();
         });
 
         for (int i = 0; i < this.layout.rows(); ++i) {
-            this.rows.add(this.method_37063(new ActionRow(p.x() + 12, this.layout.listTop() + i * 32, inner, 29)));
+            this.rows.add(this.addRenderableWidget(new ActionRow(p.x() + 12, this.layout.listTop() + i * 32, inner, 29)));
         }
 
-        this.previous = this.method_37063(new SmoothButton(p.x() + 12, this.layout.footerY(), 30, 20, class_2561.method_43470("←"), b -> this.changePage(-1)));
-        this.next = this.method_37063(new SmoothButton(p.right() - 42, this.layout.footerY(), 30, 20, class_2561.method_43470("→"), b -> this.changePage(1)));
+        this.previous = this.addRenderableWidget(new SmoothButton(p.x() + 12, this.layout.footerY(), 30, 20, Component.literal("←"), b -> this.changePage(-1)));
+        this.next = this.addRenderableWidget(new SmoothButton(p.right() - 42, this.layout.footerY(), 30, 20, Component.literal("→"), b -> this.changePage(1)));
 
         int w = (inner - 15) / 4;
         int y = this.layout.footerY() + 40;
@@ -81,13 +81,13 @@ final class BindingEditorScreen extends class_437 {
             }
         });
         this.capture = this.action(p.x() + 17 + w, y, w, "rebind", "rebind_tip", b -> {
-            if (this.selected != null && this.field_22787 != null) {
-                this.field_22787.method_1507(new CaptureKeyScreen(this, this.selected));
+            if (this.selected != null && this.minecraft != null) {
+                this.minecraft.gui.setScreen(new CaptureKeyScreen(this, this.selected));
             }
         });
         this.unbind = this.action(p.x() + 22 + w * 2, y, w, "unbind", "unbind_tip", b -> {
             if (this.selected != null) {
-                BindingCatalog.save(this.selected, class_3675.field_16237);
+                BindingCatalog.save(this.selected, InputConstants.UNKNOWN);
                 this.refresh();
             }
         });
@@ -98,13 +98,13 @@ final class BindingEditorScreen extends class_437 {
             }
         });
 
-        this.method_37063(new SmoothButton(this.field_22789 / 2 - 60, this.layout.footerY() + 66, 120, 20, class_2561.method_43469("gui.done"), b -> this.method_25419()));
+        this.addRenderableWidget(new SmoothButton(this.width / 2 - 60, this.layout.footerY() + 66, 120, 20, Component.translatable("gui.done"), b -> this.onClose()));
         this.refresh();
     }
 
-    private SmoothButton action(int x, int y, int w, String label, String tip, class_4185.class_4241 onPress) {
-        SmoothButton button = this.method_37063(new SmoothButton(x, y, w, 20, Theme.tr(label), onPress));
-        button.method_47400(class_7919.method_47407(Theme.tr(tip, this.target.method_27445().getString())));
+    private SmoothButton action(int x, int y, int w, String label, String tip, Button.OnPress onPress) {
+        SmoothButton button = this.addRenderableWidget(new SmoothButton(x, y, w, 20, Theme.tr(label), onPress));
+        button.setTooltip(Tooltip.create(Theme.tr(tip, this.target.getDisplayName().getString())));
         return button;
     }
 
@@ -128,14 +128,14 @@ final class BindingEditorScreen extends class_437 {
         this.page = this.layout.clampPage(this.page, this.filtered.size());
         this.assignedTab.selected = this.onlyThisKey;
         this.allTab.selected = !this.onlyThisKey;
-        this.assignedTab.method_25355(Theme.tr("on_key_count", this.catalog.onKey(this.target).size()));
+        this.assignedTab.setMessage(Theme.tr("on_key_count", this.catalog.onKey(this.target).size()));
 
         for (int i = 0; i < this.rows.size(); ++i) {
             int index = this.page * this.layout.rows() + i;
             this.rows.get(i).bind(index < this.filtered.size() ? this.filtered.get(index) : null);
         }
-        this.previous.field_22763 = this.page > 0;
-        this.next.field_22763 = this.page + 1 < this.layout.pages(this.filtered.size());
+        this.previous.active = this.page > 0;
+        this.next.active = this.page + 1 < this.layout.pages(this.filtered.size());
         this.updateActions();
     }
 
@@ -143,105 +143,105 @@ final class BindingEditorScreen extends class_437 {
         if (this.assign == null) {
             return;
         }
-        this.assign.field_22763 = this.selected != null && !BindingCatalog.getKey(this.selected).equals(this.target);
-        this.capture.field_22763 = this.selected != null;
-        this.unbind.field_22763 = this.selected != null && !this.selected.method_1436();
-        this.reset.field_22763 = this.selected != null && !this.selected.method_1427();
+        this.assign.active = this.selected != null && !BindingCatalog.getKey(this.selected).equals(this.target);
+        this.capture.active = this.selected != null;
+        this.unbind.active = this.selected != null && !this.selected.consumeClick();
+        this.reset.active = this.selected != null && !this.selected.isDefault();
     }
 
     @Override
-    public void method_25394(class_332 g, int mx, int my, float delta) { // render
-        g.method_25294(0, 0, this.field_22789, this.field_22790, -1207102950);
+    public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float delta) { // render
+        g.fill(0, 0, this.width, this.height, -1207102950);
         KeyboardLayout.Rect p = this.layout.panel();
         Theme.panel(g, p.x(), p.y(), p.width(), p.height());
 
         double enter = Animation.entrance((double) (System.nanoTime() - this.opened) / 1.0E9);
-        g.method_25294(p.x() + 10, p.y() + 1, p.x() + 10 + (int) ((double) (p.width() - 20) * enter), p.y() + 2, -6693165);
-        Theme.centeredFit(g, this.field_22793, this.field_22785.getString(), this.field_22789 / 2, p.y() + 15, p.width() - 26, -920073);
+        g.fill(p.x() + 10, p.y() + 1, p.x() + 10 + (int) ((double) (p.width() - 20) * enter), p.y() + 2, -6693165);
+        Theme.centeredFit(g, this.font, this.title.getString(), this.width / 2, p.y() + 15, p.width() - 26, -920073);
 
-        super.method_25394(g, mx, my, delta);
+        super.extractRenderState(g, mx, my, delta);
 
         if (this.filtered.isEmpty()) {
-            Theme.centeredFit(g, this.field_22793, Theme.tr(this.onlyThisKey && this.query.isBlank() ? "no_bindings" : "no_results").getString(), this.field_22789 / 2, this.layout.listTop() + 14, p.width() - 32, -5787202);
+            Theme.centeredFit(g, this.font, Theme.tr(this.onlyThisKey && this.query.isBlank() ? "no_bindings" : "no_results").getString(), this.width / 2, this.layout.listTop() + 14, p.width() - 32, -5787202);
         }
-        Theme.centeredFit(g, this.field_22793, Theme.tr("page", this.page + 1, this.layout.pages(this.filtered.size()), this.filtered.size()).getString(), this.field_22789 / 2, this.layout.footerY() + 10, p.width() - 108, -5787202);
+        Theme.centeredFit(g, this.font, Theme.tr("page", this.page + 1, this.layout.pages(this.filtered.size()), this.filtered.size()).getString(), this.width / 2, this.layout.footerY() + 10, p.width() - 108, -5787202);
 
-        String detail = this.selected == null ? Theme.tr("select_action").getString() : Theme.tr("selected_action", BindingCatalog.name(this.selected), this.selected.method_16007().getString()).getString();
-        g.method_51433(this.field_22793, Theme.fit(this.field_22793, detail, p.width() - 24), p.x() + 12, this.layout.footerY() + 26, this.selected != null && this.catalog.conflict(this.selected) ? -885367 : -6693165, false);
+        String detail = this.selected == null ? Theme.tr("select_action").getString() : Theme.tr("selected_action", BindingCatalog.name(this.selected), this.selected.getTranslatedKeyMessage().getString()).getString();
+        g.text(this.font, Theme.fit(this.font, detail, p.width() - 24), p.x() + 12, this.layout.footerY() + 26, this.selected != null && this.catalog.conflict(this.selected) ? -885367 : -6693165, false);
 
         if (this.selected != null && mx >= p.x() + 12 && mx < p.right() - 12 && my >= this.layout.footerY() + 24 && my < this.layout.footerY() + 38) {
-            g.method_51434(this.field_22793, List.of(class_2561.method_43470(detail)), mx, my);
+            g.setComponentTooltipForNextFrame(this.font, List.of(Component.literal(detail)), mx, my);
         }
     }
 
     @Override
-    public boolean method_25401(double x, double y, double horizontal, double vertical) { // mouseScrolled
+    public boolean mouseScrolled(double x, double y, double horizontal, double vertical) { // mouseScrolled
         if (this.layout.panel().contains(x, y) && vertical != 0.0) {
             this.changePage(vertical > 0.0 ? -1 : 1);
             return true;
         }
-        return super.method_25401(x, y, horizontal, vertical);
+        return super.mouseScrolled(x, y, horizontal, vertical);
     }
 
     @Override
-    public void method_25419() { // onClose
-        if (this.field_22787 != null) {
-            this.field_22787.method_1507(this.parent);
+    public void onClose() { // onClose
+        if (this.minecraft != null) {
+            this.minecraft.gui.setScreen(this.parent);
         }
     }
 
     private final class ActionRow extends SmoothButton {
-        private class_304 mapping;
+        private KeyMapping mapping;
 
         ActionRow(int x, int y, int w, int h) {
-            super(x, y, w, h, class_2561.method_43473(), button -> {});
+            super(x, y, w, h, Component.empty(), button -> {});
         }
 
-        void bind(class_304 mapping) {
+        void bind(KeyMapping mapping) {
             this.mapping = mapping;
-            this.field_22763 = mapping != null; // active
-            this.field_22764 = this.field_22763; // visible
+            this.active = mapping != null; // active
+            this.visible = this.active; // visible
             if (mapping != null) {
-                String status = mapping.method_1436() ? Theme.tr("unassigned").getString() : (BindingEditorScreen.this.catalog.conflict(mapping) ? Theme.tr("shared_warning").getString() : Theme.tr("single_binding").getString());
-                class_5250 text = class_2561.method_43470(BindingCatalog.name(mapping) + "\n" + BindingCatalog.category(mapping) + " · " + mapping.method_16007().getString() + "\n" + status);
-                this.method_25355(text);
-                this.method_47400(class_7919.method_47407(text));
-            } else if (this.method_25370()) {
-                BindingEditorScreen.this.method_25395(BindingEditorScreen.this.search);
+                String status = mapping.consumeClick() ? Theme.tr("unassigned").getString() : (BindingEditorScreen.this.catalog.conflict(mapping) ? Theme.tr("shared_warning").getString() : Theme.tr("single_binding").getString());
+                MutableComponent text = Component.literal(BindingCatalog.name(mapping) + "\n" + BindingCatalog.category(mapping) + " · " + mapping.getTranslatedKeyMessage().getString() + "\n" + status);
+                this.setMessage(text);
+                this.setTooltip(Tooltip.create(text));
+            } else if (this.isFocused()) {
+                BindingEditorScreen.this.setFocused(BindingEditorScreen.this.search);
             }
         }
 
         @Override
-        public void method_25306(net.minecraft.class_11907 event) {
+        public void onPress(net.minecraft.client.input.InputWithModifiers event) {
             BindingEditorScreen.this.selected = this.mapping;
             BindingEditorScreen.this.updateActions();
         }
 
         @Override
-        protected void method_75752(class_332 g, int mx, int my, float delta) {
+        protected void extractContents(GuiGraphicsExtractor g, int mx, int my, float delta) {
             if (this.mapping == null) {
                 return;
             }
             this.selected = this.mapping == BindingEditorScreen.this.selected;
-            class_2561 fullMessage = this.method_25369();
-            this.method_25355(class_2561.method_43473());
-            super.method_75752(g, mx, my, delta);
-            this.method_25355(fullMessage);
+            Component fullMessage = this.getMessage();
+            this.setMessage(Component.empty());
+            super.extractContents(g, mx, my, delta);
+            this.setMessage(fullMessage);
 
-            int status = this.mapping.method_1436() ? -12168865 : (BindingEditorScreen.this.catalog.conflict(this.mapping) ? -885367 : -9316710);
-            int x = this.method_46426();
-            int y = this.method_46427();
-            int w = this.method_25368();
-            int r = this.method_55442();
-            int b = this.method_55443();
+            int status = this.mapping.consumeClick() ? -12168865 : (BindingEditorScreen.this.catalog.conflict(this.mapping) ? -885367 : -9316710);
+            int x = this.getX();
+            int y = this.getY();
+            int w = this.getWidth();
+            int r = this.getRight();
+            int b = this.getBottom();
 
-            g.method_25294(x + 5, y + 7, x + 7, b - 7, status);
+            g.fill(x + 5, y + 7, x + 7, b - 7, status);
             int keyWidth = Math.min(w / 3, 124);
-            class_327 font = BindingEditorScreen.this.field_22793;
-            g.method_51433(font, Theme.fit(font, BindingCatalog.name(this.mapping), w - keyWidth - 30), x + 13, y + 5, -920073, false);
-            g.method_51433(font, Theme.fit(font, BindingCatalog.category(this.mapping), w - keyWidth - 30), x + 13, y + 16, -5787202, false);
-            String key = Theme.fit(font, this.mapping.method_16007().getString(), keyWidth - 8);
-            g.method_51433(font, key, r - 10 - font.method_1727(key), y + 10, status == -12168865 ? -5787202 : status, false);
+            Font font = BindingEditorScreen.this.font;
+            g.text(font, Theme.fit(font, BindingCatalog.name(this.mapping), w - keyWidth - 30), x + 13, y + 5, -920073, false);
+            g.text(font, Theme.fit(font, BindingCatalog.category(this.mapping), w - keyWidth - 30), x + 13, y + 16, -5787202, false);
+            String key = Theme.fit(font, this.mapping.getTranslatedKeyMessage().getString(), keyWidth - 8);
+            g.text(font, key, r - 10 - font.width(key), y + 10, status == -12168865 ? -5787202 : status, false);
         }
     }
 }

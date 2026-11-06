@@ -1,12 +1,12 @@
 package Yuki.lumiclient.gui;
 
-import net.minecraft.class_1011; // NativeImage
-import net.minecraft.class_1043; // NativeImageBackedTexture
-import net.minecraft.class_1044; // AbstractTexture
-import net.minecraft.class_10799; // RenderPipelines
-import net.minecraft.class_2960; // Identifier
-import net.minecraft.class_310; // MinecraftClient
-import net.minecraft.class_332; // DrawContext
+import com.mojang.blaze3d.platform.NativeImage; // NativeImage
+import net.minecraft.client.renderer.texture.DynamicTexture; // NativeImageBackedTexture
+import net.minecraft.client.renderer.texture.AbstractTexture; // AbstractTexture
+import net.minecraft.client.renderer.RenderPipelines; // RenderPipelines
+import net.minecraft.resources.Identifier; // Identifier
+import net.minecraft.client.Minecraft; // MinecraftClient
+import net.minecraft.client.gui.GuiGraphicsExtractor; // DrawContext
 import org.joml.Matrix3x2fStack;
 
 import java.util.Random;
@@ -67,10 +67,10 @@ public final class LotusBackdrop {
             })
     };
 
-    private static final class_2960[][] CURTAIN_TEX = new class_2960[STYLES.length][];
+    private static final Identifier[][] CURTAIN_TEX = new Identifier[STYLES.length][];
     private static int current = 0;
 
-    private static class_2960 ridgeId;
+    private static Identifier ridgeId;
     private static int ridgeW = 0;
     private static int ridgeH = 0;
     private static int ridgeStyle = -1;
@@ -80,7 +80,7 @@ public final class LotusBackdrop {
     private static final float[] HERO_Y = new float[HERO_STARS];
     private static final float[] HERO_FREQ = new float[HERO_STARS];
     private static final float[] HERO_PHASE = new float[HERO_STARS];
-    private static class_2960 starsId;
+    private static Identifier starsId;
     private static int starsW = 0;
     private static int starsH = 0;
 
@@ -116,7 +116,7 @@ public final class LotusBackdrop {
         return STYLES[current];
     }
 
-    public static void render(class_332 context, int width, int height, float alpha) {
+    public static void render(GuiGraphicsExtractor context, int width, int height, float alpha) {
         if (width <= 0 || height <= 0 || alpha <= 0.0f) {
             return;
         }
@@ -131,8 +131,8 @@ public final class LotusBackdrop {
         int midCol = withAlpha(s.skyMid, a255);
         int botCol = withAlpha(s.skyBot, a255);
 
-        context.method_25296(0, 0, width, hMid, topCol, midCol);
-        context.method_25296(0, hMid, width, height, midCol, botCol);
+        context.fillGradient(0, 0, width, hMid, topCol, midCol);
+        context.fillGradient(0, hMid, width, height, midCol, botCol);
 
         // 2. Stars
         stars(context, width, height, timeSec, alpha);
@@ -147,11 +147,11 @@ public final class LotusBackdrop {
         ridge(context, s, width, height, alpha);
     }
 
-    private static void stars(class_332 context, int width, int height, float timeSec, float alpha) {
-        class_2960 fieldId = starField(width, height);
+    private static void stars(GuiGraphicsExtractor context, int width, int height, float timeSec, float alpha) {
+        Identifier fieldId = starField(width, height);
         if (fieldId != null) {
             int col = withAlpha(0xFFFFFF, Math.round(255.0f * alpha));
-            context.method_25293(class_10799.field_56883, fieldId, 0, 0, 0.0f, 0.0f, width, height, starsW, starsH, starsW, starsH, col);
+            context.blit(RenderPipelines.GUI_TEXTURED, fieldId, 0, 0, 0.0f, 0.0f, width, height, starsW, starsH, starsW, starsH, col);
         }
 
         // Hero Twinkling Stars
@@ -160,13 +160,13 @@ public final class LotusBackdrop {
             int sy = (int) (HERO_Y[i] * (float) height);
             float twinkle = Math.abs((float) Math.sin(timeSec * HERO_FREQ[i] + HERO_PHASE[i]));
             int starAlpha = (int) ((70.0f + twinkle * 185.0f) * alpha);
-            context.method_25294(sx, sy, sx + 1, sy + 1, withAlpha(0xFFFFFF, starAlpha));
+            context.fill(sx, sy, sx + 1, sy + 1, withAlpha(0xFFFFFF, starAlpha));
         }
     }
 
-    private static class_2960 starField(int width, int height) {
-        class_310 mc = class_310.method_1551();
-        int scale = Math.max(1, mc.method_22683().method_4495());
+    private static Identifier starField(int width, int height) {
+        Minecraft mc = Minecraft.getInstance();
+        int scale = Math.max(1, mc.getWindow().getGuiScale());
         int pxW = width * scale;
         int pxH = height * scale;
 
@@ -177,7 +177,7 @@ public final class LotusBackdrop {
             return null;
         }
 
-        class_1011 img = new class_1011(class_1011.class_1012.field_4997, pxW, pxH, true);
+        NativeImage img = new NativeImage(NativeImage.Format.RGBA, pxW, pxH, true);
         Random rand = new Random(0x1337BEEFL);
         for (int i = 0; i < 90; i++) {
             int x = rand.nextInt(pxW);
@@ -188,13 +188,13 @@ public final class LotusBackdrop {
 
             for (int dy = y; dy < Math.min(pxH, y + starSize); dy++) {
                 for (int dx = x; dx < Math.min(pxW, x + starSize); dx++) {
-                    img.method_61941(dx, dy, argb);
+                    img.setPixel(dx, dy, argb);
                 }
             }
         }
 
         if (starsId != null) {
-            mc.method_1531().method_4615(starsId);
+            mc.getTextureManager().release(starsId);
         }
         starsId = upload("stars", img);
         starsW = pxW;
@@ -202,8 +202,8 @@ public final class LotusBackdrop {
         return starsId;
     }
 
-    private static void curtain(class_332 context, int styleIdx, int curtainIdx, Curtain c, int width, int height, float timeSec, float alpha) {
-        class_2960 tex = texture(styleIdx, curtainIdx, c);
+    private static void curtain(GuiGraphicsExtractor context, int styleIdx, int curtainIdx, Curtain c, int width, int height, float timeSec, float alpha) {
+        Identifier tex = texture(styleIdx, curtainIdx, c);
         int topY = Math.round((float) height * c.top());
         int curtainH = Math.max(1, Math.round((float) height * (c.bottom() - c.top())));
 
@@ -214,20 +214,20 @@ public final class LotusBackdrop {
         int curtainAlpha = Math.round(255.0f * c.alpha * pulse * alpha);
         int tint = (curtainAlpha << 24) | (c.rgb & 0x00FFFFFF);
 
-        Matrix3x2fStack stack = context.method_51448();
+        Matrix3x2fStack stack = context.pose();
         stack.pushMatrix();
         stack.translate(-driftShift * (float) width, breatheY);
 
         // Dual tiling so scrolling is seamless across width
-        context.method_25293(class_10799.field_56883, tex, 0, topY, 0.0f, 0.0f, width, curtainH, CURTAIN_W, CURTAIN_H, CURTAIN_W, CURTAIN_H, tint);
-        context.method_25293(class_10799.field_56883, tex, width, topY, 0.0f, 0.0f, width, curtainH, CURTAIN_W, CURTAIN_H, CURTAIN_W, CURTAIN_H, tint);
+        context.blit(RenderPipelines.GUI_TEXTURED, tex, 0, topY, 0.0f, 0.0f, width, curtainH, CURTAIN_W, CURTAIN_H, CURTAIN_W, CURTAIN_H, tint);
+        context.blit(RenderPipelines.GUI_TEXTURED, tex, width, topY, 0.0f, 0.0f, width, curtainH, CURTAIN_W, CURTAIN_H, CURTAIN_W, CURTAIN_H, tint);
 
         stack.popMatrix();
     }
 
-    private static class_2960 texture(int styleIdx, int curtainIdx, Curtain c) {
+    private static Identifier texture(int styleIdx, int curtainIdx, Curtain c) {
         if (CURTAIN_TEX[styleIdx] == null) {
-            CURTAIN_TEX[styleIdx] = new class_2960[STYLES[styleIdx].curtains.length];
+            CURTAIN_TEX[styleIdx] = new Identifier[STYLES[styleIdx].curtains.length];
         }
         if (CURTAIN_TEX[styleIdx][curtainIdx] != null) {
             return CURTAIN_TEX[styleIdx][curtainIdx];
@@ -272,11 +272,11 @@ public final class LotusBackdrop {
         blur(grid, 1, 4);
         blur(grid, 1, 4);
 
-        class_1011 img = new class_1011(class_1011.class_1012.field_4997, CURTAIN_W, CURTAIN_H, true);
+        NativeImage img = new NativeImage(NativeImage.Format.RGBA, CURTAIN_W, CURTAIN_H, true);
         for (int i = 0; i < grid.length; i++) {
             int a = Math.round(255.0f * Math.min(1.0f, Math.max(0.0f, grid[i])));
             int argb = a == 0 ? 0 : (a << 24) | 0x00FFFFFF;
-            img.method_61941(i % CURTAIN_W, i / CURTAIN_W, argb);
+            img.setPixel(i % CURTAIN_W, i / CURTAIN_W, argb);
         }
 
         CURTAIN_TEX[styleIdx][curtainIdx] = upload("curtain_" + styleIdx + "_" + curtainIdx, img);
@@ -306,20 +306,20 @@ public final class LotusBackdrop {
         }
     }
 
-    private static void ridge(class_332 context, Style style, int width, int height, float alpha) {
+    private static void ridge(GuiGraphicsExtractor context, Style style, int width, int height, float alpha) {
         int glowStartY = Math.round((float) height * 0.70f);
         int glowAlpha = Math.round((float) (style.glow >>> 24 & 0xFF) * alpha);
-        context.method_25296(0, glowStartY, width, height, withAlpha(style.glow, 0), withAlpha(style.glow, glowAlpha));
+        context.fillGradient(0, glowStartY, width, height, withAlpha(style.glow, 0), withAlpha(style.glow, glowAlpha));
 
-        class_2960 rId = ridgeTexture(style, width, height);
+        Identifier rId = ridgeTexture(style, width, height);
         if (rId != null) {
-            context.method_25293(class_10799.field_56883, rId, 0, 0, 0.0f, 0.0f, width, height, ridgeW, ridgeH, ridgeW, ridgeH, withAlpha(0xFFFFFF, Math.round(255.0f * alpha)));
+            context.blit(RenderPipelines.GUI_TEXTURED, rId, 0, 0, 0.0f, 0.0f, width, height, ridgeW, ridgeH, ridgeW, ridgeH, withAlpha(0xFFFFFF, Math.round(255.0f * alpha)));
         }
     }
 
-    private static class_2960 ridgeTexture(Style style, int width, int height) {
-        class_310 mc = class_310.method_1551();
-        int scale = Math.max(1, mc.method_22683().method_4495());
+    private static Identifier ridgeTexture(Style style, int width, int height) {
+        Minecraft mc = Minecraft.getInstance();
+        int scale = Math.max(1, mc.getWindow().getGuiScale());
         int pxW = width * scale;
         int pxH = height * scale;
 
@@ -330,7 +330,7 @@ public final class LotusBackdrop {
             return null;
         }
 
-        class_1011 img = new class_1011(class_1011.class_1012.field_4997, pxW, pxH, true);
+        NativeImage img = new NativeImage(NativeImage.Format.RGBA, pxW, pxH, true);
         int baseRgb = style.ridge & 0x00FFFFFF;
 
         for (int x = 0; x < pxW; x++) {
@@ -343,12 +343,12 @@ public final class LotusBackdrop {
 
             for (int y = Math.max(0, y1); y < pxH; y++) {
                 int a = (y < y2) ? 170 : 255;
-                img.method_61941(x, y, (a << 24) | baseRgb);
+                img.setPixel(x, y, (a << 24) | baseRgb);
             }
         }
 
         if (ridgeId != null) {
-            mc.method_1531().method_4615(ridgeId);
+            mc.getTextureManager().release(ridgeId);
         }
         ridgeId = upload("ridge", img);
         ridgeW = pxW;
@@ -357,11 +357,11 @@ public final class LotusBackdrop {
         return ridgeId;
     }
 
-    private static class_2960 upload(String name, class_1011 img) {
-        class_2960 id = class_2960.method_60655("lumiclient", name);
-        class_1043 tex = new class_1043(() -> "lotus_" + name, img);
-        tex.method_4524();
-        class_310.method_1551().method_1531().method_4616(id, (class_1044) tex);
+    private static Identifier upload(String name, NativeImage img) {
+        Identifier id = Identifier.fromNamespaceAndPath("lumiclient", name);
+        DynamicTexture tex = new DynamicTexture(() -> "lotus_" + name, img);
+        tex.upload();
+        Minecraft.getInstance().getTextureManager().register(id, (AbstractTexture) tex);
         return id;
     }
 

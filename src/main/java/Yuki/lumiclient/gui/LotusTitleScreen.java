@@ -7,25 +7,25 @@ import Yuki.lumiclient.render.nanovg.NVGRenderer;
 import Yuki.lumiclient.util.Colors;
 import Yuki.lumiclient.util.UiSounds;
 import com.mojang.authlib.GameProfile;
-import net.minecraft.class_1068;
-import net.minecraft.class_11905;
-import net.minecraft.class_11908;
-import net.minecraft.class_11909;
-import net.minecraft.class_310;
-import net.minecraft.class_332;
-import net.minecraft.class_429;
-import net.minecraft.class_440;
-import net.minecraft.class_442;
-import net.minecraft.class_500;
-import net.minecraft.class_526;
-import net.minecraft.class_8685;
-import net.minecraft.class_8765;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.input.CharacterEvent;
+import net.minecraft.client.input.KeyEvent;
+import net.minecraft.client.input.MouseButtonEvent;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.screens.options.OptionsScreen;
+import net.minecraft.client.gui.screens.options.SkinCustomizationScreen;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
+import net.minecraft.client.gui.screens.worldselection.SelectWorldScreen;
+import net.minecraft.world.entity.player.PlayerSkin;
+import net.minecraft.client.gui.components.PlayerSkinWidget;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class LotusTitleScreen extends class_442 implements NvgDrawable {
+public class LotusTitleScreen extends TitleScreen implements NvgDrawable {
 
     public static final int GLASS_BG             = 0x50101824;
     public static final int GLASS_BG_HOVER       = 0x801A2638;
@@ -55,7 +55,7 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
     private GlassButton keybindsButton;
     private GlassButton spotifyButton;
 
-    private class_8765 skinWidget;
+    private PlayerSkinWidget skinWidget;
     private long lastFrameTime = System.currentTimeMillis();
     private int hoveredBtnId = -1;
 
@@ -69,33 +69,33 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
 
         // 1. Singleplayer
         centerButtons.add(new GlassButton("Singleplayer", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new class_526(this));
+            Minecraft mc = Minecraft.getInstance();
+            if (mc != null) mc.gui.setScreen(new SelectWorldScreen(this));
         }));
 
         // 2. Multiplayer
         centerButtons.add(new GlassButton("Multiplayer", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new class_500(this));
+            Minecraft mc = Minecraft.getInstance();
+            if (mc != null) mc.gui.setScreen(new JoinMultiplayerScreen(this));
         }));
 
         // Lotus Button WEG GELASSEN wie gewünscht!
 
         // Split-Row: Options... & Quit Game
         optionsButton = new GlassButton("Options...", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new class_429(this, mc.field_1690));
+            Minecraft mc = Minecraft.getInstance();
+            if (mc != null) mc.gui.setScreen(new OptionsScreen(this, mc.options));
         });
 
         quitButton = new GlassButton("Quit Game", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1592();
+            Minecraft mc = Minecraft.getInstance();
+            if (mc != null) mc.stop();
         });
 
         // Wardrobe Button
         wardrobeButton = new GlassButton("Wardrobe", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new class_440(this, mc.field_1690));
+            Minecraft mc = Minecraft.getInstance();
+            if (mc != null) mc.gui.setScreen(new SkinCustomizationScreen(this, mc.options));
         });
 
         // Sky-Theme Switcher Button (Top-Right)
@@ -105,67 +105,67 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
 
         // Keybinds Button (Top-Right)
         keybindsButton = new GlassButton("Keybinds", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new KeyboardScreen(this));
+            Minecraft mc = Minecraft.getInstance();
+            if (mc != null) mc.gui.setScreen(new KeyboardScreen(this));
         });
 
         // Music / SkyLyrics Dashboard Button (Top-Right)
         spotifyButton = new GlassButton("🎵 Music", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new dev.lyricsflow.gui.LyricsFlowScreen(this));
+            Minecraft mc = Minecraft.getInstance();
+            if (mc != null) mc.gui.setScreen(new dev.lyricsflow.gui.SkyLyricsScreen(this));
         });
     }
 
     private void initSkinWidget() {
         try {
-            class_310 mc = class_310.method_1551();
-            if (mc == null || mc.method_31974() == null) return;
-            Supplier<class_8685> skinSupplier = () -> {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc == null || mc.getEntityModels() == null) return;
+            Supplier<PlayerSkin> skinSupplier = () -> {
                 try {
-                    GameProfile profile = mc.method_53462();
-                    if (profile != null && mc.method_1582() != null) {
-                        Supplier<class_8685> sup = mc.method_1582().method_73544(profile, false);
+                    GameProfile profile = mc.getGameProfile();
+                    if (profile != null && mc.getSkinManager() != null) {
+                        Supplier<PlayerSkin> sup = mc.getSkinManager().createLookup(profile, false);
                         if (sup != null && sup.get() != null) {
                             return sup.get();
                         }
                     }
                 } catch (Throwable ignored) {}
-                return class_1068.method_62620();
+                return DefaultPlayerSkin.getDefaultSkin();
             };
-            this.skinWidget = new class_8765(120, 190, mc.method_31974(), skinSupplier);
+            this.skinWidget = new PlayerSkinWidget(120, 190, mc.getEntityModels(), skinSupplier);
         } catch (Throwable t) {
             t.printStackTrace();
         }
     }
 
     @Override
-    protected void method_25426() {
+    protected void init() {
         try {
-            this.method_37070();
+            this.afterKeyboardAction();
         } catch (Throwable ignored) {}
         initSkinWidget();
     }
 
     @Override
-    public void method_25420(class_332 context, int mouseX, int mouseY, float deltaTicks) {
+    public void extractBackground(GuiGraphicsExtractor context, int mouseX, int mouseY, float deltaTicks) {
     }
 
     @Override
-    public boolean method_25422() {
+    public boolean shouldCloseOnEsc() {
         return false;
     }
 
     @Override
-    public void method_25394(class_332 context, int mouseX, int mouseY, float deltaTicks) {
-        int w = this.field_22789;
-        int h = this.field_22790;
+    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float deltaTicks) {
+        int w = this.width;
+        int h = this.height;
 
         LotusBackdrop.render(context, w, h, 1.0f);
         drawMannequin(context, mouseX, mouseY, deltaTicks);
-        context.method_71278();
+        context.blurBeforeThisStratum();
     }
 
-    private void drawMannequin(class_332 context, int mouseX, int mouseY, float deltaTicks) {
+    private void drawMannequin(GuiGraphicsExtractor context, int mouseX, int mouseY, float deltaTicks) {
         try {
             if (this.skinWidget == null) {
                 initSkinWidget();
@@ -174,8 +174,8 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
 
             float sw = OverlayRenderer.uiWidth();
             float sh = OverlayRenderer.uiHeight();
-            if (sw <= 0) sw = this.field_22789;
-            if (sh <= 0) sh = this.field_22790;
+            if (sw <= 0) sw = this.width;
+            if (sh <= 0) sh = this.height;
 
             float s = Math.max(0.65f, Math.min(sw / 960.0f, sh / 540.0f));
             float cx = sw / 2f;
@@ -191,19 +191,19 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
             float skinUiW = 130f * s;
             float skinUiX = figX + (figW - skinUiW) / 2f;
 
-            float scaleX = (float) this.field_22789 / sw;
-            float scaleY = (float) this.field_22790 / sh;
+            float scaleX = (float) this.width / sw;
+            float scaleY = (float) this.height / sh;
 
             int gx = Math.round(skinUiX * scaleX);
             int gy = Math.round(skinUiY * scaleY);
             int gw = Math.round(skinUiW * scaleX);
             int gh = Math.round(skinUiH * scaleY);
 
-            this.skinWidget.method_46421(gx);
-            this.skinWidget.method_46419(gy);
-            this.skinWidget.method_25358(gw);
-            this.skinWidget.method_53533(gh);
-            this.skinWidget.method_25394(context, mouseX, mouseY, deltaTicks);
+            this.skinWidget.setX(gx);
+            this.skinWidget.setY(gy);
+            this.skinWidget.setWidth(gw);
+            this.skinWidget.setHeight(gh);
+            this.skinWidget.extractRenderState(context, mouseX, mouseY, deltaTicks);
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -395,10 +395,10 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
     }
 
     @Override
-    public boolean method_25402(class_11909 event, boolean doubleClick) {
-        float mx = OverlayRenderer.guiToUi(event.comp_4798());
-        float my = OverlayRenderer.guiToUi(event.comp_4799());
-        int button = event.method_74245();
+    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        float mx = OverlayRenderer.guiToUi(event.x());
+        float my = OverlayRenderer.guiToUi(event.y());
+        int button = event.button();
 
         if (button == 0) {
             float sw = OverlayRenderer.uiWidth();
@@ -491,8 +491,8 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
                 return true;
             }
 
-            if (this.skinWidget != null && this.skinWidget.method_25405(event.comp_4798(), event.comp_4799())) {
-                this.skinWidget.method_25402(event, doubleClick);
+            if (this.skinWidget != null && this.skinWidget.isMouseOver(event.x(), event.y())) {
+                this.skinWidget.mouseClicked(event, doubleClick);
                 return true;
             }
 
@@ -502,44 +502,44 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
     }
 
     @Override
-    public boolean method_25406(class_11909 event) {
+    public boolean mouseReleased(MouseButtonEvent event) {
         if (this.skinWidget != null) {
-            this.skinWidget.method_25406(event);
+            this.skinWidget.mouseReleased(event);
         }
         return true;
     }
 
     @Override
-    public boolean method_25403(class_11909 event, double deltaX, double deltaY) {
+    public boolean mouseDragged(MouseButtonEvent event, double deltaX, double deltaY) {
         if (this.skinWidget != null) {
-            double mx = event.comp_4798();
-            double my = event.comp_4799();
-            if (this.skinWidget.method_25405(mx, my)) {
-                this.skinWidget.method_25403(event, deltaX, deltaY);
+            double mx = event.x();
+            double my = event.y();
+            if (this.skinWidget.isMouseOver(mx, my)) {
+                this.skinWidget.mouseDragged(event, deltaX, deltaY);
                 return true;
             }
         }
-        return super.method_25403(event, deltaX, deltaY);
+        return super.mouseDragged(event, deltaX, deltaY);
     }
 
     @Override
-    public boolean method_25404(class_11908 event) {
-        if (event.comp_4795() == 256) {
+    public boolean keyPressed(KeyEvent event) {
+        if (event.key() == 256) {
             return true;
         }
-        return super.method_25404(event);
+        return super.keyPressed(event);
     }
 
     @Override
-    public boolean method_25400(class_11905 event) {
-        return super.method_25400(event);
+    public boolean charTyped(CharacterEvent event) {
+        return super.charTyped(event);
     }
 
     private static String getUsername() {
         try {
-            class_310 mc = class_310.method_1551();
-            if (mc != null && mc.method_53462() != null) {
-                Object profile = mc.method_53462();
+            Minecraft mc = Minecraft.getInstance();
+            if (mc != null && mc.getGameProfile() != null) {
+                Object profile = mc.getGameProfile();
                 try {
                     return (String) profile.getClass().getMethod("name").invoke(profile);
                 } catch (Throwable t) {
@@ -548,9 +548,9 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
             }
         } catch (Throwable ignored) {}
         try {
-            class_310 mc = class_310.method_1551();
-            if (mc != null && mc.method_1548() != null) {
-                return mc.method_1548().method_1676();
+            Minecraft mc = Minecraft.getInstance();
+            if (mc != null && mc.getUser() != null) {
+                return mc.getUser().getName();
             }
         } catch (Throwable ignored) {}
         return "Player";
