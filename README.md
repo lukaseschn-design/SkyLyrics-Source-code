@@ -137,6 +137,9 @@ A: The mod loads on all platforms, but automatic media detection (SMTC) is curre
 All Rights Reserved (ARR). This mod may be downloaded and used for personal gameplay. Redistribution, modification, or commercial use is not permitted without explicit permission.
 
 ---
+## 📜 Just some guys:
+
+Pnio/VexVibe/BitePioner/Speez/storxm_
 
 <p align="center">
   <strong>Created by Maximus</strong><br>
