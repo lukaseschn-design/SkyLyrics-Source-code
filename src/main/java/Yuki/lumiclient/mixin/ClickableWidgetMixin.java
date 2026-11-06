@@ -16,3 +16,4 @@ public abstract class ClickableWidgetMixin {
         ci.cancel();
     }
 }
+
