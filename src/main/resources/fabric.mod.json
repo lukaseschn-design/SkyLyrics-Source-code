@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "lyricsflow",
+  "version": "1.0+1.21.11",
+  "name": "SkyLyrics",
+  "description": "Synced live lyrics from Spotify or YouTube, glowing in the sky or floating smoothly in the air.\ndc: i.am.maximus",
+  "authors": [
+    "Maximus"
+  ],
+  "contact": {},
+  "license": "Custom (ARR)",
+  "icon": "assets/lyricsflow/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "dev.lyricsflow.LyricsFlowClient"
+    ],
+    "modmenu": [
+      "dev.lyricsflow.compat.ModMenuEntry"
+    ]
+  },
+  "mixins": [
+    "lyricsflow.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.17.0",
+    "minecraft": "~1.21.11",
+    "java": ">=21",
+    "fabric-api": "*"
+  },
+  "suggests": {
+    "modmenu": "*"
+  }
+}

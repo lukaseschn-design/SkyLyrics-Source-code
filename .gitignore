@@ -1,0 +1,41 @@
+# Build
+build/
+out/
+*.class
+
+# Gradle
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+.metadata/
+bin/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Fabric / Loom
+run/
+remappedSrc/
+.fabric/
+
+# Logs
+*.log
+logs/
+
+# Misc
+*.jar.disabled
+cp_build.args
+
