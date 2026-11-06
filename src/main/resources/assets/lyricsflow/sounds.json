@@ -2,7 +2,7 @@
   "ui.click": {
     "sounds": [
       {
-        "name": "lyricsflow:ui/click",
+        "name": "lyricsflow:ui/select",
         "stream": false
       }
     ]
@@ -107,6 +107,14 @@
     "sounds": [
       {
         "name": "lyricsflow:ui_serious/song",
+        "stream": false
+      }
+    ]
+  },
+  "ui.select": {
+    "sounds": [
+      {
+        "name": "lyricsflow:ui/select",
         "stream": false
       }
     ]

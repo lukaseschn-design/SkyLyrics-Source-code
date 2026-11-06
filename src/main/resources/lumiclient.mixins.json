@@ -10,7 +10,8 @@
     "PressableWidgetMixin",
     "SliderWidgetMixin",
     "GameRendererMixin",
-    "KeyMappingAccessor"
+    "KeyMappingAccessor",
+    "ClickableWidgetMixin"
   ],
   "injectors": {
     "defaultRequire": 1

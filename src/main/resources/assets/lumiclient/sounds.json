@@ -1,0 +1,16 @@
+{
+	"ui.gui_open": {"sounds": ["lumiclient:ui/gui_open"]},
+	"ui.gui_close": {"sounds": ["lumiclient:ui/gui_close"]},
+	"ui.hover": {"sounds": ["lumiclient:ui/hover"]},
+	"ui.toggle_on": {"sounds": ["lumiclient:ui/toggle_on"]},
+	"ui.toggle_off": {"sounds": ["lumiclient:ui/toggle_off"]},
+	"ui.slider": {"sounds": ["lumiclient:ui/slider"]},
+	"ui.select": {"sounds": ["lumiclient:ui/select"]},
+	"ui.keybind": {"sounds": ["lumiclient:ui/keybind"]},
+	"ui.notify_on": {"sounds": ["lumiclient:ui/notify_on"]},
+	"ui.notify_off": {"sounds": ["lumiclient:ui/notify_off"]},
+	"startup.sad": {"sounds": [{"name": "lumiclient:startup/startup_sad", "stream": true}]},
+	"startup.song": {"sounds": [{"name": "lumiclient:startup/startup_song", "stream": true}]},
+	"startup.tiki": {"sounds": [{"name": "lumiclient:startup/startup_tiki", "stream": true}]},
+	"startup.67": {"sounds": [{"name": "lumiclient:startup/startup_67", "stream": true}]}
+}

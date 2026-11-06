@@ -1,38 +1,40 @@
 package Yuki.lumiclient.util;
 
 import net.minecraft.class_1109;
+import net.minecraft.class_2960;
 import net.minecraft.class_310;
-import net.minecraft.class_3417;
+import net.minecraft.class_3414;
 
 public final class UiSounds {
     private static long lastHover = 0;
 
+    // Custom UI Sound Events (direkt verknüpft mit den OGG-Sounds in sounds.json)
+    public static final class_3414 SOUND_SELECT = class_3414.method_47908(class_2960.method_60655("lumiclient", "ui.select"));
+    public static final class_3414 SOUND_HOVER = class_3414.method_47908(class_2960.method_60655("lumiclient", "ui.hover"));
+
     /**
-     * Sanfter, dezenter Tastatur-/Hover-Tick (Note Block Hat).
-     * Klingt wie ein edler mechanischer Switch, kein schrilles Klicken.
+     * Custom Hover Sound: cleaner, dezent-leiser Pop/Tick (kein Vanilla Sound).
      */
     public static void hover() {
         long now = System.currentTimeMillis();
-        if (now - lastHover < 75) return;
+        if (now - lastHover < 65) return;
         lastHover = now;
         try {
             class_310 mc = class_310.method_1551();
             if (mc != null && mc.method_1483() != null) {
-                // field_15204 ist block.note_block.hat -> weicher, knackiger Tick
-                mc.method_1483().method_4873(class_1109.method_4757(class_3417.field_15204.comp_349(), 1.30f, 0.10f));
+                mc.method_1483().method_4873(class_1109.method_4757(SOUND_HOVER, 1.0f, 0.40f));
             }
         } catch (Throwable ignored) {}
     }
 
     /**
-     * Knackiger, satter Button-Klick (echter UI Button Click).
+     * Custom Click Sound: satter, ultra-cleaner Tactile Pop/Click (kein Vanilla Sound).
      */
     public static void select() {
         try {
             class_310 mc = class_310.method_1551();
             if (mc != null && mc.method_1483() != null) {
-                // field_15015 ist ui.button.click -> satter, klassischer Minecraft Klick
-                mc.method_1483().method_4873(class_1109.method_4757(class_3417.field_15015.comp_349(), 1.0f, 0.35f));
+                mc.method_1483().method_4873(class_1109.method_4757(SOUND_SELECT, 1.0f, 0.65f));
             }
         } catch (Throwable ignored) {}
     }
