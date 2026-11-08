@@ -9,8 +9,8 @@ import net.minecraft.class_327;
 import net.minecraft.class_332;
 import net.minecraft.class_4185;
 import net.minecraft.class_429;
+import net.minecraft.class_437;
 import net.minecraft.class_440;
-import net.minecraft.class_442;
 import net.minecraft.class_500;
 import net.minecraft.class_526;
 import net.minecraft.class_8685;
@@ -19,12 +19,12 @@ import org.joml.Matrix3x2fStack;
 
 import java.util.function.Supplier;
 
-public class LotusTitleScreen extends class_442 {
+public class LotusTitleScreen extends class_437 {
 
     private class_8765 skinWidget;
 
     public LotusTitleScreen() {
-        super();
+        super(class_2561.method_43470("SkyLyrics"));
     }
 
     private void initSkinWidget() {
@@ -43,7 +43,7 @@ public class LotusTitleScreen extends class_442 {
                 } catch (Throwable ignored) {}
                 return class_1068.method_62620();
             };
-            this.skinWidget = new class_8765(120, 190, mc.method_31974(), skinSupplier);
+            this.skinWidget = new class_8765(90, 145, mc.method_31974(), skinSupplier);
         } catch (Throwable t) {
             t.printStackTrace();
         }
@@ -135,10 +135,15 @@ public class LotusTitleScreen extends class_442 {
             }
         ).method_46434(sw - 85 - 10 - 75 - 6 - 72 - 6, topY, 72, topBtnH).method_46431());
 
-        // 5. Wardrobe Button unter dem Skin
-        int wardW = 80;
-        int wardX = cx + 160 + (120 - wardW) / 2;
-        int wardY = startY + 145;
+        // 5. Wardrobe Button unter dem Skin (zentraler platziert)
+        int skinX = cx + 130;
+        int skinY = startY - 20;
+        int skinW = 90;
+        int skinH = 145;
+        int wardW = 75;
+        int wardX = skinX + (skinW - wardW) / 2;
+        int wardY = skinY + skinH + 4;
+
         this.method_37063(class_4185.method_46430(
             class_2561.method_43470("Wardrobe"),
             b -> {
@@ -166,10 +171,10 @@ public class LotusTitleScreen extends class_442 {
         // 1. Aurora Dynamic Animated Background
         LotusBackdrop.render(context, w, h, 1.0f);
 
-        // 2. 3D Mannequin
+        // 2. 3D Mannequin (etwas kompakter & zentraler)
         drawMannequin(context, mouseX, mouseY, deltaTicks);
 
-        // 3. Zentrierter SkyLyrics Titel (Ohne KI-Noten-Logo, clean und zentriert!)
+        // 3. Zentrierter SkyLyrics Titel (Sauber in der Mitte, kein Vanilla-Logo)
         class_327 font = this.field_22787 != null ? this.field_22787.field_1772 : null;
         if (font != null) {
             int startY = h / 2 - 10;
@@ -184,11 +189,11 @@ public class LotusTitleScreen extends class_442 {
             context.method_51439(font, title, -tw / 2, -4, 0xFFFFFFFF, true);
             matrices.popMatrix();
 
-            // Unten links: Subtiles Versions-Branding
+            // Unten links: Ausschließlich unser Mod-Branding (keine Überlappung mehr!)
             context.method_51439(font, class_2561.method_43470("§7SkyLyrics 1.0  §8Minecraft 1.21.11"), 12, h - 14, 0xFFCAD4E0, true);
         }
 
-        // 4. Alle Buttons zeichnen (mittels LotusButtonRenderer über PressableWidgetMixin!)
+        // 4. Buttons rendern (Screen.render zeichnet die Widgets mit LotusButtonRenderer)
         super.method_25394(context, mouseX, mouseY, deltaTicks);
 
         context.method_71278();
@@ -204,10 +209,10 @@ public class LotusTitleScreen extends class_442 {
             int cx = this.field_22789 / 2;
             int startY = this.field_22790 / 2 - 10;
 
-            int skinX = cx + 160;
-            int skinY = startY - 45;
-            int skinW = 120;
-            int skinH = 180;
+            int skinX = cx + 130;
+            int skinY = startY - 20;
+            int skinW = 90;
+            int skinH = 145;
 
             this.skinWidget.method_46421(skinX);
             this.skinWidget.method_46419(skinY);
