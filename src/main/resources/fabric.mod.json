@@ -7,7 +7,11 @@
   "authors": [
     "Maximus"
   ],
-  "contact": {},
+  "contact": {
+    "homepage": "https://github.com/lukaseschn-design/SkyLyrics-Source-code",
+    "sources": "https://github.com/lukaseschn-design/SkyLyrics-Source-code",
+    "issues": "https://github.com/lukaseschn-design/SkyLyrics-Source-code/issues"
+  },
   "license": "Custom (ARR)",
   "icon": "assets/lyricsflow/icon.png",
   "environment": "client",
