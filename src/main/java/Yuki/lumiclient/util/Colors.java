@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package Yuki.lumiclient.util;
 
 public final class Colors {

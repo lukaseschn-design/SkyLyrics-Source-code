@@ -1,27 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.gson.Gson
- *  com.google.gson.JsonElement
- *  com.google.gson.JsonObject
- *  net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
- *  net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
- *  net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
- *  net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents
- *  net.fabricmc.fabric.api.event.player.AttackEntityCallback
- *  net.minecraft.class_1269
- *  net.minecraft.class_1937
- *  net.minecraft.class_2874
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fc
- *  org.slf4j.Logger
- *  org.slf4j.LoggerFactory
- */
 package dev.lyricsflow.app;
 
 import com.google.gson.Gson;

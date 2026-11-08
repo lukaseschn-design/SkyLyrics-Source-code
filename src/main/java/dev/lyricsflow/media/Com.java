@@ -1,16 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.sun.jna.Function
- *  com.sun.jna.Memory
- *  com.sun.jna.Native
- *  com.sun.jna.NativeLibrary
- *  com.sun.jna.Pointer
- *  com.sun.jna.ptr.IntByReference
- *  com.sun.jna.ptr.LongByReference
- *  com.sun.jna.ptr.PointerByReference
- */
 package dev.lyricsflow.media;
 
 import com.sun.jna.Function;
@@ -71,7 +58,6 @@ final class Com {
                 Com.call(p, 2, new Object[0]);
             }
             catch (Throwable throwable) {
-                // empty catch block
             }
         }
     }
@@ -221,7 +207,6 @@ final class Com {
                     Thread.sleep(2L);
                 }
                 catch (InterruptedException e) {
-                    // empty catch block
                     break;
                 }
             }

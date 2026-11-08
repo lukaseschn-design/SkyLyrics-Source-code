@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  org.lwjgl.opengl.GL33C
- */
 package Yuki.lumiclient.render.nanovg;
 
 import org.lwjgl.opengl.GL33C;

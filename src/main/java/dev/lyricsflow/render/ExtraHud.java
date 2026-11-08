@@ -1,19 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
- *  net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
- *  net.minecraft.class_1041
- *  net.minecraft.class_1074
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- *  net.minecraft.class_3675
- *  net.minecraft.class_408
- *  net.minecraft.class_437
- *  net.minecraft.class_9779
- *  org.lwjgl.glfw.GLFW
- */
 package dev.lyricsflow.render;
 import net.minecraft.class_11909;
 

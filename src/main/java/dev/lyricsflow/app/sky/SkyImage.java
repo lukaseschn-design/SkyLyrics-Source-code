@@ -1,19 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1044
- *  net.minecraft.class_12249
- *  net.minecraft.class_156
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fc
- */
 package dev.lyricsflow.app.sky;
 
 import dev.lyricsflow.app.Core;
@@ -134,7 +118,6 @@ public final class SkyImage {
                     DECODED.put(name, out);
                 }
                 catch (Throwable throwable) {
-                    // empty catch block
                 }
             });
         }
@@ -158,7 +141,6 @@ public final class SkyImage {
             class_156.method_668().method_60932(SkyImage.dir());
         }
         catch (Exception exception) {
-            // empty catch block
         }
     }
 

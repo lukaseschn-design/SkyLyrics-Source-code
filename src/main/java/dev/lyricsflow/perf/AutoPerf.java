@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_310
- */
 package dev.lyricsflow.perf;
 
 import dev.lyricsflow.config.ConfigManager;
@@ -64,7 +58,6 @@ public final class AutoPerf {
             }
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
         return Math.max(20, t);
     }

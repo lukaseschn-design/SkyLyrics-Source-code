@@ -1,11 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.gson.Gson
- *  com.google.gson.GsonBuilder
- *  net.fabricmc.loader.api.FabricLoader
- */
 package dev.lyricsflow.app.config;
 
 import com.google.gson.Gson;

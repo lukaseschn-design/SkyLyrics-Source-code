@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1044
- *  net.minecraft.class_10799
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- */
 package dev.lyricsflow.app.hud;
 
 import dev.lyricsflow.app.Core;
@@ -272,7 +260,6 @@ public final class SkyThumbs {
                             Files.write(file, png, new OpenOption[0]);
                         }
                         catch (Exception exception) {
-                            // empty catch block
                         }
                     }
                     DONE.add(new Done(p.name(), key, class_1011.method_49277((byte[])png)));

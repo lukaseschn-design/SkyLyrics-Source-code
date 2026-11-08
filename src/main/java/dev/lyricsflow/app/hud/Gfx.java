@@ -1,20 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.blaze3d.pipeline.RenderPipeline
- *  net.minecraft.class_10799
- *  net.minecraft.class_11719
- *  net.minecraft.class_11719$class_11721
- *  net.minecraft.class_2561
- *  net.minecraft.class_2583
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_327
- *  net.minecraft.class_332
- *  net.minecraft.class_5250
- *  net.minecraft.class_5348
- */
 package dev.lyricsflow.app.hud;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;

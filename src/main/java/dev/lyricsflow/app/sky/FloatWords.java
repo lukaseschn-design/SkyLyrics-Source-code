@@ -1,16 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_243
- *  net.minecraft.class_2561
- *  net.minecraft.class_310
- *  net.minecraft.class_327
- *  net.minecraft.class_327$class_6415
- *  net.minecraft.class_4597
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fc
- */
 package dev.lyricsflow.app.sky;
 
 import dev.lyricsflow.app.config.Config;

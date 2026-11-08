@@ -1,22 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_10055
- *  net.minecraft.class_11659
- *  net.minecraft.class_12249
- *  net.minecraft.class_1304
- *  net.minecraft.class_1657
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_3883
- *  net.minecraft.class_3887
- *  net.minecraft.class_4587
- *  net.minecraft.class_4587$class_4665
- *  net.minecraft.class_4588
- *  net.minecraft.class_4608
- *  net.minecraft.class_591
- */
 package dev.lyricsflow.render;
 import net.minecraft.class_10017;
 

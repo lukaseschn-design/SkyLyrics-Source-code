@@ -1,19 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.blaze3d.buffers.GpuBufferSlice
- *  net.minecraft.class_4184
- *  net.minecraft.class_761
- *  net.minecraft.class_9779
- *  net.minecraft.class_9922
- *  org.joml.Matrix4f
- *  org.joml.Vector4f
- *  org.spongepowered.asm.mixin.Mixin
- *  org.spongepowered.asm.mixin.injection.At
- *  org.spongepowered.asm.mixin.injection.Inject
- *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
- */
 package dev.lyricsflow.mixin;
 
 import com.mojang.blaze3d.buffers.GpuBufferSlice;

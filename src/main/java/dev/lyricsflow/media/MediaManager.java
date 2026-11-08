@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.gson.Gson
- */
 package dev.lyricsflow.media;
 
 import com.google.gson.Gson;
@@ -215,7 +209,6 @@ public final class MediaManager {
             Files.deleteIfExists(MediaManager.cacheFile(t));
         }
         catch (Exception exception) {
-            // empty catch block
         }
         this.fetchLyrics(t, this.songSeq);
     }
@@ -326,7 +319,6 @@ public final class MediaManager {
                     b = this.backend().cover();
                 }
                 catch (Throwable throwable) {
-                    // empty catch block
                 }
                 if (seq == this.songSeq) {
                     this.cover = b;
@@ -417,7 +409,6 @@ public final class MediaManager {
                     got = LyricsFetcher.fetch(t.artist, t.title, t.album, t.durationMs);
                 }
                 catch (Throwable throwable) {
-                    // empty catch block
                 }
                 if (got != null) {
                     if (l == null || got.synced) {
@@ -521,7 +512,6 @@ public final class MediaManager {
             Files.writeString(MediaManager.cacheFile(t), (CharSequence)GSON.toJson((Object)e), StandardCharsets.UTF_8, new OpenOption[0]);
         }
         catch (Exception exception) {
-            // empty catch block
         }
     }
 

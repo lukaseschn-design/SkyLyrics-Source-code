@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.gson.Gson
- *  com.google.gson.GsonBuilder
- *  com.google.gson.JsonElement
- *  com.google.gson.JsonObject
- *  com.google.gson.JsonParser
- *  com.google.gson.JsonPrimitive
- *  net.fabricmc.loader.api.FabricLoader
- */
 package dev.lyricsflow.config;
 
 import com.google.gson.Gson;
@@ -61,7 +49,6 @@ public final class ConfigManager {
             Files.createDirectories(p, new FileAttribute[0]);
         }
         catch (IOException iOException) {
-            // empty catch block
         }
         return p;
     }
@@ -130,7 +117,6 @@ public final class ConfigManager {
                     col = s.length() <= 7 ? (int)(0xFF000000L | l) : (int)l;
                 }
                 catch (NumberFormatException numberFormatException) {
-                    // empty catch block
                 }
             }
             flat.addProperty((String)e.getKey(), (Number)col);
@@ -260,7 +246,6 @@ public final class ConfigManager {
                 Files.writeString(ConfigManager.file(), (CharSequence)json, StandardCharsets.UTF_8, new OpenOption[0]);
             }
             catch (IOException iOException) {
-                // empty catch block
             }
         }
     }
@@ -275,7 +260,6 @@ public final class ConfigManager {
             o.add("_sky", new Gson().toJsonTree((Object)Core.cfg()));
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
         return new Gson().toJson((JsonElement)o);
     }

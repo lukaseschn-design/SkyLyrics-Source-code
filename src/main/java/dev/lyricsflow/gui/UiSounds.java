@@ -1,17 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_1109
- *  net.minecraft.class_1113
- *  net.minecraft.class_1113$class_1114
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_3414
- *  net.minecraft.class_3417
- *  net.minecraft.class_3419
- *  net.minecraft.class_5819
- */
 package dev.lyricsflow.gui;
 
 import dev.lyricsflow.LyricsFlow;

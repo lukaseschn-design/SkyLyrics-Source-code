@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package dev.lyricsflow.media;
 
 import java.util.Locale;

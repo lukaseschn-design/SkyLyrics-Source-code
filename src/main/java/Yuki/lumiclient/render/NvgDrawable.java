@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package Yuki.lumiclient.render;
 
 import Yuki.lumiclient.render.nanovg.NVGRenderer;

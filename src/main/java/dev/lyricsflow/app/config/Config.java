@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package dev.lyricsflow.app.config;
 
 import dev.lyricsflow.app.hud.Gfx;

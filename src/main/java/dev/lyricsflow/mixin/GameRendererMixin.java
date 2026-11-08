@@ -1,21 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_4184
- *  net.minecraft.class_757
- *  net.minecraft.class_9779
- *  net.minecraft.class_9920
- *  net.minecraft.class_9922
- *  org.spongepowered.asm.mixin.Final
- *  org.spongepowered.asm.mixin.Mixin
- *  org.spongepowered.asm.mixin.Shadow
- *  org.spongepowered.asm.mixin.injection.At
- *  org.spongepowered.asm.mixin.injection.At$Shift
- *  org.spongepowered.asm.mixin.injection.Inject
- *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
- *  org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
- */
 package dev.lyricsflow.mixin;
 
 import dev.lyricsflow.config.ConfigManager;

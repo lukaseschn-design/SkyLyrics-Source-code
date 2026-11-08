@@ -1,14 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  org.lwjgl.nanovg.NVGColor
- *  org.lwjgl.nanovg.NVGPaint
- *  org.lwjgl.nanovg.NanoVG
- *  org.lwjgl.nanovg.NanoVGGL3
- *  org.lwjgl.system.MemoryStack
- *  org.lwjgl.system.MemoryUtil
- */
 package Yuki.lumiclient.render.nanovg;
 
 import Yuki.lumiclient.util.Colors;

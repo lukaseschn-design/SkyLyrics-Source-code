@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_243
- *  net.minecraft.class_310
- *  net.minecraft.class_4184
- *  org.joml.Vector3fc
- */
 package dev.lyricsflow.render;
 
 import net.minecraft.class_243;

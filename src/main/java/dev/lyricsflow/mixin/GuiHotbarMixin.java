@@ -1,16 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.llamalad7.mixinextras.injector.wrapoperation.Operation
- *  com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation
- *  com.mojang.blaze3d.pipeline.RenderPipeline
- *  net.minecraft.class_2960
- *  net.minecraft.class_329
- *  net.minecraft.class_332
- *  org.spongepowered.asm.mixin.Mixin
- *  org.spongepowered.asm.mixin.injection.At
- */
 package dev.lyricsflow.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

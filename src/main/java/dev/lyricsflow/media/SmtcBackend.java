@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.sun.jna.Memory
- *  com.sun.jna.Platform
- *  com.sun.jna.Pointer
- *  com.sun.jna.ptr.PointerByReference
- */
 package dev.lyricsflow.media;
 
 import com.sun.jna.Memory;
@@ -277,7 +268,6 @@ implements MediaBackend {
             Com.awaitAction(Com.outPtr(this.session, 21, mode));
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
     }
 
@@ -338,7 +328,6 @@ implements MediaBackend {
             Com.awaitAction(Com.outPtr(this.session, index, new Object[0]));
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
     }
 
@@ -366,7 +355,6 @@ implements MediaBackend {
             Com.awaitAction(Com.outPtr(this.session, 24, Math.max(0L, ms) * 10000L));
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
     }
 

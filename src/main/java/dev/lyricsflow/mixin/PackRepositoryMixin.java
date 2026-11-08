@@ -1,18 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_1065
- *  net.minecraft.class_3283
- *  net.minecraft.class_3285
- *  org.spongepowered.asm.mixin.Final
- *  org.spongepowered.asm.mixin.Mixin
- *  org.spongepowered.asm.mixin.Mutable
- *  org.spongepowered.asm.mixin.Shadow
- *  org.spongepowered.asm.mixin.injection.At
- *  org.spongepowered.asm.mixin.injection.Inject
- *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
- */
 package dev.lyricsflow.mixin;
 
 import dev.lyricsflow.render.CustomFonts;

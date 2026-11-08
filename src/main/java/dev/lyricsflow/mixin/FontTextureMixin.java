@@ -1,19 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.blaze3d.systems.RenderSystem
- *  com.mojang.blaze3d.textures.FilterMode
- *  net.minecraft.class_1011
- *  net.minecraft.class_1011$class_1012
- *  net.minecraft.class_1044
- *  net.minecraft.class_380
- *  net.minecraft.class_8538
- *  org.spongepowered.asm.mixin.Mixin
- *  org.spongepowered.asm.mixin.injection.At
- *  org.spongepowered.asm.mixin.injection.Inject
- *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
- */
 package dev.lyricsflow.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -43,7 +27,6 @@ extends class_1044 {
                 }
             }
             catch (Throwable throwable) {
-                // empty catch block
             }
         }
     }

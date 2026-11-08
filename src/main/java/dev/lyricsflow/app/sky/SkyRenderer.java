@@ -1,14 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_1937
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- *  net.minecraft.class_4063
- *  net.minecraft.class_7172
- *  net.minecraft.class_9779
- */
 package dev.lyricsflow.app.sky;
 
 import dev.lyricsflow.app.Core;
@@ -154,7 +143,6 @@ public final class SkyRenderer {
                 opt.method_41748((Object)class_4063.valueOf((String)c.cloudsBefore));
             }
             catch (Exception exception) {
-                // empty catch block
             }
             c.cloudsBefore = "";
             Core.saveConfig();

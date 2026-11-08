@@ -1,31 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.gson.JsonObject
- *  com.google.gson.JsonParser
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1044
- *  net.minecraft.class_12249
- *  net.minecraft.class_1297
- *  net.minecraft.class_1304
- *  net.minecraft.class_1657
- *  net.minecraft.class_1921
- *  net.minecraft.class_243
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_3532
- *  net.minecraft.class_4050
- *  net.minecraft.class_4587
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
- *  net.minecraft.class_4608
- *  net.minecraft.class_5602
- *  net.minecraft.class_591
- *  net.minecraft.class_7833
- *  org.joml.Quaternionfc
- */
 package dev.lyricsflow.render;
 
 import com.google.gson.JsonObject;

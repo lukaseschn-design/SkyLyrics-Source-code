@@ -1,25 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.blaze3d.pipeline.BlendFunction
- *  com.mojang.blaze3d.pipeline.RenderPipeline
- *  com.mojang.blaze3d.pipeline.RenderPipeline$Snippet
- *  com.mojang.blaze3d.systems.RenderSystem
- *  com.mojang.blaze3d.vertex.VertexFormat$class_5596
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1044
- *  net.minecraft.class_10789
- *  net.minecraft.class_12247
- *  net.minecraft.class_1921
- *  net.minecraft.class_290
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  org.joml.Matrix3f
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fc
- */
 package dev.lyricsflow.app.sky;
 
 import com.mojang.blaze3d.pipeline.BlendFunction;
@@ -91,12 +69,10 @@ public final class LiveSkyShader {
                 gpu = RenderSystem.getDevice().getRenderer() + " / " + RenderSystem.getDevice().getVersion();
             }
             catch (Throwable throwable) {
-                // empty catch block
             }
             Files.writeString(Storage.dir().resolve("sky-status.txt"), (CharSequence)(String.valueOf(LocalDateTime.now()) + "\nHimmel-Shader: " + s + "\nGrafik: " + (String)gpu + "\n"), new OpenOption[0]);
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
     }
 

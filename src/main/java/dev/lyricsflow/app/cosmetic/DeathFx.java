@@ -1,27 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_12249
- *  net.minecraft.class_1297
- *  net.minecraft.class_1922
- *  net.minecraft.class_1944
- *  net.minecraft.class_2338
- *  net.minecraft.class_243
- *  net.minecraft.class_2680
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_4608
- *  net.minecraft.class_742
- *  net.minecraft.class_765
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fc
- *  org.joml.Quaternionf
- *  org.joml.Quaternionfc
- *  org.joml.Vector3f
- */
 package dev.lyricsflow.app.cosmetic;
 
 import dev.lyricsflow.app.Core;
@@ -323,7 +299,6 @@ public final class DeathFx {
             }
         }
         catch (Throwable dy) {
-            // empty catch block
         }
         f.ox = pos.field_1352;
         f.oy = gy;

@@ -1,18 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_2561
- *  net.minecraft.class_3259$class_8619
- *  net.minecraft.class_3264
- *  net.minecraft.class_3285
- *  net.minecraft.class_3288
- *  net.minecraft.class_3288$class_3289
- *  net.minecraft.class_3288$class_7680
- *  net.minecraft.class_5352
- *  net.minecraft.class_9224
- *  net.minecraft.class_9225
- */
 package dev.lyricsflow.render;
 
 import dev.lyricsflow.LyricsFlow;
@@ -64,7 +49,6 @@ public final class CustomFonts {
             }
         }
         catch (IOException iOException) {
-            // empty catch block
         }
         return p;
     }

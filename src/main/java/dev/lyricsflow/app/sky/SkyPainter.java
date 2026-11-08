@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package dev.lyricsflow.app.sky;
 
 import java.util.Random;

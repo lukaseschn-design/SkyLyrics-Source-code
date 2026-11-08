@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_310
- */
 package dev.lyricsflow.lyrics;
 
 import dev.lyricsflow.config.ConfigManager;
@@ -36,7 +30,6 @@ public final class Lyrics {
             }
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
         return s.toUpperCase(loc);
     }

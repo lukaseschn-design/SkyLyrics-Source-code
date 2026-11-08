@@ -1,29 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_12249
- *  net.minecraft.class_1297
- *  net.minecraft.class_1299
- *  net.minecraft.class_1538
- *  net.minecraft.class_1937
- *  net.minecraft.class_243
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_3414
- *  net.minecraft.class_3417
- *  net.minecraft.class_3419
- *  net.minecraft.class_3730
- *  net.minecraft.class_4587
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_4608
- *  net.minecraft.class_9944
- *  org.joml.Matrix3f
- *  org.joml.Matrix3fc
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fc
- */
 package dev.lyricsflow.app.cosmetic;
 
 import dev.lyricsflow.app.cosmetic.Accessories;
@@ -151,7 +125,6 @@ final class DeathMore {
                 }
             }
             catch (Throwable lb) {
-                // empty catch block
             }
             c.sound(class_3417.field_14865, 3.0f, 0.9f);
             c.sound(class_3417.field_14956, 2.0f, 0.8f);
@@ -867,7 +840,6 @@ final class DeathMore {
                 this.mc.field_1687.method_8486(this.f.ox, this.f.oy + 1.0, this.f.oz, e, class_3419.field_15248, vol, pitch, false);
             }
             catch (Throwable throwable) {
-                // empty catch block
             }
         }
     }

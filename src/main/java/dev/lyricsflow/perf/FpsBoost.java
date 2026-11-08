@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_310
- *  net.minecraft.class_7172
- */
 package dev.lyricsflow.perf;
 
 import dev.lyricsflow.LyricsFlow;

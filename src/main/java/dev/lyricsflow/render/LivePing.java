@@ -1,10 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_310
- *  net.minecraft.class_640
- */
 package dev.lyricsflow.render;
 
 import dev.lyricsflow.config.ConfigManager;
@@ -46,7 +39,6 @@ public final class LivePing {
             ((ClientPacketListenerAccessor)mc.method_1562()).lyricsflow$pingMonitor().method_53486();
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
     }
 

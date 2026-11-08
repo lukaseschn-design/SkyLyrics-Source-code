@@ -1,17 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_4184
- *  net.minecraft.class_5636
- *  net.minecraft.class_638
- *  net.minecraft.class_758
- *  org.joml.Vector4f
- *  org.spongepowered.asm.mixin.Mixin
- *  org.spongepowered.asm.mixin.injection.At
- *  org.spongepowered.asm.mixin.injection.Inject
- *  org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
- */
 package dev.lyricsflow.mixin;
 
 import dev.lyricsflow.app.sky.WorldSky;

@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1044
- *  net.minecraft.class_10799
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- */
 package dev.lyricsflow.gui;
 
 import dev.lyricsflow.LyricsFlow;
@@ -91,7 +79,6 @@ public final class CoverArt {
                 decoded = out;
             }
             catch (Throwable throwable) {
-                // empty catch block
             }
         }, "SkyLyrics cover");
         th.setDaemon(true);
@@ -175,13 +162,11 @@ public final class CoverArt {
                 class_310.method_1551().method_1531().method_4615(ID);
             }
             catch (Throwable throwable) {
-                // empty catch block
             }
             try {
                 class_310.method_1551().method_1531().method_4615(ID_ROUND);
             }
             catch (Throwable throwable) {
-                // empty catch block
             }
         }
         has = false;

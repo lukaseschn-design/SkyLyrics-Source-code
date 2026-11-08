@@ -1,32 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.blaze3d.pipeline.RenderPipeline
- *  net.minecraft.class_10799
- *  net.minecraft.class_1109
- *  net.minecraft.class_1113
- *  net.minecraft.class_12247
- *  net.minecraft.class_12249
- *  net.minecraft.class_1921
- *  net.minecraft.class_243
- *  net.minecraft.class_2561
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_327
- *  net.minecraft.class_327$class_6415
- *  net.minecraft.class_3414
- *  net.minecraft.class_3417
- *  net.minecraft.class_4184
- *  net.minecraft.class_437
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fc
- *  org.joml.Vector3f
- *  org.joml.Vector3fc
- */
 package dev.lyricsflow.app.cosmetic;
 
 import com.mojang.blaze3d.pipeline.RenderPipeline;
@@ -220,7 +191,6 @@ final class WorldPanel {
             mc.method_1483().method_4873((class_1113)class_1109.method_4757((class_3414)ev, (float)pitch, (float)vol));
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
     }
 

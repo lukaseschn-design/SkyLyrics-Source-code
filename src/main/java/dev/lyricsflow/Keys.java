@@ -1,17 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper
- *  net.minecraft.class_124
- *  net.minecraft.class_2561
- *  net.minecraft.class_2960
- *  net.minecraft.class_304
- *  net.minecraft.class_304$class_11900
- *  net.minecraft.class_310
- *  net.minecraft.class_3675$class_307
- *  net.minecraft.class_437
- */
 package dev.lyricsflow;
 
 import dev.lyricsflow.LyricsFlow;

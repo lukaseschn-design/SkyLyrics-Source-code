@@ -1,20 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_12249
- *  net.minecraft.class_243
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fc
- *  org.joml.Quaternionf
- *  org.joml.Quaternionfc
- *  org.joml.Vector3f
- *  org.joml.Vector3fc
- */
 package dev.lyricsflow.app.cosmetic;
 
 import dev.lyricsflow.app.cosmetic.Accessories;

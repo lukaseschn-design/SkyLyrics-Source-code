@@ -1,6 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- */
 package dev.lyricsflow.perf;
 
 import dev.lyricsflow.app.Core;

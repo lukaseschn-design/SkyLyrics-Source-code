@@ -1,11 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.gson.JsonObject
- *  com.google.gson.JsonParser
- *  net.minecraft.class_310
- */
 package dev.lyricsflow.media;
 
 import com.google.gson.JsonObject;
@@ -177,7 +169,6 @@ public final class CosmeticSync {
             }
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
     }
 
@@ -200,7 +191,6 @@ public final class CosmeticSync {
             others.putAll(next);
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
     }
 

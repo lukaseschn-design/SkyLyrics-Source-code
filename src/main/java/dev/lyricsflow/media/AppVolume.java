@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.sun.jna.Memory
- *  com.sun.jna.NativeLibrary
- *  com.sun.jna.Platform
- *  com.sun.jna.Pointer
- *  com.sun.jna.ptr.FloatByReference
- *  com.sun.jna.ptr.IntByReference
- *  com.sun.jna.ptr.PointerByReference
- */
 package dev.lyricsflow.media;
 
 import com.sun.jna.Memory;

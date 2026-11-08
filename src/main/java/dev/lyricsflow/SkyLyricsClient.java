@@ -1,24 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.fabricmc.api.ClientModInitializer
- *  net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
- *  net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
- *  net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback
- *  net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback$RegistrationHelper
- *  net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
- *  net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
- *  net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents
- *  net.fabricmc.fabric.api.event.player.AttackEntityCallback
- *  net.minecraft.class_10055
- *  net.minecraft.class_1007
- *  net.minecraft.class_1269
- *  net.minecraft.class_2960
- *  net.minecraft.class_3883
- *  net.minecraft.class_3887
- *  net.minecraft.class_591
- */
 package dev.lyricsflow;
 
 import dev.lyricsflow.Keys;

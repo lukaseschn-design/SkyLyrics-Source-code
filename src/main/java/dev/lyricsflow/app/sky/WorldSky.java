@@ -1,31 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.blaze3d.buffers.GpuBufferSlice
- *  com.mojang.blaze3d.systems.RenderSystem
- *  net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext
- *  net.minecraft.class_12249
- *  net.minecraft.class_1937
- *  net.minecraft.class_243
- *  net.minecraft.class_2561
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- *  net.minecraft.class_327
- *  net.minecraft.class_327$class_6415
- *  net.minecraft.class_4184
- *  net.minecraft.class_4587
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
- *  net.minecraft.class_4608
- *  net.minecraft.class_746
- *  net.minecraft.class_758
- *  net.minecraft.class_758$class_4596
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fc
- *  org.joml.Vector4f
- */
 package dev.lyricsflow.app.sky;
 
 import com.mojang.blaze3d.buffers.GpuBufferSlice;
@@ -1126,7 +1098,6 @@ public final class WorldSky {
                 fov = ((Integer)mc.field_1690.method_41808().method_41753()).intValue();
             }
             catch (Throwable throwable) {
-                // empty catch block
             }
             double aspect = (double)mc.method_22683().method_4489() / (double)Math.max(1, mc.method_22683().method_4506());
             double halfDiag = Math.toDegrees(Math.atan(Math.tan(Math.toRadians(Math.min(170.0, fov * 1.6) / 2.0)) * Math.sqrt(1.0 + aspect * aspect)));
@@ -1256,7 +1227,6 @@ public final class WorldSky {
                 fov = ((Integer)mc.field_1690.method_41808().method_41753()).intValue();
             }
             catch (Throwable throwable) {
-                // empty catch block
             }
             double aspect = (double)mc.method_22683().method_4489() / (double)Math.max(1, mc.method_22683().method_4506());
             double halfDiag = Math.toDegrees(Math.atan(Math.tan(Math.toRadians(Math.min(170.0, fov * 1.6) / 2.0)) * Math.sqrt(1.0 + aspect * aspect)));
@@ -1352,7 +1322,6 @@ public final class WorldSky {
                 fov = ((Integer)mc.field_1690.method_41808().method_41753()).intValue();
             }
             catch (Throwable throwable) {
-                // empty catch block
             }
             double aspect = (double)mc.method_22683().method_4489() / (double)Math.max(1, mc.method_22683().method_4506());
             double halfDiag = Math.toDegrees(Math.atan(Math.tan(Math.toRadians(Math.min(170.0, fov * 1.6) / 2.0)) * Math.sqrt(1.0 + aspect * aspect)));

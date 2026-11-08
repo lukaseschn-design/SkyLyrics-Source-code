@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_12249
- *  net.minecraft.class_2960
- *  net.minecraft.class_4588
- *  net.minecraft.class_4597
- *  net.minecraft.class_4608
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fc
- */
 package dev.lyricsflow.render;
 
 import dev.lyricsflow.LyricsFlow;

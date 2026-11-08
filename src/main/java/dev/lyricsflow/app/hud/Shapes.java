@@ -1,13 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_1011
- *  net.minecraft.class_1043
- *  net.minecraft.class_1044
- *  net.minecraft.class_2960
- *  net.minecraft.class_310
- */
 package dev.lyricsflow.app.hud;
 
 import dev.lyricsflow.app.Core;

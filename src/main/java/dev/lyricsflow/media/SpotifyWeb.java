@@ -1,11 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.gson.JsonObject
- *  com.google.gson.JsonParser
- *  net.minecraft.class_156
- */
 package dev.lyricsflow.media;
 
 import com.google.gson.JsonObject;
@@ -287,7 +279,6 @@ public final class SpotifyWeb {
                     SpotifyWeb.poll();
                 }
                 catch (Throwable throwable) {
-                    // empty catch block
                 }
                 try {
                     Thread.sleep(100L);
@@ -452,7 +443,6 @@ public final class SpotifyWeb {
             nextPoll = 0L;
         }
         catch (Throwable throwable) {
-            // empty catch block
         }
     }
 

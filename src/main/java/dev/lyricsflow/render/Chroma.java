@@ -1,27 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.blaze3d.buffers.GpuBuffer
- *  com.mojang.blaze3d.buffers.GpuBufferSlice
- *  com.mojang.blaze3d.buffers.Std140Builder
- *  com.mojang.blaze3d.systems.RenderSystem
- *  net.minecraft.class_1297
- *  net.minecraft.class_243
- *  net.minecraft.class_279
- *  net.minecraft.class_283
- *  net.minecraft.class_310
- *  net.minecraft.class_4184
- *  net.minecraft.class_4587
- *  net.minecraft.class_4597
- *  net.minecraft.class_4597$class_4598
- *  net.minecraft.class_9922
- *  net.minecraft.class_9960
- *  org.joml.Matrix4f
- *  org.joml.Matrix4fStack
- *  org.joml.Matrix4fc
- *  org.lwjgl.system.MemoryStack
- */
 package dev.lyricsflow.render;
 
 import com.mojang.blaze3d.buffers.GpuBuffer;

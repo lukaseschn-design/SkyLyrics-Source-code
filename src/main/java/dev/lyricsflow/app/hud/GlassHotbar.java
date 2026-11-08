@@ -1,13 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement
- *  net.minecraft.class_1661
- *  net.minecraft.class_1799
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- */
 package dev.lyricsflow.app.hud;
 
 import dev.lyricsflow.app.hud.Anim;

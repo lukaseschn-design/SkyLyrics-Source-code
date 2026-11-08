@@ -1,13 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_310
- *  net.minecraft.class_332
- *  net.minecraft.class_4587
- *  net.minecraft.class_4597
- *  net.minecraft.class_9779
- */
 package dev.lyricsflow.render;
 
 import dev.lyricsflow.config.ConfigManager;

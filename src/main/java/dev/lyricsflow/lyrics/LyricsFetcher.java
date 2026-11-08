@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.google.gson.JsonArray
- *  com.google.gson.JsonElement
- *  com.google.gson.JsonObject
- *  com.google.gson.JsonParser
- */
 package dev.lyricsflow.lyrics;
 
 import com.google.gson.JsonArray;

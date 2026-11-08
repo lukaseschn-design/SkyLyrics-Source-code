@@ -1,12 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.mojang.blaze3d.buffers.GpuBuffer
- *  net.minecraft.class_283
- *  org.spongepowered.asm.mixin.Mixin
- *  org.spongepowered.asm.mixin.gen.Accessor
- */
 package dev.lyricsflow.mixin;
 
 import com.mojang.blaze3d.buffers.GpuBuffer;

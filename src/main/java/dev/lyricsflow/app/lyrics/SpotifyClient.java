@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents
- */
 package dev.lyricsflow.app.lyrics;
 
 import dev.lyricsflow.app.Core;

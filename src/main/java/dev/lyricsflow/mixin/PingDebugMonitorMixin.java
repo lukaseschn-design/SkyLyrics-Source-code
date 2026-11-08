@@ -1,15 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  net.minecraft.class_156
- *  net.minecraft.class_2923
- *  net.minecraft.class_8761
- *  org.spongepowered.asm.mixin.Mixin
- *  org.spongepowered.asm.mixin.injection.At
- *  org.spongepowered.asm.mixin.injection.Inject
- *  org.spongepowered.asm.mixin.injection.callback.CallbackInfo
- */
 package dev.lyricsflow.mixin;
 
 import dev.lyricsflow.render.LivePing;
