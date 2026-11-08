@@ -1,18 +1,13 @@
 package Yuki.lumiclient.gui;
 
 import Yuki.lumiclient.keybinds.KeyboardScreen;
-import Yuki.lumiclient.render.NvgDrawable;
-import Yuki.lumiclient.render.OverlayRenderer;
-import Yuki.lumiclient.render.nanovg.NVGRenderer;
-import Yuki.lumiclient.util.Colors;
-import Yuki.lumiclient.util.UiSounds;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.class_1068;
-import net.minecraft.class_11905;
-import net.minecraft.class_11908;
-import net.minecraft.class_11909;
+import net.minecraft.class_2561;
 import net.minecraft.class_310;
+import net.minecraft.class_327;
 import net.minecraft.class_332;
+import net.minecraft.class_4185;
 import net.minecraft.class_429;
 import net.minecraft.class_440;
 import net.minecraft.class_442;
@@ -20,100 +15,16 @@ import net.minecraft.class_500;
 import net.minecraft.class_526;
 import net.minecraft.class_8685;
 import net.minecraft.class_8765;
+import org.joml.Matrix3x2fStack;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.function.Supplier;
 
-public class LotusTitleScreen extends class_442 implements NvgDrawable {
-
-    public static final int GLASS_BG             = 0x50101824;
-    public static final int GLASS_BG_HOVER       = 0x801A2638;
-    public static final int GLASS_BORDER         = 0x408098B0;
-    public static final int GLASS_BORDER_HOVER   = 0xDD9FE2FF;
-    public static final int ACCENT_CYAN          = 0xFF7FE6FF;
-    public static final int ACCENT_LOTUS         = 0xFFFF78B5;
-    public static final int TEXT_WHITE           = 0xFFFFFFFF;
-    public static final int TEXT_MUTED           = 0x90C8D6E5;
-
-    private static class GlassButton {
-        String label;
-        final Runnable action;
-        float hoverAnim = 0f;
-
-        GlassButton(String label, Runnable action) {
-            this.label = label;
-            this.action = action;
-        }
-    }
-
-    private final List<GlassButton> centerButtons = new ArrayList<>();
-    private GlassButton optionsButton;
-    private GlassButton quitButton;
-    private GlassButton wardrobeButton;
-    private GlassButton skyButton;
-    private GlassButton keybindsButton;
-    private GlassButton spotifyButton;
+public class LotusTitleScreen extends class_442 {
 
     private class_8765 skinWidget;
-    private long lastFrameTime = System.currentTimeMillis();
-    private int hoveredBtnId = -1;
 
     public LotusTitleScreen() {
         super();
-        initMenuButtons();
-    }
-
-    private void initMenuButtons() {
-        centerButtons.clear();
-
-        // 1. Singleplayer
-        centerButtons.add(new GlassButton("Singleplayer", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new class_526(this));
-        }));
-
-        // 2. Multiplayer
-        centerButtons.add(new GlassButton("Multiplayer", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new class_500(this));
-        }));
-
-        // Lotus Button WEG GELASSEN wie gewünscht!
-
-        // Split-Row: Options... & Quit Game
-        optionsButton = new GlassButton("Options...", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new class_429(this, mc.field_1690));
-        });
-
-        quitButton = new GlassButton("Quit Game", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1592();
-        });
-
-        // Wardrobe Button
-        wardrobeButton = new GlassButton("Wardrobe", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new class_440(this, mc.field_1690));
-        });
-
-        // Sky-Theme Switcher Button (Top-Right)
-        skyButton = new GlassButton("Sky: " + LotusBackdrop.name(), () -> {
-            LotusBackdrop.cycle();
-        });
-
-        // Keybinds Button (Top-Right)
-        keybindsButton = new GlassButton("Keybinds", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new KeyboardScreen(this));
-        });
-
-        // Music / SkyLyrics Dashboard Button (Top-Right)
-        spotifyButton = new GlassButton("🎵 Music", () -> {
-            class_310 mc = class_310.method_1551();
-            if (mc != null) mc.method_1507(new dev.lyricsflow.gui.LyricsFlowScreen(this));
-        });
     }
 
     private void initSkinWidget() {
@@ -144,6 +55,97 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
             this.method_37070();
         } catch (Throwable ignored) {}
         initSkinWidget();
+
+        int sw = this.field_22789;
+        int sh = this.field_22790;
+        int cx = sw / 2;
+
+        int menuW = 204;
+        int btnH = 20;
+        int btnGap = 4;
+        int startY = sh / 2 - 10;
+
+        // 1. Singleplayer Button
+        this.method_37063(class_4185.method_46430(
+            class_2561.method_43470("Singleplayer"),
+            b -> {
+                class_310 mc = class_310.method_1551();
+                if (mc != null) mc.method_1507(new class_526(this));
+            }
+        ).method_46434(cx - menuW / 2, startY, menuW, btnH).method_46431());
+
+        // 2. Multiplayer Button
+        this.method_37063(class_4185.method_46430(
+            class_2561.method_43470("Multiplayer"),
+            b -> {
+                class_310 mc = class_310.method_1551();
+                if (mc != null) mc.method_1507(new class_500(this));
+            }
+        ).method_46434(cx - menuW / 2, startY + (btnH + btnGap), menuW, btnH).method_46431());
+
+        // 3. Options... & Quit Game (Split Row)
+        int splitW = (menuW - btnGap) / 2;
+        int splitY = startY + 2 * (btnH + btnGap);
+
+        this.method_37063(class_4185.method_46430(
+            class_2561.method_43470("Options..."),
+            b -> {
+                class_310 mc = class_310.method_1551();
+                if (mc != null) mc.method_1507(new class_429(this, mc.field_1690));
+            }
+        ).method_46434(cx - menuW / 2, splitY, splitW, btnH).method_46431());
+
+        this.method_37063(class_4185.method_46430(
+            class_2561.method_43470("Quit Game"),
+            b -> {
+                class_310 mc = class_310.method_1551();
+                if (mc != null) mc.method_1592();
+            }
+        ).method_46434(cx - menuW / 2 + splitW + btnGap, splitY, splitW, btnH).method_46431());
+
+        // 4. Oben Rechts: Sky Theme, Keybinds & Music
+        int topBtnH = 20;
+        int topY = 10;
+
+        // Sky: <Theme>
+        class_4185 skyBtn = class_4185.method_46430(
+            class_2561.method_43470("Sky: " + LotusBackdrop.name()),
+            b -> {
+                LotusBackdrop.cycle();
+                b.method_25355(class_2561.method_43470("Sky: " + LotusBackdrop.name()));
+            }
+        ).method_46434(sw - 85 - 10, topY, 85, topBtnH).method_46431();
+        this.method_37063(skyBtn);
+
+        // Keybinds
+        this.method_37063(class_4185.method_46430(
+            class_2561.method_43470("Keybinds"),
+            b -> {
+                class_310 mc = class_310.method_1551();
+                if (mc != null) mc.method_1507(new KeyboardScreen(this));
+            }
+        ).method_46434(sw - 85 - 10 - 75 - 6, topY, 75, topBtnH).method_46431());
+
+        // 🎵 Music
+        this.method_37063(class_4185.method_46430(
+            class_2561.method_43470("🎵 Music"),
+            b -> {
+                class_310 mc = class_310.method_1551();
+                if (mc != null) mc.method_1507(new dev.lyricsflow.gui.LyricsFlowScreen(this));
+            }
+        ).method_46434(sw - 85 - 10 - 75 - 6 - 72 - 6, topY, 72, topBtnH).method_46431());
+
+        // 5. Wardrobe Button unter dem Skin
+        int wardW = 80;
+        int wardX = cx + 160 + (120 - wardW) / 2;
+        int wardY = startY + 145;
+        this.method_37063(class_4185.method_46430(
+            class_2561.method_43470("Wardrobe"),
+            b -> {
+                class_310 mc = class_310.method_1551();
+                if (mc != null) mc.method_1507(new class_440(this, mc.field_1690));
+            }
+        ).method_46434(wardX, wardY, wardW, btnH).method_46431());
     }
 
     @Override
@@ -159,9 +161,36 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
     public void method_25394(class_332 context, int mouseX, int mouseY, float deltaTicks) {
         int w = this.field_22789;
         int h = this.field_22790;
+        int cx = w / 2;
 
+        // 1. Aurora Dynamic Animated Background
         LotusBackdrop.render(context, w, h, 1.0f);
+
+        // 2. 3D Mannequin
         drawMannequin(context, mouseX, mouseY, deltaTicks);
+
+        // 3. Zentrierter SkyLyrics Titel (Ohne KI-Noten-Logo, clean und zentriert!)
+        class_327 font = this.field_22787 != null ? this.field_22787.field_1772 : null;
+        if (font != null) {
+            int startY = h / 2 - 10;
+            Matrix3x2fStack matrices = context.method_51448();
+            matrices.pushMatrix();
+            float scale = 2.4f;
+            matrices.translate((float) cx, (float) (startY - 38));
+            matrices.scale(scale, scale);
+
+            class_2561 title = class_2561.method_43470("§b§lSky§f§lLyrics");
+            int tw = font.method_27525(title);
+            context.method_51439(font, title, -tw / 2, -4, 0xFFFFFFFF, true);
+            matrices.popMatrix();
+
+            // Unten links: Subtiles Versions-Branding
+            context.method_51439(font, class_2561.method_43470("§7SkyLyrics 1.0  §8Minecraft 1.21.11"), 12, h - 14, 0xFFCAD4E0, true);
+        }
+
+        // 4. Alle Buttons zeichnen (mittels LotusButtonRenderer über PressableWidgetMixin!)
+        super.method_25394(context, mouseX, mouseY, deltaTicks);
+
         context.method_71278();
     }
 
@@ -172,381 +201,21 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
             }
             if (this.skinWidget == null) return;
 
-            float sw = OverlayRenderer.uiWidth();
-            float sh = OverlayRenderer.uiHeight();
-            if (sw <= 0) sw = this.field_22789;
-            if (sh <= 0) sh = this.field_22790;
+            int cx = this.field_22789 / 2;
+            int startY = this.field_22790 / 2 - 10;
 
-            float s = Math.max(0.65f, Math.min(sw / 960.0f, sh / 540.0f));
-            float cx = sw / 2f;
-            float totalBlockH = (centerButtons.size() + 1) * (30f * s) + centerButtons.size() * (6f * s);
-            float startY = Math.max(80f * s, (sh - totalBlockH) * 0.46f);
+            int skinX = cx + 160;
+            int skinY = startY - 45;
+            int skinW = 120;
+            int skinH = 180;
 
-            float figX = cx + (153f + 40f) * s;
-            float figY = startY - 40f * s;
-            float figW = 240f * s;
-
-            float skinUiY = figY + 28f * s;
-            float skinUiH = (225f - 28f) * s;
-            float skinUiW = 130f * s;
-            float skinUiX = figX + (figW - skinUiW) / 2f;
-
-            float scaleX = (float) this.field_22789 / sw;
-            float scaleY = (float) this.field_22790 / sh;
-
-            int gx = Math.round(skinUiX * scaleX);
-            int gy = Math.round(skinUiY * scaleY);
-            int gw = Math.round(skinUiW * scaleX);
-            int gh = Math.round(skinUiH * scaleY);
-
-            this.skinWidget.method_46421(gx);
-            this.skinWidget.method_46419(gy);
-            this.skinWidget.method_25358(gw);
-            this.skinWidget.method_53533(gh);
+            this.skinWidget.method_46421(skinX);
+            this.skinWidget.method_46419(skinY);
+            this.skinWidget.method_25358(skinW);
+            this.skinWidget.method_53533(skinH);
             this.skinWidget.method_25394(context, mouseX, mouseY, deltaTicks);
         } catch (Throwable t) {
             t.printStackTrace();
         }
-    }
-
-    @Override
-    public void renderNvg(NVGRenderer nvg, float mx, float my, float sw, float sh) {
-        long now = System.currentTimeMillis();
-        float dt = Math.min(2.0f, Math.max(0.2f, (now - lastFrameTime) / 16.666f));
-        lastFrameTime = now;
-
-        float s = Math.max(0.65f, Math.min(sw / 960.0f, sh / 540.0f));
-
-        nvg.rectGradient(0f, 0f, sw, sh * 0.28f, 0f, 0x50000000, 0x00000000, true);
-        nvg.rectGradient(0f, sh * 0.72f, sw, sh * 0.28f, 0f, 0x00000000, 0x65020408, true);
-
-        float cx = sw / 2f;
-        float menuW = 306f * s;
-        float btnH = 30f * s;
-        float btnRadius = 3.5f * s;
-        float btnGap = 6f * s;
-        float fontSize = 13.5f * s;
-
-        float totalBlockH = (centerButtons.size() + 1) * btnH + centerButtons.size() * btnGap;
-        float startY = Math.max(80f * s, (sh - totalBlockH) * 0.46f);
-
-        // ── Zentrales Branding: SkyLyrics (Zentrierter Text, kein KI-Logo) ───
-        float titleCenterY = startY - 44f * s;
-        float titleFontSize = 34f * s;
-
-        float textW_Sky = nvg.textWidth("Sky", titleFontSize);
-        float textW_Lyrics = nvg.textWidth("Lyrics", titleFontSize);
-        float totalTextW = textW_Sky + textW_Lyrics;
-        float textLeftX = cx - totalTextW / 2f;
-
-        nvg.text("Sky", textLeftX, titleCenterY, titleFontSize, ACCENT_CYAN);
-        nvg.text("Lyrics", textLeftX + textW_Sky, titleCenterY, titleFontSize, TEXT_WHITE);
-
-        // ── Menü-Buttons (Singleplayer, Multiplayer) ───────────────────────────
-        for (int i = 0; i < centerButtons.size(); i++) {
-            GlassButton btn = centerButtons.get(i);
-            float bx = cx - menuW / 2f;
-            float by = startY + i * (btnH + btnGap);
-
-            boolean hovered = mx >= bx && mx <= bx + menuW && my >= by && my <= by + btnH;
-            renderGlassButton(nvg, btn, bx, by, menuW, btnH, btnRadius, fontSize, hovered, dt, i, s);
-        }
-
-        // ── Split Row: Options... & Quit Game ────────────────────────────────
-        float splitY = startY + centerButtons.size() * (btnH + btnGap);
-        float splitW = (menuW - btnGap) / 2f;
-        float optX = cx - menuW / 2f;
-        float quitX = optX + splitW + btnGap;
-
-        boolean optHover = mx >= optX && mx <= optX + splitW && my >= splitY && my <= splitY + btnH;
-        renderGlassButton(nvg, optionsButton, optX, splitY, splitW, btnH, btnRadius, fontSize, optHover, dt, 100, s);
-
-        boolean quitHover = mx >= quitX && mx <= quitX + splitW && my >= splitY && my <= splitY + btnH;
-        renderGlassButton(nvg, quitButton, quitX, splitY, splitW, btnH, btnRadius, fontSize, quitHover, dt, 101, s);
-
-        // ── Oben Rechts: Sky Theme, Keybinds & Music Buttons ─────────────────
-        skyButton.label = "Sky: " + LotusBackdrop.name();
-        float topCornerR = 3.0f * s;
-        float skyW = 92f * s;
-        float skyH = 22f * s;
-        float skyX = sw - skyW - 14f * s;
-        float skyY = 12f * s;
-
-        boolean skyHover = mx >= skyX && mx <= skyX + skyW && my >= skyY && my <= skyY + skyH;
-        renderGlassButton(nvg, skyButton, skyX, skyY, skyW, skyH, topCornerR, 10.5f * s, skyHover, dt, 102, s);
-
-        float keybindsW = 86f * s;
-        float keybindsH = 22f * s;
-        float keybindsX = skyX - keybindsW - 8f * s;
-        float keybindsY = 12f * s;
-
-        boolean keybindsHover = mx >= keybindsX && mx <= keybindsX + keybindsW && my >= keybindsY && my <= keybindsY + keybindsH;
-        renderGlassButton(nvg, keybindsButton, keybindsX, keybindsY, keybindsW, keybindsH, topCornerR, 10.5f * s, keybindsHover, dt, 104, s);
-
-        float spotifyW = 86f * s;
-        float spotifyH = 22f * s;
-        float spotifyX = keybindsX - spotifyW - 8f * s;
-        float spotifyY = 12f * s;
-
-        boolean spotifyHover = mx >= spotifyX && mx <= spotifyX + spotifyW && my >= spotifyY && my <= spotifyY + spotifyH;
-        renderGlassButton(nvg, spotifyButton, spotifyX, spotifyY, spotifyW, spotifyH, topCornerR, 10.5f * s, spotifyHover, dt, 105, s);
-
-        // ── Rechte Seite: Badge & Wardrobe Button ────────────────────────────
-        float figX = cx + (153f + 40f) * s;
-        float figY = startY - 40f * s;
-        float figW = 240f * s;
-
-        String currentAccount = getUsername();
-        float badgeFontSize = 11f * s;
-        float badgeW = 20f * s + nvg.textWidth("SkyLyrics  " + currentAccount, badgeFontSize) + 20f * s;
-        float badgeH = 20f * s;
-        float badgeX = figX + (figW - badgeW) / 2f;
-        float badgeY = figY + 8f * s;
-
-        nvg.rect(badgeX, badgeY, badgeW, badgeH, 3.5f * s, 0x650D141F);
-        nvg.rectOutline(badgeX, badgeY, badgeW, badgeH, 3.5f * s, 1.0f, 0x458098B0);
-
-        float sqSize = 6.5f * s;
-        nvg.glow(badgeX + 7f * s, badgeY + (badgeH - sqSize) / 2f, sqSize, sqSize, 2f * s, 4f * s, Colors.withAlpha(ACCENT_CYAN, 0.6f));
-        nvg.rect(badgeX + 7f * s, badgeY + (badgeH - sqSize) / 2f, sqSize, sqSize, 1.5f * s, ACCENT_CYAN);
-
-        float labelW = nvg.textWidth("SkyLyrics", badgeFontSize);
-        nvg.text("SkyLyrics", badgeX + 17f * s, badgeY + badgeH / 2f, badgeFontSize, 0xFFCAD4E0);
-        float sepX = badgeX + 17f * s + labelW + 6f * s;
-        nvg.line(sepX, badgeY + 4f * s, sepX, badgeY + badgeH - 4f * s, 1f, 0x35FFFFFF);
-        nvg.text(currentAccount, sepX + 6f * s, badgeY + badgeH / 2f, badgeFontSize, TEXT_WHITE);
-
-        float wardrobeW = 120f * s;
-        float wardrobeH = 30f * s;
-        float wardrobeX = figX + (figW - wardrobeW) / 2f;
-        float wardrobeY = figY + 225f * s;
-
-        boolean wardHover = mx >= wardrobeX && mx <= wardrobeX + wardrobeW && my >= wardrobeY && my <= wardrobeY + wardrobeH;
-        renderGlassButton(nvg, wardrobeButton, wardrobeX, wardrobeY, wardrobeW, wardrobeH, btnRadius, fontSize, wardHover, dt, 103, s);
-
-        // ── Linke Seite: "What's new" Changelog ──────────────────────────────
-        float newsX = Math.max(18f * s, cx - menuW / 2f - 240f * s);
-        float newsY = startY + 6f * s;
-
-        nvg.text("What's new", newsX, newsY, 13f * s, TEXT_WHITE);
-        nvg.text("1.0", newsX, newsY + 16f * s, 11f * s, ACCENT_CYAN);
-        nvg.text("Features", newsX, newsY + 34f * s, 10.5f * s, 0xFF8AA4BE);
-        nvg.text("• Synced song lyrics from Spotify & YouTube", newsX, newsY + 48f * s, 10.5f * s, TEXT_MUTED);
-        nvg.text("• 3D Holographic in-air & celestial sky lyrics", newsX, newsY + 62f * s, 10.5f * s, TEXT_MUTED);
-        nvg.text("• Dynamic animated Aurora start menu", newsX, newsY + 76f * s, 10.5f * s, TEXT_MUTED);
-        nvg.text("• Interactive visual keybind manager", newsX, newsY + 90f * s, 10.5f * s, TEXT_MUTED);
-
-        // ── Unten Links: SkyLyrics Branding ──────────────────────────────────
-        nvg.text("SkyLyrics 1.0  Minecraft 1.21.11", 16f * s, sh - 14f * s, 10.5f * s, 0x80859CAE);
-    }
-
-    private void renderGlassButton(NVGRenderer nvg, GlassButton btn, float x, float y, float w, float h, float r, float fontSz, boolean hovered, float dt, int btnId, float s) {
-        if (hovered) {
-            if (hoveredBtnId != btnId) {
-                UiSounds.hover();
-                hoveredBtnId = btnId;
-            }
-        } else if (hoveredBtnId == btnId) {
-            hoveredBtnId = -1;
-        }
-
-        float target = hovered ? 1.0f : 0.0f;
-        btn.hoverAnim += (target - btn.hoverAnim) * Math.min(1.0f, 0.30f * dt);
-
-        float drawX = x;
-        float drawY = y;
-        float drawW = w;
-        float drawH = h;
-        float drawR = r;
-
-        // 1. Zarter Cyan-Außenglow bei Hover (1px, sauber)
-        if (btn.hoverAnim > 0.02f) {
-            int glowBorder = Colors.withAlpha(ACCENT_CYAN, 0.35f * btn.hoverAnim);
-            nvg.rectOutline(drawX - 1f, drawY - 1f, drawW + 2f, drawH + 2f, drawR + 1f, 1.0f, glowBorder);
-        }
-
-        // 2. Frosted Glass Hintergrund
-        int hoverBg = 0x801A283C;
-        int bg = Colors.lerp(GLASS_BG, hoverBg, btn.hoverAnim);
-        nvg.rect(drawX, drawY, drawW, drawH, drawR, bg);
-
-        // 3. Feiner Lichtschein auf oberer Hälfte
-        if (btn.hoverAnim > 0.02f) {
-            int sheenTop = Colors.withAlpha(0xFFFFFF, 0.12f * btn.hoverAnim);
-            int sheenBot = Colors.withAlpha(0xFFFFFF, 0.01f * btn.hoverAnim);
-            nvg.rectGradient(drawX, drawY, drawW, drawH * 0.50f, drawR, sheenTop, sheenBot, true);
-        }
-
-        // 4. Scharfe, saubere Kontur
-        int hoverBorder = 0xEE9FE2FF;
-        int border = Colors.lerp(GLASS_BORDER, hoverBorder, btn.hoverAnim);
-        nvg.rectOutline(drawX, drawY, drawW, drawH, drawR, 1.0f, border);
-
-        // 5. Zentrierter Text
-        int textCol = Colors.lerp(0xD5D8E4F0, 0xFFFFFFFF, btn.hoverAnim);
-        float textW = nvg.textWidth(btn.label, fontSz);
-        nvg.text(btn.label, drawX + (drawW - textW) / 2f, drawY + drawH / 2f, fontSz, textCol);
-    }
-
-    @Override
-    public boolean method_25402(class_11909 event, boolean doubleClick) {
-        float mx = OverlayRenderer.guiToUi(event.comp_4798());
-        float my = OverlayRenderer.guiToUi(event.comp_4799());
-        int button = event.method_74245();
-
-        if (button == 0) {
-            float sw = OverlayRenderer.uiWidth();
-            float sh = OverlayRenderer.uiHeight();
-            float s = Math.max(0.65f, Math.min(sw / 960.0f, sh / 540.0f));
-
-            float cx = sw / 2f;
-            float menuW = 306f * s;
-            float btnH = 30f * s;
-            float btnGap = 6f * s;
-            float totalBlockH = (centerButtons.size() + 1) * btnH + centerButtons.size() * btnGap;
-            float startY = Math.max(80f * s, (sh - totalBlockH) * 0.46f);
-            float pad = 2f * s;
-
-            // 1. Top-Right Buttons
-            float skyW = 92f * s;
-            float skyH = 22f * s;
-            float skyX = sw - skyW - 14f * s;
-            float skyY = 12f * s;
-            if (mx >= skyX - pad && mx <= skyX + skyW + pad && my >= skyY - pad && my <= skyY + skyH + pad) {
-                UiSounds.select();
-                skyButton.action.run();
-                return true;
-            }
-
-            float keybindsW = 86f * s;
-            float keybindsH = 22f * s;
-            float keybindsX = skyX - keybindsW - 8f * s;
-            float keybindsY = 12f * s;
-            if (mx >= keybindsX - pad && mx <= keybindsX + keybindsW + pad && my >= keybindsY - pad && my <= keybindsY + keybindsH + pad) {
-                UiSounds.select();
-                if (keybindsButton != null && keybindsButton.action != null) {
-                    keybindsButton.action.run();
-                }
-                return true;
-            }
-
-            float spotifyW = 86f * s;
-            float spotifyH = 22f * s;
-            float spotifyX = keybindsX - spotifyW - 8f * s;
-            float spotifyY = 12f * s;
-            if (mx >= spotifyX - pad && mx <= spotifyX + spotifyW + pad && my >= spotifyY - pad && my <= spotifyY + spotifyH + pad) {
-                UiSounds.select();
-                if (spotifyButton != null && spotifyButton.action != null) {
-                    spotifyButton.action.run();
-                }
-                return true;
-            }
-
-            // 2. Center Buttons
-            for (int i = 0; i < centerButtons.size(); i++) {
-                float bx = cx - menuW / 2f;
-                float by = startY + i * (btnH + btnGap);
-                if (mx >= bx - pad && mx <= bx + menuW + pad && my >= by - pad && my <= by + btnH + pad) {
-                    UiSounds.select();
-                    centerButtons.get(i).action.run();
-                    return true;
-                }
-            }
-
-            // 3. Options & Quit Game
-            float splitY = startY + centerButtons.size() * (btnH + btnGap);
-            float splitW = (menuW - btnGap) / 2f;
-            float optX = cx - menuW / 2f;
-            float quitX = optX + splitW + btnGap;
-
-            if (mx >= optX - pad && mx <= optX + splitW + pad && my >= splitY - pad && my <= splitY + btnH + pad) {
-                UiSounds.select();
-                optionsButton.action.run();
-                return true;
-            }
-            if (mx >= quitX - pad && mx <= quitX + splitW + pad && my >= splitY - pad && my <= splitY + btnH + pad) {
-                UiSounds.select();
-                quitButton.action.run();
-                return true;
-            }
-
-            // 4. Wardrobe Button
-            float figX = cx + (153f + 40f) * s;
-            float figY = startY - 40f * s;
-            float figW = 240f * s;
-            float wardrobeW = 120f * s;
-            float wardrobeH = 30f * s;
-            float wardrobeX = figX + (figW - wardrobeW) / 2f;
-            float wardrobeY = figY + 225f * s;
-
-            if (mx >= wardrobeX - pad && mx <= wardrobeX + wardrobeW + pad && my >= wardrobeY - pad && my <= wardrobeY + wardrobeH + pad) {
-                UiSounds.select();
-                wardrobeButton.action.run();
-                return true;
-            }
-
-            if (this.skinWidget != null && this.skinWidget.method_25405(event.comp_4798(), event.comp_4799())) {
-                this.skinWidget.method_25402(event, doubleClick);
-                return true;
-            }
-
-            return true;
-        }
-        return true;
-    }
-
-    @Override
-    public boolean method_25406(class_11909 event) {
-        if (this.skinWidget != null) {
-            this.skinWidget.method_25406(event);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean method_25403(class_11909 event, double deltaX, double deltaY) {
-        if (this.skinWidget != null) {
-            double mx = event.comp_4798();
-            double my = event.comp_4799();
-            if (this.skinWidget.method_25405(mx, my)) {
-                this.skinWidget.method_25403(event, deltaX, deltaY);
-                return true;
-            }
-        }
-        return super.method_25403(event, deltaX, deltaY);
-    }
-
-    @Override
-    public boolean method_25404(class_11908 event) {
-        if (event.comp_4795() == 256) {
-            return true;
-        }
-        return super.method_25404(event);
-    }
-
-    @Override
-    public boolean method_25400(class_11905 event) {
-        return super.method_25400(event);
-    }
-
-    private static String getUsername() {
-        try {
-            class_310 mc = class_310.method_1551();
-            if (mc != null && mc.method_53462() != null) {
-                Object profile = mc.method_53462();
-                try {
-                    return (String) profile.getClass().getMethod("name").invoke(profile);
-                } catch (Throwable t) {
-                    return (String) profile.getClass().getMethod("getName").invoke(profile);
-                }
-            }
-        } catch (Throwable ignored) {}
-        try {
-            class_310 mc = class_310.method_1551();
-            if (mc != null && mc.method_1548() != null) {
-                return mc.method_1548().method_1676();
-            }
-        } catch (Throwable ignored) {}
-        return "Player";
     }
 }
