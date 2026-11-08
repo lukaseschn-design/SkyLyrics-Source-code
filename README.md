@@ -130,6 +130,38 @@ A: The mod loads on all platforms, but automatic media detection (SMTC) is curre
 
 ---
 
+## 🔤 Font Credits & Attributions
+
+SkyLyrics bundles high-quality open-source typefaces to render custom lyrics and UI elements. Huge thanks to all type designers and foundries for making their work freely available:
+
+| Font | Designer / Foundry | License |
+| :--- | :--- | :--- |
+| **Inter** | Rasmus Andersson (rsms) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Bebas Neue** | Ryoichi Tsunekawa (Dharma Type) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Caveat Brush** | Pablo Impallari | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Comfortaa** | Johan Aakerlund | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Courgette** | Karolina Lach (Sorkin Type Co.) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Damion** | Vernon Adams | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **DejaVu Sans** | DejaVu Fonts Team & Bitstream | [Bitstream Vera / Public Domain](http://dejavu.sourceforge.net/wiki/index.php/License) |
+| **Fredoka** | Ben Nathan (Milena B. Brandão, Hafontia) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Grand Hotel** | Brian J. Bonislawsky & Jim Lyles (Astigmatic AOETI) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Kaushan Script** | Pablo Impallari (Impallari Type) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Lobster** | Pablo Impallari (Impallari Type) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Marck Script** | Denis Masharov & Marck Fogel | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Norican** | Vernon Adams | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Outfit** | Rodrigo Fuenzalida (fragTYPE) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Pacifico** | Vernon Adams | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Poppins** | Ninad Kale & Jonny Pinhorn (Indian Type Foundry) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Quicksand** | Andrew Paglinawan | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Righteous** | Brian J. Bonislawsky (Astigmatic AOETI) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Syne** | Lucas Descroix (Bonjour Monde) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Yellowtail** | Brian J. Bonislawsky (Astigmatic AOETI) | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
+| **Yesteryear** | Brian J. Bonislawsky (Astigmatic AOETI) | [SIL OFL 1.1](https://openfontlicense.org/) |
+
+*All fonts bundled within this mod are distributed in full compliance with their respective open-source licenses.*
+
+---
+
 ## 📜 License
 
 All Rights Reserved (ARR). This mod may be downloaded and used for personal gameplay. Redistribution, modification, or commercial use is not permitted without explicit permission.
