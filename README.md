@@ -1,117 +1,100 @@
 # SkyLyrics
 
-Client-side Fabric mod for Minecraft 1.21.11 that displays synchronized song lyrics in real-time from Spotify, YouTube, and Windows media players.
+SkyLyrics is a client-side Fabric mod for Minecraft 1.21.11 that brings real-time, synchronized song lyrics from your desktop media player straight into your game world.
 
-Lyrics can be displayed floating in 3D around the player ("Air" mode), projected across the sky dome ("Sky" mode), or pinned to the HUD.
+Whether you're listening to Spotify, watching a music video on YouTube, or playing local tracks through your media player, SkyLyrics displays live lyrics floating around you in 3D ("Air" mode), projected across the sky dome ("Sky" mode), or pinned to a clean HUD widget.
+
+> **Note:** Media playback is detected locally via Windows System Media Transport Controls (SMTC). This means SkyLyrics runs on Windows 10/11 and requires an active player (Spotify desktop app, browser tab playing audio, or media player) in the background. No account linking or logins needed.
 
 ---
 
 ## Features
 
-- **3D Air & Sky Lyrics:** Render synchronized lyrics directly in the game world—either floating dynamically in 3D around you or mapped across the celestial sky dome.
-- **Media Detection:** Reads currently playing track title, artist, and playback progress locally using Windows System Media Transport Controls (SMTC). No account login or credentials required.
-- **Synchronized Karaoke Display:** Fetches synchronized word-by-word and line-by-line lyrics from public providers (LRCLIB, NetEase).
-- **Customizable Appearance:** Choose from over 20 color presets or configure custom RGB palettes, glowing outlines, text shadow, scale, distance, and opacity.
-- **Custom Fonts:** Bundled with open-source typefaces (Inter, Poppins, Quicksand, Bebas Neue, Fredoka, etc.) and allows loading custom `.ttf` fonts from the config folder.
-- **HUD Music Player & Dynamic Island:** Minimalist top-bar pill showing playback status, title, artist, and mini waveform visualizer.
-- **Atmospheric Sky Effects:** Optional animated aurora borealis curtains, stars, and music-reactive particles.
-- **Optimization & Compatibility:** Lightweight rendering pipeline compatible with Sodium, Iris shaders, and Lithium. Includes built-in FPS optimization toggles.
+- **3D Air & Celestial Sky Lyrics:** Lyrics render directly in the game world—either hovering in 3D around your player or stretched across the night sky.
+- **Real-Time Karaoke Sync:** Synchronized line-by-line and word-by-word timing with smooth animations and beat pulsing.
+- **Local Media Detection:** Automatically hooks into Windows SMTC to read track names, artists, and playback state without API keys or account log-ins.
+- **In-Game Customization:** Over 20 built-in color presets (Aurora, Sunset, Glacier, Matrix, Vaporwave, etc.), custom RGB palettes, text glow, sizing, and distance controls.
+- **Custom Font Support:** Ships with 20+ open-source typefaces (Inter, Poppins, Bebas Neue, Quicksand, Fredoka, etc.) and lets you drop your own `.ttf` fonts into the config folder.
+- **Minimalist HUD & Island Player:** An optional top-bar pill showing current song progress, artist, and playback status.
+- **Sodium & Iris Compatible:** Built with a lightweight rendering pipeline that runs smoothly alongside Sodium and Iris shader packs.
 
 ---
 
 ## Controls
 
-Default keybindings (all configurable in Options -> Controls or in the in-game dashboard):
+All keybinds can be rebound in `Options -> Controls -> SkyLyrics` or directly in the in-game settings dashboard:
 
-| Key | Function |
+| Key | Action |
 | :--- | :--- |
-| **K** | Open SkyLyrics Settings Dashboard |
-| **J** | Open HUD Music Player |
-| **O** | Toggle Lyrics Visibility On / Off |
-| **Down Arrow** | Play / Pause media playback |
+| **K** | Open the SkyLyrics Settings Dashboard |
+| **J** | Open the HUD Music Player |
+| **O** | Toggle lyrics visibility on / off |
+| **Down Arrow** | Play / Pause |
 | **Right Arrow** | Next track |
 | **Left Arrow** | Previous track |
-| **[** | Nudge lyrics sync -100 ms |
-| **]** | Nudge lyrics sync +100 ms |
+| **[** / **]** | Adjust sync offset (-100 ms / +100 ms) |
 
 ---
 
-## Installation
+## Server & Multiplayer Safety
 
-1. Install **Fabric Loader** (version 0.17.0 or newer) for Minecraft **1.21.11**.
-2. Install **Fabric API** for Minecraft 1.21.11.
-3. Download the latest `SkyLyrics-v1.0+1.21.11.jar` from the [Releases](https://github.com/lukaseschn-design/SkyLyrics-Source-code/releases) page.
-4. Place the `.jar` file into your `.minecraft/mods` folder.
-5. Launch Minecraft and start any song on Spotify, YouTube, or your desktop media player.
+SkyLyrics is **strictly client-side**. You can safely join any vanilla, Fabric, Paper, or Spigot multiplayer server without installing anything server-side.
 
-### Requirements
-
-- Minecraft: `1.21.11`
-- Fabric Loader: `>= 0.17.0`
-- Fabric API: `0.141.6+1.21.11`
-- Java Runtime: `Java 21+`
-- Operating System: Windows 10 / 11 (required for local SMTC media playback detection)
+- **No unfair advantages:** The mod only displays cosmetic text and HUD elements.
+- **Underground lyrics:** The cave/underground mode simply adjusts text contrast against dark blocks—it does not light up caves, reveal ores, or highlight hidden players.
 
 ---
 
-## Building from Source
+## Privacy & Network
 
-SkyLyrics is built with Fabric Loom and Gradle:
-
-```bash
-git clone https://github.com/lukaseschn-design/SkyLyrics-Source-code.git
-cd SkyLyrics-Source-code
-./gradlew build
-```
-
-The compiled mod JAR will be located in `build/libs/`.
+- **Local detection:** Track info is read entirely on your local machine via Windows SMTC.
+- **Lyrics queries:** When a new song starts, SkyLyrics sends a public, unauthenticated query (artist name and track title only) to open lyrics APIs ([LRCLIB](https://lrclib.net/) and NetEase) over HTTPS.
+- **Zero tracking:** No personal identifiers, accounts, credentials, or telemetry data are ever collected, stored, or sent.
 
 ---
 
 ## Credits & Attributions
 
-### Mod Inspiration & Concepts
-- **Studious Keybinds** by *StudiousGoose* — Interactive keycap keyboard editor module in the controls menu.
-- **LyricsFlow** — Architectural concept for 3D world lyrics and celestial dome projection.
-- **LumiClient / Lotus** — Design inspiration for frosted-glass UI styling.
+SkyLyrics incorporates ideas, code patterns, and libraries from the community:
+
+- **[Studious Keybinds](https://modrinth.com/mod/studious-keybinds)** by *StudiousGoose* — Interactive keycap keyboard editor in the controls menu.
+- **LyricsFlow** — Architectural foundation for 3D world lyrics and celestial dome projection.
+- **LumiClient / Lotus** — Inspiration for the frosted-glass UI styling.
+- **Libraries:** [NanoVG](https://github.com/memononen/nanovg) (Mikko Mononen, zlib), [LWJGL 3](https://www.lwjgl.org/) (BSD-3-Clause), [JNA](https://github.com/java-native-access/jna) (LGPL 2.1 / Apache 2.0).
 
 ### Bundled Fonts
-All fonts bundled within this mod are distributed in full compliance with their respective open-source licenses:
-- **Inter** (Rasmus Andersson) — SIL Open Font License 1.1
-- **Bebas Neue** (Dharma Type) — SIL Open Font License 1.1
-- **Caveat Brush** (Pablo Impallari) — SIL Open Font License 1.1
-- **Comfortaa** (Johan Aakerlund) — SIL Open Font License 1.1
-- **Courgette** (Karolina Lach) — SIL Open Font License 1.1
-- **Damion** (Vernon Adams) — SIL Open Font License 1.1
-- **DejaVu Sans** (DejaVu Fonts Team) — Bitstream Vera License
-- **Fredoka** (Ben Nathan) — SIL Open Font License 1.1
-- **Grand Hotel** (Brian J. Bonislawsky & Jim Lyles) — SIL Open Font License 1.1
-- **Kaushan Script** (Pablo Impallari) — SIL Open Font License 1.1
-- **Lobster** (Pablo Impallari) — SIL Open Font License 1.1
-- **Marck Script** (Denis Masharov & Marck Fogel) — SIL Open Font License 1.1
-- **Norican** (Vernon Adams) — SIL Open Font License 1.1
-- **Outfit** (Rodrigo Fuenzalida) — SIL Open Font License 1.1
-- **Pacifico** (Vernon Adams) — SIL Open Font License 1.1
-- **Poppins** (Indian Type Foundry) — SIL Open Font License 1.1
-- **Quicksand** (Andrew Paglinawan) — SIL Open Font License 1.1
-- **Righteous** (Brian J. Bonislawsky) — SIL Open Font License 1.1
-- **SkyLyrics Script** (Pablo Impallari & Igino Marini) — SIL Open Font License 1.1
-- **Syne** (Lucas Descroix) — SIL Open Font License 1.1
-- **Yellowtail** (Brian J. Bonislawsky) — Apache License 2.0
-- **Yesteryear** (Brian J. Bonislawsky) — SIL Open Font License 1.1
 
-### Libraries
-- **NanoVG** (Mikko Mononen) — zlib License
-- **LWJGL 3** (LWJGL Team) — BSD-3-Clause License
-- **JNA** (Java Native Access) — LGPL 2.1 / Apache 2.0
-- **FabricMC** — Apache 2.0
+All fonts bundled within this mod are open-source and distributed under their respective licenses:
 
-### Lyrics APIs
-- **LRCLIB** by *tranxuanthang* — Community-driven synchronized lyrics database.
-- **NetEase Cloud Music** — Public lyrics catalog.
+| Font | Designer / Foundry | License |
+| :--- | :--- | :--- |
+| **Inter** | Rasmus Andersson | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Bebas Neue** | Ryoichi Tsunekawa (Dharma Type) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Caveat Brush** | Pablo Impallari | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Comfortaa** | Johan Aakerlund | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Courgette** | Karolina Lach | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Damion** | Vernon Adams | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **DejaVu Sans** | DejaVu Fonts Team & Bitstream | [Bitstream Vera](https://dejavu-fonts.github.io/License.html) |
+| **Fredoka** | Ben Nathan | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Grand Hotel** | Brian J. Bonislawsky & Jim Lyles | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Kaushan Script** | Pablo Impallari | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Lobster** | Pablo Impallari | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Marck Script** | Denis Masharov & Marck Fogel | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Norican** | Vernon Adams | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Outfit** | Rodrigo Fuenzalida | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Pacifico** | Vernon Adams | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Poppins** | Ninad Kale & Jonny Pinhorn | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Quicksand** | Andrew Paglinawan | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Righteous** | Brian J. Bonislawsky | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **SkyLyrics Script** | Pablo Impallari & Igino Marini | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Syne** | Lucas Descroix | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **Yellowtail** | Brian J. Bonislawsky | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
+| **Yesteryear** | Brian J. Bonislawsky | [SIL OFL 1.1](https://openfontlicense.org/) |
 
 ---
 
-## License
+## Links & Author
 
-All Rights Reserved (ARR). Free to download and use for personal gameplay, singleplayer, multiplayer servers, and video content.
+- **Author:** Maximus (Discord: `i.am.maximus`)
+- **Source Code:** [GitHub Repository](https://github.com/lukaseschn-design/SkyLyrics-Source-code)
+- **Bug Tracker:** [Report an Issue](https://github.com/lukaseschn-design/SkyLyrics-Source-code/issues)
