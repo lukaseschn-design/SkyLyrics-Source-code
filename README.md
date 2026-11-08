@@ -19,14 +19,6 @@ Lyrics can be displayed floating in 3D around the player ("Air" mode), projected
 
 ---
 
-## Screenshots
-
-| Air Lyrics (3D Floating) | 3D Music Dashboard | Celestial Aurora Sky |
-| :---: | :---: | :---: |
-| ![Air Lyrics](docs/screenshots/air_lyrics.png) | ![3D Dashboard](docs/screenshots/3d_menu.png) | ![Aurora Sky](docs/screenshots/aurora_visuals.png) |
-
----
-
 ## Controls
 
 Default keybindings (all configurable in Options -> Controls or in the in-game dashboard):
