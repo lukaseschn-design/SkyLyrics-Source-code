@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="icon.jpg" alt="SkyLyrics Logo" width="180" />
+  <img src="icon.png" alt="SkyLyrics Logo" width="180" />
 </p>
 
 <h1 align="center">🎵 SkyLyrics</h1>
@@ -162,14 +162,50 @@ SkyLyrics bundles high-quality open-source typefaces to render custom lyrics and
 
 ---
 
+## 📚 Third-Party Libraries & Attributions
+
+SkyLyrics is built with and utilizes several open-source libraries and APIs. We extend our sincere gratitude to their creators and maintainers:
+
+| Project | Author / Maintainer | Role in SkyLyrics | License |
+| :--- | :--- | :--- | :--- |
+| **[NanoVG](https://github.com/memononen/nanovg)** | Mikko Mononen | High-performance 2D vector graphics rendering | [zlib](https://github.com/memononen/nanovg/blob/master/LICENSE.txt) |
+| **[LWJGL 3](https://www.lwjgl.org/)** | LWJGL Team | OpenGL, GLFW & NanoVG native Java bindings | [BSD-3-Clause](https://www.lwjgl.org/license) |
+| **[JNA (Java Native Access)](https://github.com/java-native-access/jna)** | Timothy Wall & Contributors | Interfacing with Windows SMTC for zero-config media detection | [LGPL 2.1 / Apache 2.0](https://github.com/java-native-access/jna/blob/master/LICENSE) |
+| **[FabricMC](https://fabricmc.net/)** | FabricMC Team | Fabric Loader and Fabric API mod framework | [Apache 2.0](https://github.com/FabricMC/fabric/blob/1.21.1/LICENSE) |
+| **[Mod Menu](https://github.com/TerraformersMC/ModMenu)** | TerraformersMC | In-game configuration screen integration | [MIT](https://github.com/TerraformersMC/ModMenu/blob/main/LICENSE) |
+
+---
+
+## 🌐 Lyrics APIs & Services
+
+Special thanks to the open lyrics communities and service providers that power synchronized karaoke display:
+
+* **[LRCLIB](https://lrclib.net/)** by *tranxuanthang* — An open-source, community-driven database for synchronized song lyrics.
+* **NetEase Cloud Music & Musixmatch** — Public lyrics catalog providers.
+* **Windows System Media Transport Controls (SMTC)** — Local media playback detection for Spotify Desktop, YouTube, and media players.
+
+---
+
+## 💡 Mod Concepts & Inspiration
+
+* **[Studious Keybinds](https://www.curseforge.com/minecraft/mc-mods/studious-keybinds)** by *StudiousGoose* — Inspired the interactive visual keycap keyboard editor in the controls menu.
+* **LyricsFlow** — Architectural foundation for 3D floating and celestial dome lyrics projection.
+* **Lotus / LumiClient** — Frosted-glass pill aesthetic and Aurora title screen styling.
+
+---
+
+## 👥 Contributors & Special Thanks
+
+* **Lead Developer:** Maximus (Discord: `i.am.maximus`)
+* **Contributors & Testers:** `Pnio`, `VexVibe`, `BitePioner`, `Speez`, `storxm_`
+
+---
+
 ## 📜 License
 
 All Rights Reserved (ARR). This mod may be downloaded and used for personal gameplay. Redistribution, modification, or commercial use is not permitted without explicit permission.
 
 ---
-## 📜 Just some guys:
-
-Pnio/VexVibe/BitePioner/Speez/storxm_
 
 <p align="center">
   <strong>Created by Maximus</strong><br>
