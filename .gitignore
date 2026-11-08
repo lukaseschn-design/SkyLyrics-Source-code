@@ -1,12 +1,12 @@
-# Build
+# Build Outputs
 build/
 out/
 *.class
 
-# Gradle
+# Gradle Cache
 .gradle/
 
-# IDE
+# IDE Configuration
 .idea/
 *.iml
 *.ipr
@@ -18,21 +18,20 @@ out/
 .metadata/
 bin/
 
-# OS
+# Operating System Files
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Fabric / Loom
+# Fabric & Loom Temporary Files
 run/
 remappedSrc/
 .fabric/
 
-# Logs
+# Logs & Diagnostics
 *.log
 logs/
 
-# Misc
+# Build Scratch & Disabled Files
 *.jar.disabled
 cp_build.args
-

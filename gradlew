@@ -1,5 +1,5 @@
 #!/bin/sh
-
+# SkyLyrics build wrapper for Unix
 #
 # Copyright © 2015 the original authors.
 #
