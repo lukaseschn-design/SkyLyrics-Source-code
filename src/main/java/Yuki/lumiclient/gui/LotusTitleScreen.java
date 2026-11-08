@@ -223,28 +223,22 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
         float cx = sw / 2f;
         float menuW = 306f * s;
         float btnH = 30f * s;
-        float btnRadius = 10f * s;
+        float btnRadius = 3.5f * s;
         float btnGap = 6f * s;
         float fontSize = 13.5f * s;
 
         float totalBlockH = (centerButtons.size() + 1) * btnH + centerButtons.size() * btnGap;
         float startY = Math.max(80f * s, (sh - totalBlockH) * 0.46f);
 
-        // ── Zentrales Branding: SkyLyrics ─────────────────────────────────────
-        float titleCenterY = startY - 48f * s;
-        float emblemRadius = 24f * s;
-        float pulse = (float) (Math.sin(now * 0.0035) * (1.2f * s));
-        float titleFontSize = 32f * s;
+        // ── Zentrales Branding: SkyLyrics (Zentrierter Text, kein KI-Logo) ───
+        float titleCenterY = startY - 44f * s;
+        float titleFontSize = 34f * s;
 
         float textW_Sky = nvg.textWidth("Sky", titleFontSize);
         float textW_Lyrics = nvg.textWidth("Lyrics", titleFontSize);
-        float emblemToTextGap = 14f * s;
-        float totalBrandingW = (emblemRadius * 2f) + emblemToTextGap + textW_Sky + textW_Lyrics;
+        float totalTextW = textW_Sky + textW_Lyrics;
+        float textLeftX = cx - totalTextW / 2f;
 
-        float emblemCenterX = cx - totalBrandingW / 2f + emblemRadius;
-        float textLeftX = emblemCenterX + emblemRadius + emblemToTextGap;
-
-        drawSkyLyricsEmblem(nvg, emblemCenterX, titleCenterY, emblemRadius, pulse);
         nvg.text("Sky", textLeftX, titleCenterY, titleFontSize, ACCENT_CYAN);
         nvg.text("Lyrics", textLeftX + textW_Sky, titleCenterY, titleFontSize, TEXT_WHITE);
 
@@ -255,7 +249,7 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
             float by = startY + i * (btnH + btnGap);
 
             boolean hovered = mx >= bx && mx <= bx + menuW && my >= by && my <= by + btnH;
-            renderGlassPill(nvg, btn, bx, by, menuW, btnH, btnRadius, fontSize, hovered, dt, i, s);
+            renderGlassButton(nvg, btn, bx, by, menuW, btnH, btnRadius, fontSize, hovered, dt, i, s);
         }
 
         // ── Split Row: Options... & Quit Game ────────────────────────────────
@@ -265,20 +259,21 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
         float quitX = optX + splitW + btnGap;
 
         boolean optHover = mx >= optX && mx <= optX + splitW && my >= splitY && my <= splitY + btnH;
-        renderGlassPill(nvg, optionsButton, optX, splitY, splitW, btnH, btnRadius, fontSize, optHover, dt, 100, s);
+        renderGlassButton(nvg, optionsButton, optX, splitY, splitW, btnH, btnRadius, fontSize, optHover, dt, 100, s);
 
         boolean quitHover = mx >= quitX && mx <= quitX + splitW && my >= splitY && my <= splitY + btnH;
-        renderGlassPill(nvg, quitButton, quitX, splitY, splitW, btnH, btnRadius, fontSize, quitHover, dt, 101, s);
+        renderGlassButton(nvg, quitButton, quitX, splitY, splitW, btnH, btnRadius, fontSize, quitHover, dt, 101, s);
 
         // ── Oben Rechts: Sky Theme, Keybinds & Music Buttons ─────────────────
         skyButton.label = "Sky: " + LotusBackdrop.name();
+        float topCornerR = 3.0f * s;
         float skyW = 92f * s;
         float skyH = 22f * s;
         float skyX = sw - skyW - 14f * s;
         float skyY = 12f * s;
 
         boolean skyHover = mx >= skyX && mx <= skyX + skyW && my >= skyY && my <= skyY + skyH;
-        renderGlassPill(nvg, skyButton, skyX, skyY, skyW, skyH, 6f * s, 10.5f * s, skyHover, dt, 102, s);
+        renderGlassButton(nvg, skyButton, skyX, skyY, skyW, skyH, topCornerR, 10.5f * s, skyHover, dt, 102, s);
 
         float keybindsW = 86f * s;
         float keybindsH = 22f * s;
@@ -286,7 +281,7 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
         float keybindsY = 12f * s;
 
         boolean keybindsHover = mx >= keybindsX && mx <= keybindsX + keybindsW && my >= keybindsY && my <= keybindsY + keybindsH;
-        renderGlassPill(nvg, keybindsButton, keybindsX, keybindsY, keybindsW, keybindsH, 6f * s, 10.5f * s, keybindsHover, dt, 104, s);
+        renderGlassButton(nvg, keybindsButton, keybindsX, keybindsY, keybindsW, keybindsH, topCornerR, 10.5f * s, keybindsHover, dt, 104, s);
 
         float spotifyW = 86f * s;
         float spotifyH = 22f * s;
@@ -294,7 +289,7 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
         float spotifyY = 12f * s;
 
         boolean spotifyHover = mx >= spotifyX && mx <= spotifyX + spotifyW && my >= spotifyY && my <= spotifyY + spotifyH;
-        renderGlassPill(nvg, spotifyButton, spotifyX, spotifyY, spotifyW, spotifyH, 6f * s, 10.5f * s, spotifyHover, dt, 105, s);
+        renderGlassButton(nvg, spotifyButton, spotifyX, spotifyY, spotifyW, spotifyH, topCornerR, 10.5f * s, spotifyHover, dt, 105, s);
 
         // ── Rechte Seite: Badge & Wardrobe Button ────────────────────────────
         float figX = cx + (153f + 40f) * s;
@@ -308,8 +303,8 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
         float badgeX = figX + (figW - badgeW) / 2f;
         float badgeY = figY + 8f * s;
 
-        nvg.rect(badgeX, badgeY, badgeW, badgeH, 10f * s, 0x650D141F);
-        nvg.rectOutline(badgeX, badgeY, badgeW, badgeH, 10f * s, 1.0f, 0x458098B0);
+        nvg.rect(badgeX, badgeY, badgeW, badgeH, 3.5f * s, 0x650D141F);
+        nvg.rectOutline(badgeX, badgeY, badgeW, badgeH, 3.5f * s, 1.0f, 0x458098B0);
 
         float sqSize = 6.5f * s;
         nvg.glow(badgeX + 7f * s, badgeY + (badgeH - sqSize) / 2f, sqSize, sqSize, 2f * s, 4f * s, Colors.withAlpha(ACCENT_CYAN, 0.6f));
@@ -327,7 +322,7 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
         float wardrobeY = figY + 225f * s;
 
         boolean wardHover = mx >= wardrobeX && mx <= wardrobeX + wardrobeW && my >= wardrobeY && my <= wardrobeY + wardrobeH;
-        renderGlassPill(nvg, wardrobeButton, wardrobeX, wardrobeY, wardrobeW, wardrobeH, 9f * s, fontSize, wardHover, dt, 103, s);
+        renderGlassButton(nvg, wardrobeButton, wardrobeX, wardrobeY, wardrobeW, wardrobeH, btnRadius, fontSize, wardHover, dt, 103, s);
 
         // ── Linke Seite: "What's new" Changelog ──────────────────────────────
         float newsX = Math.max(18f * s, cx - menuW / 2f - 240f * s);
@@ -345,7 +340,7 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
         nvg.text("SkyLyrics 1.0  Minecraft 1.21.11", 16f * s, sh - 14f * s, 10.5f * s, 0x80859CAE);
     }
 
-    private void renderGlassPill(NVGRenderer nvg, GlassButton btn, float x, float y, float w, float h, float r, float fontSz, boolean hovered, float dt, int btnId, float s) {
+    private void renderGlassButton(NVGRenderer nvg, GlassButton btn, float x, float y, float w, float h, float r, float fontSz, boolean hovered, float dt, int btnId, float s) {
         if (hovered) {
             if (hoveredBtnId != btnId) {
                 UiSounds.hover();
@@ -356,39 +351,38 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
         }
 
         float target = hovered ? 1.0f : 0.0f;
-        btn.hoverAnim += (target - btn.hoverAnim) * Math.min(1.0f, 0.26f * dt);
+        btn.hoverAnim += (target - btn.hoverAnim) * Math.min(1.0f, 0.30f * dt);
 
-        float lift = 1.0f * s * btn.hoverAnim;
-        float expand = 1.5f * s * btn.hoverAnim;
-        float drawX = x - expand;
-        float drawY = y - lift;
-        float drawW = w + expand * 2.0f;
+        float drawX = x;
+        float drawY = y;
+        float drawW = w;
         float drawH = h;
-        float drawR = r + expand * 0.25f;
+        float drawR = r;
 
-        if (btn.hoverAnim > 0.015f) {
-            int argb = Colors.withAlpha(ACCENT_CYAN, 0.52f * btn.hoverAnim);
-            drawBoxGlow(nvg, drawX, drawY, drawW, drawH, drawR, 14f * s, argb);
+        // 1. Zarter Cyan-Außenglow bei Hover (1px, sauber)
+        if (btn.hoverAnim > 0.02f) {
+            int glowBorder = Colors.withAlpha(ACCENT_CYAN, 0.35f * btn.hoverAnim);
+            nvg.rectOutline(drawX - 1f, drawY - 1f, drawW + 2f, drawH + 2f, drawR + 1f, 1.0f, glowBorder);
         }
 
-        int hoverBg = 0x75182C40;
+        // 2. Frosted Glass Hintergrund
+        int hoverBg = 0x801A283C;
         int bg = Colors.lerp(GLASS_BG, hoverBg, btn.hoverAnim);
         nvg.rect(drawX, drawY, drawW, drawH, drawR, bg);
 
+        // 3. Feiner Lichtschein auf oberer Hälfte
         if (btn.hoverAnim > 0.02f) {
-            int sheenTop = Colors.withAlpha(0xFFFFFF, 0.16f * btn.hoverAnim);
+            int sheenTop = Colors.withAlpha(0xFFFFFF, 0.12f * btn.hoverAnim);
             int sheenBot = Colors.withAlpha(0xFFFFFF, 0.01f * btn.hoverAnim);
-            nvg.rectGradient(drawX, drawY, drawW, drawH * 0.52f, drawR, sheenTop, sheenBot, true);
-
-            float innerPad = drawR * 0.65f;
-            nvg.line(drawX + innerPad, drawY + 1.0f, drawX + drawW - innerPad, drawY + 1.0f, 1.0f, Colors.withAlpha(0xFFFFFF, 0.35f * btn.hoverAnim));
+            nvg.rectGradient(drawX, drawY, drawW, drawH * 0.50f, drawR, sheenTop, sheenBot, true);
         }
 
-        int hoverBorder = 0xFF9FE2FF;
+        // 4. Scharfe, saubere Kontur
+        int hoverBorder = 0xEE9FE2FF;
         int border = Colors.lerp(GLASS_BORDER, hoverBorder, btn.hoverAnim);
-        float borderWidth = 1.0f + 0.45f * btn.hoverAnim;
-        nvg.rectOutline(drawX, drawY, drawW, drawH, drawR, borderWidth, border);
+        nvg.rectOutline(drawX, drawY, drawW, drawH, drawR, 1.0f, border);
 
+        // 5. Zentrierter Text
         int textCol = Colors.lerp(0xD5D8E4F0, 0xFFFFFFFF, btn.hoverAnim);
         float textW = nvg.textWidth(btn.label, fontSz);
         nvg.text(btn.label, drawX + (drawW - textW) / 2f, drawY + drawH / 2f, fontSz, textCol);
@@ -554,54 +548,5 @@ public class LotusTitleScreen extends class_442 implements NvgDrawable {
             }
         } catch (Throwable ignored) {}
         return "Player";
-    }
-
-    private static void drawSkyLyricsEmblem(NVGRenderer nvg, float cx, float cy, float radius, float pulse) {
-        // Multi-Layer Outer Bloom Glow
-        nvg.circleGlow(cx, cy, radius + 4f + pulse, 18f, Colors.withAlpha(ACCENT_CYAN, 0.45f));
-        nvg.circleGlow(cx, cy, radius, 8f, Colors.withAlpha(0xFFE0F7FF, 0.60f));
-
-        // Frosted Glass Disk
-        nvg.circle(cx, cy, radius, 0x750E1826);
-        nvg.circleOutline(cx, cy, radius, 1.4f, ACCENT_CYAN);
-
-        // Inner glowing ring
-        nvg.circle(cx, cy, radius * 0.78f, 0x301D88E5);
-        nvg.circleOutline(cx, cy, radius * 0.78f, 1.0f, 0x807FE6FF);
-
-        // Vector Beamed Musical Note (♫) - 100% gestochen scharf, kein Font-Glyph-Fehler
-        float r = radius;
-        // Left notehead
-        nvg.circle(cx - r * 0.28f, cy + r * 0.22f, r * 0.20f, 0xFFFFFFFF);
-        nvg.circle(cx - r * 0.23f, cy + r * 0.16f, r * 0.15f, 0xFF7FE6FF);
-
-        // Right notehead
-        nvg.circle(cx + r * 0.22f, cy + r * 0.10f, r * 0.20f, 0xFFFFFFFF);
-        nvg.circle(cx + r * 0.27f, cy + r * 0.04f, r * 0.15f, 0xFF7FE6FF);
-
-        // Left stem
-        nvg.rect(cx - r * 0.14f, cy - r * 0.38f, r * 0.09f, r * 0.60f, r * 0.04f, 0xFFFFFFFF);
-
-        // Right stem
-        nvg.rect(cx + r * 0.36f, cy - r * 0.50f, r * 0.09f, r * 0.60f, r * 0.04f, 0xFFFFFFFF);
-
-        // Connecting Beam
-        nvg.rect(cx - r * 0.14f, cy - r * 0.48f, r * 0.59f, r * 0.16f, r * 0.05f, 0xFFFFFFFF);
-        nvg.rect(cx - r * 0.14f, cy - r * 0.48f, r * 0.59f, r * 0.06f, 0.5f, 0xFF7FE6FF);
-
-        // Sparkle Star (top right)
-        float sx = cx + r * 0.46f, sy = cy - r * 0.22f;
-        nvg.glow(sx - 1.5f, sy - 1.5f, 3f, 3f, 1f, 4f, 0xCC7FE6FF);
-        nvg.rect(sx - 0.7f, sy - 3f, 1.4f, 6f, 0.5f, 0xFFFFFFFF);
-        nvg.rect(sx - 3f, sy - 0.7f, 6f, 1.4f, 0.5f, 0xFFFFFFFF);
-    }
-
-    private static void drawBoxGlow(NVGRenderer nvg, float x, float y, float w, float h, float radius, float blur, int argb) {
-        if ((argb >>> 24) == 0 || blur <= 0.5f) return;
-        int ambient = Colors.withAlpha(argb, 0.45f * ((argb >>> 24) / 255.0f));
-        nvg.glow(x, y, w, h, radius, blur * 1.35f, ambient);
-
-        int core = Colors.withAlpha(argb, 0.90f * ((argb >>> 24) / 255.0f));
-        nvg.glow(x, y, w, h, radius, blur * 0.50f, core);
     }
 }
