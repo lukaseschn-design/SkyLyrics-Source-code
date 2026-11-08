@@ -135,9 +135,9 @@ public class LotusTitleScreen extends class_437 {
             }
         ).method_46434(sw - 85 - 10 - 75 - 6 - 72 - 6, topY, 72, topBtnH).method_46431());
 
-        // 5. Wardrobe Button unter dem Skin (zentraler platziert)
-        int skinX = cx + 130;
-        int skinY = startY - 20;
+        // 5. Wardrobe Button unter dem Skin (oben rechts versetzt)
+        int skinX = Math.min(sw - 90 - 15, cx + 220);
+        int skinY = Math.max(35, startY - 55);
         int skinW = 90;
         int skinH = 145;
         int wardW = 75;
@@ -206,13 +206,14 @@ public class LotusTitleScreen extends class_437 {
             }
             if (this.skinWidget == null) return;
 
-            int cx = this.field_22789 / 2;
+            int sw = this.field_22789;
+            int cx = sw / 2;
             int startY = this.field_22790 / 2 - 10;
 
-            int skinX = cx + 130;
-            int skinY = startY - 20;
             int skinW = 90;
             int skinH = 145;
+            int skinX = Math.min(sw - skinW - 15, cx + 220);
+            int skinY = Math.max(35, startY - 55);
 
             this.skinWidget.method_46421(skinX);
             this.skinWidget.method_46419(skinY);
