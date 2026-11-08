@@ -47,7 +47,7 @@
 
 | Key | Action |
 | :--- | :--- |
-| **M** | Open the SkyLyrics settings dashboard |
+| **K** | Open the SkyLyrics settings dashboard |
 | **P** | Play / Pause |
 | **→** | Next song |
 | **←** | Previous song |
