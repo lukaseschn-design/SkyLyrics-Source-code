@@ -32,7 +32,7 @@
 | 🌌 **3D Air & Sky Lyrics** | Lyrics projected onto the celestial dome or floating in 3D space around you |
 | 🎧 **Zero-Config Media Sync** | Automatically detects playback from Spotify Desktop, YouTube, and any Windows media player (SMTC) |
 | ⏱️ **Word-by-Word Karaoke** | High-precision word-level synchronization with musical beat pulsing |
-| 🎨 **Neon Themes** | Built-in color themes (Lilac, Purple, Pink, Blue, Red, Gold) or fully custom colors |
+| 🎨 **Neon Themes** | 20+ built-in presets (Neon Pink, Ice Blue, Sunset, Matrix, Aurora, Vaporwave, and more) or fully custom palettes |
 | ✏️ **Custom Fonts** | Drop any `.ttf` font into the config folder and use it instantly |
 | 🌠 **Sky Effects** | Twinkling stars, floating light motes, and falling streaks while music plays |
 | 🎚️ **Dynamic Island Top Bar** | Song title, artist, and live lyrics in a sleek top-of-screen pill |
@@ -48,19 +48,23 @@
 | Key | Action |
 | :--- | :--- |
 | **K** | Open the SkyLyrics settings dashboard |
-| **P** | Play / Pause |
-| **→** | Next song |
-| **←** | Previous song |
+| **J** | Open the HUD music player |
+| **O** | Toggle SkyLyrics on / off |
+| **↓** | Play / Pause playback |
+| **→** | Next track |
+| **←** | Previous track |
+| **[** | Nudge lyrics earlier (-100 ms) |
+| **]** | Nudge lyrics later (+100 ms) |
 
-All keybinds are fully configurable in the dashboard.
+All keybinds are fully remappable in the dashboard or via Minecraft's standard Controls menu.
 
 ---
 
 ## 📦 Installation
 
-1. Install [Fabric Loader](https://fabricmc.net/use/) (>= 0.17.0) for **Minecraft 1.21.11**
+1. Install [Fabric Loader](https://fabricmc.net/use/) (>= 0.17.0, tested with 0.19.5) for **Minecraft 1.21.11**
 2. Install [Fabric API](https://modrinth.com/mod/fabric-api) (0.141.6+1.21.11)
-3. Download [SkyLyrics-v1.0+1.21.11.jar](releases/SkyLyrics-v1.0+1.21.11.jar)
+3. Download the latest mod jar from the [GitHub Releases](https://github.com/lukaseschn-design/SkyLyrics-Source-code/releases/tag/v1.0%2B1.21.11) page (or from `releases/SkyLyrics-v1.0+1.21.11.jar`)
 4. Drop it into your `.minecraft/mods` folder
 5. Launch the game, play any song on Spotify or YouTube, and enjoy!
 
@@ -74,8 +78,22 @@ All keybinds are fully configurable in the dashboard.
 
 ### Optional (Recommended)
 
-- [Mod Menu](https://modrinth.com/mod/modmenu) — for easy access to the settings screen
+- [Mod Menu](https://modrinth.com/mod/modmenu) — for easy access to the in-game configuration screen
 - [Sodium](https://modrinth.com/mod/sodium) — fully compatible, runs great together
+
+---
+
+## 🔨 Building from Source
+
+You can build SkyLyrics directly using the included Gradle wrapper:
+
+```bash
+git clone https://github.com/lukaseschn-design/SkyLyrics-Source-code.git
+cd SkyLyrics-Source-code
+./gradlew build
+```
+
+The resulting mod JAR will be placed in `build/libs/SkyLyrics-1.0+1.21.11.jar`.
 
 ---
 
@@ -105,7 +123,7 @@ SkyLyrics offers multiple ways to display your lyrics:
 - Wall projection mode
 - Automatic Spotify & YouTube detection (Windows SMTC)
 - Word-by-word karaoke synchronization (Musixmatch, NetEase, LRCLIB)
-- 8 built-in neon color themes
+- 20+ built-in color themes & custom palette support
 - Custom font support (.ttf)
 - Dynamic Island top bar with waveform
 - HUD music player with cover art
@@ -142,7 +160,7 @@ SkyLyrics bundles high-quality open-source typefaces to render custom lyrics and
 | **Comfortaa** | Johan Aakerlund | [SIL OFL 1.1](https://openfontlicense.org/) |
 | **Courgette** | Karolina Lach (Sorkin Type Co.) | [SIL OFL 1.1](https://openfontlicense.org/) |
 | **Damion** | Vernon Adams | [SIL OFL 1.1](https://openfontlicense.org/) |
-| **DejaVu Sans** | DejaVu Fonts Team & Bitstream | [Bitstream Vera / Public Domain](http://dejavu.sourceforge.net/wiki/index.php/License) |
+| **DejaVu Sans** | DejaVu Fonts Team & Bitstream | [Bitstream Vera / Free Software](https://dejavu-fonts.github.io/License.html) |
 | **Fredoka** | Ben Nathan (Milena B. Brandão, Hafontia) | [SIL OFL 1.1](https://openfontlicense.org/) |
 | **Grand Hotel** | Brian J. Bonislawsky & Jim Lyles (Astigmatic AOETI) | [SIL OFL 1.1](https://openfontlicense.org/) |
 | **Kaushan Script** | Pablo Impallari (Impallari Type) | [SIL OFL 1.1](https://openfontlicense.org/) |
@@ -154,6 +172,7 @@ SkyLyrics bundles high-quality open-source typefaces to render custom lyrics and
 | **Poppins** | Ninad Kale & Jonny Pinhorn (Indian Type Foundry) | [SIL OFL 1.1](https://openfontlicense.org/) |
 | **Quicksand** | Andrew Paglinawan | [SIL OFL 1.1](https://openfontlicense.org/) |
 | **Righteous** | Brian J. Bonislawsky (Astigmatic AOETI) | [SIL OFL 1.1](https://openfontlicense.org/) |
+| **SkyLyrics Script** | Pablo Impallari & Igino Marini (derived from Kaushan) | [SIL OFL 1.1](https://openfontlicense.org/) |
 | **Syne** | Lucas Descroix (Bonjour Monde) | [SIL OFL 1.1](https://openfontlicense.org/) |
 | **Yellowtail** | Brian J. Bonislawsky (Astigmatic AOETI) | [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0) |
 | **Yesteryear** | Brian J. Bonislawsky (Astigmatic AOETI) | [SIL OFL 1.1](https://openfontlicense.org/) |
@@ -172,7 +191,7 @@ SkyLyrics is built with and utilizes several open-source libraries and APIs. We 
 | **[LWJGL 3](https://www.lwjgl.org/)** | LWJGL Team | OpenGL, GLFW & NanoVG native Java bindings | [BSD-3-Clause](https://www.lwjgl.org/license) |
 | **[JNA (Java Native Access)](https://github.com/java-native-access/jna)** | Timothy Wall & Contributors | Interfacing with Windows SMTC for zero-config media detection | [LGPL 2.1 / Apache 2.0](https://github.com/java-native-access/jna/blob/master/LICENSE) |
 | **[FabricMC](https://fabricmc.net/)** | FabricMC Team | Fabric Loader and Fabric API mod framework | [Apache 2.0](https://github.com/FabricMC/fabric/blob/1.21.1/LICENSE) |
-| **[Mod Menu](https://github.com/TerraformersMC/ModMenu)** | TerraformersMC | In-game configuration screen integration | [MIT](https://github.com/TerraformersMC/ModMenu/blob/main/LICENSE) |
+| **[Mod Menu](https://github.com/TerraformersMC/ModMenu)** | TerraformersMC | In-game configuration screen integration | [MIT](https://github.com/TerraformersMC/ModMenu/blob/master/LICENSE) |
 
 ---
 
@@ -188,7 +207,7 @@ Special thanks to the open lyrics communities and service providers that power s
 
 ## 💡 Mod Concepts & Inspiration
 
-* **[Studious Keybinds](https://www.curseforge.com/minecraft/mc-mods/studious-keybinds)** by *StudiousGoose* — Inspired the interactive visual keycap keyboard editor in the controls menu.
+* **[Studious Keybinds](https://modrinth.com/mod/studious-keybinds)** by *StudiousGoose* — Inspired the interactive visual keycap keyboard editor in the controls menu.
 * **LyricsFlow** — Architectural foundation for 3D floating and celestial dome lyrics projection.
 * **Lotus / LumiClient** — Frosted-glass pill aesthetic and Aurora title screen styling.
 
