@@ -108,9 +108,25 @@ SkyLyrics offers multiple ways to display your lyrics:
 
 ---
 
-## 🖼️ Screenshots
+## 🖼️ Screenshots & Showcase
 
-> *Coming soon — screenshots of each lyrics style in action*
+<p align="center">
+  <img src="docs/screenshots/air_lyrics.png" alt="AirLyrics 3D Floating Mode" width="280" />
+  <img src="docs/screenshots/3d_menu.png" alt="3D Music Dashboard" width="280" />
+  <img src="docs/screenshots/aurora_visuals.png" alt="Celestial Aurora Sky" width="280" />
+</p>
+
+### 🌌 Feature Highlights
+
+* 🌠 **AirLyrics (3D Floating Mode)** — Real-time lyrics floating dynamically in 3D around the player with beat pulsing, smooth drift, and custom font colors.
+* 🎵 **3D In-Game Dashboard** — Integrated 3D player screen, synchronized lyrics, music controls, volume sliders, and live audio waveforms.
+* 🌌 **Celestial Sky & Aurora Dome** — Dynamic aurora borealis effects and constellation projections mapped across the celestial sphere.
+* 🎨 **Sky Menu & Atmospheric Themes** — Transform your Minecraft sky with music-reactive animations, dynamic weather effects, and color palettes.
+* ✏️ **Style & Typography Customization** — Wide selection of open-source fonts, glowing neon text, shadow effects, and customizable palettes.
+* ⚡ **Performance & Optimization Settings** — Automatic FPS adjustments, reduced particle density, and lightweight rendering compatible with Sodium & Iris.
+* 🎚️ **Lyrics Positioning** — Toggle between floating tags or sky lyrics; adjust size, distance, height, opacity, and entry/exit animations.
+* ⌨️ **Controls & Visual Keyboard Editor** — Interactive visual keycap keyboard editor to remap keys, adjust lyric sync (-100ms / +100ms), and configure UI sounds.
+* 🎧 **Zero-Config Media Sync** — Seamless playback detection from Spotify Desktop, YouTube, and Windows Media (SMTC).
 
 ---
 
