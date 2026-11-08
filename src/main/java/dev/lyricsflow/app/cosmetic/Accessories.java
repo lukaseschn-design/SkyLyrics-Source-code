@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  com.mojang.blaze3d.platform.NativeImage
- *  net.minecraft.client.renderer.texture.DynamicTexture
- *  net.minecraft.client.renderer.texture.AbstractTexture
- *  net.minecraft.world.phys.Vec3
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
- *  dev.lyricsflow.compat.LegacyBufferSource
+ *  net.minecraft.class_1011
+ *  net.minecraft.class_1043
+ *  net.minecraft.class_1044
+ *  net.minecraft.class_243
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
+ *  net.minecraft.class_4597
  *  org.joml.Matrix4f
  */
 package dev.lyricsflow.app.cosmetic;
@@ -22,18 +22,18 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import javax.imageio.ImageIO;
-import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
-import dev.lyricsflow.compat.LegacyBufferSource;
+import net.minecraft.class_1011;
+import net.minecraft.class_1043;
+import net.minecraft.class_1044;
+import net.minecraft.class_243;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
+import net.minecraft.class_4597;
 import org.joml.Matrix4f;
 
 public final class Accessories {
     public static final String[] HATS = Cosmetics.IDS;
-    public static final Identifier WHITE = Identifier.fromNamespaceAndPath((String)"lyricsflow", (String)"cosmetic/white");
+    public static final class_2960 WHITE = class_2960.method_60655((String)"lyricsflow", (String)"cosmetic/white");
     private static boolean whiteReady;
     private static boolean whiteFailed;
     private static final float[][] MESH;
@@ -107,7 +107,7 @@ public final class Accessories {
             }
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write((RenderedImage)img, "png", out);
-            Minecraft.getInstance().getTextureManager().register(WHITE, (AbstractTexture)new DynamicTexture(() -> "lyricsflow_white", NativeImage.read((byte[])out.toByteArray())));
+            class_310.method_1551().method_1531().method_4616(WHITE, (class_1044)new class_1043(() -> "lyricsflow_white", class_1011.method_49277((byte[])out.toByteArray())));
             whiteReady = true;
         }
         catch (Throwable var3) {
@@ -116,7 +116,7 @@ public final class Accessories {
         return whiteReady;
     }
 
-    public static void render(Minecraft mc, LegacyBufferSource buffers, Matrix4f base, Vec3 cam, float pt) {
+    public static void render(class_310 mc, class_4597 buffers, Matrix4f base, class_243 cam, float pt) {
     }
 
     static {
@@ -124,3 +124,4 @@ public final class Accessories {
         TRIED = new boolean[HATS.length];
     }
 }
+

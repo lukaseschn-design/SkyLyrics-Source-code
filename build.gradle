@@ -1,5 +1,5 @@
 plugins {
-    id 'net.fabricmc.fabric-loom' version '1.17.20'
+    id 'fabric-loom' version '1.17.20'
     id 'maven-publish'
 }
 
@@ -12,8 +12,7 @@ base {
 
 repositories {
     mavenCentral()
-
-    // Modrinth Maven (for dependency mods published on Modrinth)
+    maven { url = "https://maven.fabricmc.net/" }
     maven {
         name = 'Modrinth'
         url = 'https://api.modrinth.com/maven'
@@ -30,24 +29,23 @@ repositories {
 dependencies {
     // Minecraft
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.layered {
+        mappings file("mappings/identity.tiny")
+    }
+
     // Fabric Loader
-    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Fabric API
-    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     // Mod Menu API (optional at runtime)
-    compileOnly "com.terraformersmc:modmenu:21.0.0"
+    compileOnly "com.terraformersmc:modmenu:17.0.1"
 
-    // NanoVG classes are nested in the built mod but must be present on the compile classpath.
+    // NanoVG & Native APIs
     compileOnly "org.lwjgl:lwjgl-nanovg:3.3.3"
-    include "org.lwjgl:lwjgl-nanovg:3.3.3"
-    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-linux-arm64"
-    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-linux"
-    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-macos-arm64"
-    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-macos"
-    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-windows-arm64"
-    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-windows"
+    compileOnly "net.java.dev.jna:jna:5.14.0"
+    compileOnly "net.java.dev.jna:jna-platform:5.14.0"
 }
 
 processResources {
@@ -72,21 +70,5 @@ java {
 jar {
     from("LICENSE") {
         rename { "${it}_${project.base.archivesName.get()}" }
-    }
-}
-
-publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
-            from components.java
-        }
-    }
-
-    repositories {
-        // Uncomment to publish to a local Maven repository
-        // maven {
-        //     url = layout.buildDirectory.dir("repo")
-        // }
     }
 }

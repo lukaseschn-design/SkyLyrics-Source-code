@@ -2,24 +2,25 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.renderer.entity.state.AvatarRenderState
- *  net.minecraft.client.renderer.SubmitNodeCollector
- *  net.minecraft.client.renderer.rendertype.RenderTypes
- *  net.minecraft.world.entity.EquipmentSlot
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.renderer.entity.RenderLayerParent
- *  net.minecraft.client.renderer.entity.layers.RenderLayer
- *  com.mojang.blaze3d.vertex.PoseStack
- *  com.mojang.blaze3d.vertex.PoseStack$Pose
- *  com.mojang.blaze3d.vertex.VertexConsumer
- *  net.minecraft.client.renderer.texture.OverlayTexture
- *  net.minecraft.client.model.player.PlayerModel
+ *  net.minecraft.class_10055
+ *  net.minecraft.class_11659
+ *  net.minecraft.class_12249
+ *  net.minecraft.class_1304
+ *  net.minecraft.class_1657
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
+ *  net.minecraft.class_3883
+ *  net.minecraft.class_3887
+ *  net.minecraft.class_4587
+ *  net.minecraft.class_4587$class_4665
+ *  net.minecraft.class_4588
+ *  net.minecraft.class_4608
+ *  net.minecraft.class_591
  */
 package dev.lyricsflow.render;
+import net.minecraft.class_10017;
 
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
 import dev.lyricsflow.render.Cosmetics;
@@ -27,24 +28,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.client.renderer.entity.state.AvatarRenderState;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.model.player.PlayerModel;
+import net.minecraft.class_10055;
+import net.minecraft.class_11659;
+import net.minecraft.class_12249;
+import net.minecraft.class_1304;
+import net.minecraft.class_1657;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
+import net.minecraft.class_3883;
+import net.minecraft.class_3887;
+import net.minecraft.class_4587;
+import net.minecraft.class_4588;
+import net.minecraft.class_4608;
+import net.minecraft.class_591;
 
 public final class HelmetLayer
-extends RenderLayer<AvatarRenderState, PlayerModel> {
+extends class_3887<class_10055, class_591> {
     public static final String ID = "astronaut_helmet";
-    private static final Identifier WHITE = SkyLyrics.id("textures/misc/white.png");
+    private static final class_2960 WHITE = LyricsFlow.id("textures/misc/white.png");
     private static final float PX = 0.0625f;
     private static final float V = 0.5f;
     private static List<Vox> solid;
@@ -63,7 +64,7 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
     private static final float VY1 = -1.5f;
     private static final String[] FLAG;
 
-    public HelmetLayer(RenderLayerParent<AvatarRenderState, PlayerModel> parent) {
+    public HelmetLayer(class_3883<class_10055, class_591> parent) {
         super(parent);
     }
 
@@ -72,46 +73,47 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
         return c.worn().contains(ID);
     }
 
-    public void submit(PoseStack pose, SubmitNodeCollector queue, int light, AvatarRenderState state, float yRot, float xRot) {
+    @Override
+    public void method_4199(class_4587 pose, class_11659 queue, int light, class_10055 state, float yRot, float xRot) {
         double t;
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || state.isInvisible || state.isSpectator) {
+        class_310 mc = class_310.method_1551();
+        if (mc.field_1724 == null || state.field_53333 || state.field_53542) {
             return;
         }
-        if (!Cosmetics.forEntity(state.id).contains(ID)) {
+        if (!Cosmetics.forEntity(state.field_53528).contains(ID)) {
             return;
         }
-        Player owner = Cosmetics.playerOf(state.id);
+        class_1657 owner = Cosmetics.playerOf(state.field_53528);
         if (owner == null) {
             return;
         }
-        if (!((PlayerModel)this.getParentModel()).head.visible) {
+        if (!((class_591)this.method_17165()).field_3398.field_3665) {
             return;
         }
         if (solid == null) {
             HelmetLayer.build();
         }
         boolean blink = (t = (double)System.nanoTime() / 1.0E9) % 1.4 < 0.9;
-        pose.pushPose();
-        ((PlayerModel)this.getParentModel()).head.translateAndRotate(pose);
-        if (!owner.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) {
-            pose.translate(0.0f, -0.25f, 0.0f);
-            pose.scale(1.17f, 1.17f, 1.17f);
-            pose.translate(0.0f, 0.25f, 0.0f);
+        pose.method_22903();
+        ((class_591)this.method_17165()).field_3398.method_22703(pose);
+        if (!owner.method_6118(class_1304.field_6169).method_7960()) {
+            pose.method_46416(0.0f, -0.25f, 0.0f);
+            pose.method_22905(1.17f, 1.17f, 1.17f);
+            pose.method_46416(0.0f, 0.25f, 0.0f);
         }
-        queue.submitCustomGeometry(pose, RenderTypes.entityCutout((Identifier)WHITE), (p, vc) -> {
+        queue.method_73483(pose, class_12249.method_75994((class_2960)WHITE), (p, vc) -> {
             for (Vox v : solid) {
                 HelmetLayer.cube(vc, p, v, light);
             }
         });
-        queue.submitCustomGeometry(pose, RenderTypes.entityTranslucent((Identifier)WHITE), (p, vc) -> HelmetLayer.visor(vc, p, light));
-        queue.submitCustomGeometry(pose, RenderTypes.entityCutout((Identifier)WHITE), (p, vc) -> {
+        queue.method_73483(pose, class_12249.method_76000((class_2960)WHITE), (p, vc) -> HelmetLayer.visor(vc, p, light));
+        queue.method_73483(pose, class_12249.method_75994((class_2960)WHITE), (p, vc) -> {
             for (Vox v : glow) {
                 if (v.rgb() == 0xFF3030 && !blink) continue;
                 HelmetLayer.cube(vc, p, v, 0xF000F0);
             }
         });
-        pose.popPose();
+        pose.method_22909();
     }
 
     private static void build() {
@@ -213,7 +215,7 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
         m.put(HelmetLayer.key(x, y, z), new int[]{col});
     }
 
-    private static void visor(VertexConsumer vc, PoseStack.Pose p, int light) {
+    private static void visor(class_4588 vc, class_4587.class_4665 p, int light) {
         float z = -0.3125f;
         float x0 = -0.21875f;
         float x1 = 0.21875f;
@@ -237,7 +239,7 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
         HelmetLayer.v(vc, p, sx0 - 0.0375f, sy1, zz, sh, light, 0.0f, 0.0f, -1.0f);
     }
 
-    private static void cube(VertexConsumer vc, PoseStack.Pose p, Vox v, int light) {
+    private static void cube(class_4588 vc, class_4587.class_4665 p, Vox v, int light) {
         float x0 = (float)v.x() * 0.5f * 0.0625f;
         float x1 = (float)(v.x() + 1) * 0.5f * 0.0625f;
         float y0 = (float)v.y() * 0.5f * 0.0625f;
@@ -267,7 +269,7 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
         }
     }
 
-    private static void quad(VertexConsumer vc, PoseStack.Pose p, int rgb, float k, int light, boolean both, float nx, float ny, float nz, float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz, float dx, float dy, float dz) {
+    private static void quad(class_4588 vc, class_4587.class_4665 p, int rgb, float k, int light, boolean both, float nx, float ny, float nz, float ax, float ay, float az, float bx, float by, float bz, float cx, float cy, float cz, float dx, float dy, float dz) {
         if (both) {
             k = 1.0f;
         }
@@ -281,8 +283,8 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
         HelmetLayer.v(vc, p, dx, dy, dz, col, light, nx, ny, nz);
     }
 
-    private static void v(VertexConsumer vc, PoseStack.Pose p, float x, float y, float z, int col, int light, float nx, float ny, float nz) {
-        vc.addVertex(p, x, y, z).setColor(col).setUv(0.5f, 0.5f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(p, nx, ny, nz);
+    private static void v(class_4588 vc, class_4587.class_4665 p, float x, float y, float z, int col, int light, float nx, float ny, float nz) {
+        vc.method_56824(p, x, y, z).method_39415(col).method_22913(0.5f, 0.5f).method_22922(class_4608.field_21444).method_60803(light).method_60831(p, nx, ny, nz);
     }
 
     static {

@@ -908,3 +908,4 @@ public final class LyricsFetcher {
         WORD_TAG = Pattern.compile("<(\\d+):(\\d+)(?:\\.(\\d+))?>");
     }
 }
+

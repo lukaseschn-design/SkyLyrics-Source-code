@@ -2,63 +2,63 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.OptionInstance
+ *  net.minecraft.class_310
+ *  net.minecraft.class_7172
  */
 package dev.lyricsflow.perf;
 
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.OptionInstance;
+import net.minecraft.class_310;
+import net.minecraft.class_7172;
 
 public final class FpsBoost {
     private FpsBoost() {
     }
 
     public static void apply(boolean on) {
-        Minecraft mc = Minecraft.getInstance();
+        class_310 mc = class_310.method_1551();
         LFConfig c = ConfigManager.get();
         try {
             if (on) {
                 if (!c.fpsBoost || c.boostBefore == null || c.boostBefore.isEmpty()) {
-                    c.boostBefore = FpsBoost.save(mc.options.entityShadows()) + ";" + FpsBoost.save(mc.options.particles()) + ";" + FpsBoost.save(mc.options.biomeBlendRadius()) + ";" + FpsBoost.save(mc.options.cloudStatus()) + ";" + FpsBoost.save(mc.options.enableVsync());
+                    c.boostBefore = FpsBoost.save(mc.field_1690.method_42435()) + ";" + FpsBoost.save(mc.field_1690.method_42475()) + ";" + FpsBoost.save(mc.field_1690.method_41805()) + ";" + FpsBoost.save(mc.field_1690.method_42528()) + ";" + FpsBoost.save(mc.field_1690.method_42433());
                 }
-                FpsBoost.set(mc.options.entityShadows(), "false");
-                FpsBoost.set(mc.options.particles(), "MINIMAL");
-                FpsBoost.set(mc.options.biomeBlendRadius(), "0");
-                FpsBoost.set(mc.options.cloudStatus(), "OFF");
-                FpsBoost.set(mc.options.enableVsync(), "false");
+                FpsBoost.set(mc.field_1690.method_42435(), "false");
+                FpsBoost.set(mc.field_1690.method_42475(), "MINIMAL");
+                FpsBoost.set(mc.field_1690.method_41805(), "0");
+                FpsBoost.set(mc.field_1690.method_42528(), "OFF");
+                FpsBoost.set(mc.field_1690.method_42433(), "false");
                 c.quality = 0;
             } else if (c.boostBefore != null && !c.boostBefore.isEmpty()) {
                 String[] v = c.boostBefore.split(";", -1);
                 if (v.length >= 3) {
-                    FpsBoost.set(mc.options.entityShadows(), v[0]);
-                    FpsBoost.set(mc.options.particles(), v[1]);
-                    FpsBoost.set(mc.options.biomeBlendRadius(), v[2]);
+                    FpsBoost.set(mc.field_1690.method_42435(), v[0]);
+                    FpsBoost.set(mc.field_1690.method_42475(), v[1]);
+                    FpsBoost.set(mc.field_1690.method_41805(), v[2]);
                 }
                 if (v.length >= 5) {
-                    FpsBoost.set(mc.options.cloudStatus(), v[3]);
-                    FpsBoost.set(mc.options.enableVsync(), v[4]);
+                    FpsBoost.set(mc.field_1690.method_42528(), v[3]);
+                    FpsBoost.set(mc.field_1690.method_42433(), v[4]);
                 }
                 c.boostBefore = "";
                 if (c.quality == 0) {
                     c.quality = 1;
                 }
             }
-            mc.options.save();
+            mc.field_1690.method_1640();
         }
         catch (Exception e) {
-            SkyLyrics.LOG.warn("[SkyLyrics] FPS boost could not change every setting", (Throwable)e);
+            LyricsFlow.LOG.warn("[SkyLyrics] FPS boost could not change every setting", (Throwable)e);
         }
         c.fpsBoost = on;
         ConfigManager.save();
     }
 
-    private static String save(OptionInstance<?> o) {
+    private static String save(class_7172<?> o) {
         String string;
-        Object v = o.get();
+        Object v = o.method_41753();
         if (v instanceof Enum) {
             Enum e = (Enum)v;
             string = e.name();
@@ -68,9 +68,9 @@ public final class FpsBoost {
         return string;
     }
 
-    private static void set(OptionInstance o, String value) {
+    private static void set(class_7172 o, String value) {
         Object nv;
-        Object cur = o.get();
+        Object cur = o.method_41753();
         if (cur instanceof Boolean) {
             nv = Boolean.parseBoolean(value);
         } else if (cur instanceof Integer) {
@@ -81,6 +81,7 @@ public final class FpsBoost {
         } else {
             return;
         }
-        o.set((Object)nv);
+        ((class_7172)o).method_41748(nv);
     }
 }
+

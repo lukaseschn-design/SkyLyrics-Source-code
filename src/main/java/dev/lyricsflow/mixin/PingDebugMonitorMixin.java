@@ -2,9 +2,9 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.util.Util
- *  net.minecraft.network.protocol.ping.ClientboundPongResponsePacket
- *  net.minecraft.client.multiplayer.PingDebugMonitor
+ *  net.minecraft.class_156
+ *  net.minecraft.class_2923
+ *  net.minecraft.class_8761
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.injection.At
  *  org.spongepowered.asm.mixin.injection.Inject
@@ -13,18 +13,19 @@
 package dev.lyricsflow.mixin;
 
 import dev.lyricsflow.render.LivePing;
-import net.minecraft.util.Util;
-import net.minecraft.network.protocol.ping.ClientboundPongResponsePacket;
-import net.minecraft.client.multiplayer.PingDebugMonitor;
+import net.minecraft.class_156;
+import net.minecraft.class_2923;
+import net.minecraft.class_8761;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={PingDebugMonitor.class})
+@Mixin(value={class_8761.class})
 public abstract class PingDebugMonitorMixin {
-    @Inject(method={"onPongReceived"}, at={@At(value="HEAD")}, require=0)
-    private void lyricsflow$pong(ClientboundPongResponsePacket packet, CallbackInfo ci) {
-        LivePing.record(Util.getMillis() - packet.time());
+    @Inject(method={"method_53487"}, at={@At(value="HEAD")}, require=0)
+    private void lyricsflow$pong(class_2923 packet, CallbackInfo ci) {
+        LivePing.record(class_156.method_658() - packet.comp_2201());
     }
 }
+

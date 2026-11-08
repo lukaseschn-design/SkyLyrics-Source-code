@@ -39,11 +39,9 @@ public class LotusLoadingOverlay {
 
         int a = Math.round(alpha * 255.0f);
 
-        // 1. Edler dunkler Hintergrund (#0A0C13)
         int bgColor = (a << 24) | 0x0A0C13;
         context.method_25294(0, 0, screenW, screenH, bgColor);
 
-        // 2. SkyLyrics Branding (512x192 Textur, knackig scharf & prominent)
         int brandH = Math.max(68, Math.min(108, Math.round(screenH * 0.165f)));
         int brandW = Math.round((float) brandH * (512.0f / 192.0f));
 
@@ -59,51 +57,31 @@ public class LotusLoadingOverlay {
             int logoColor = (a << 24) | 0x00FFFFFF;
             context.method_25293(class_10799.field_56839, BRAND_LOGO, brandX, brandY, 0.0f, 0.0f, brandW, brandH, 512, 192, 512, 192, logoColor);
         } else if (client.field_1772 != null) {
-            // Eleganter Fallback Text
             int titleCol = (a << 24) | 0x45D6F5;
             context.method_27534(client.field_1772, class_2561.method_43470("SkyLyrics"), screenW / 2, brandY + brandH / 2 - 6, titleCol);
         }
 
-        // 3. Fortschrittsleiste
         int barX = (screenW - barW) / 2;
         int barY = brandY + brandH + 24;
 
         int trackAlpha = Math.round(alpha * 40.0f);
-        context.method_25294(barX, barY, barX + barW, barY + barH, (trackAlpha << 24) | 0x00FFFFFF);
+        context.method_25294(barX, barY, barX + barW, barY + barH, (trackAlpha << 24) | 0xFFFFFF);
 
-        float clampedProgress;
-        if (progress >= 0.0f) {
-            clampedProgress = class_3532.method_15363(progress, 0.0f, 1.0f);
-        } else {
-            long time = System.currentTimeMillis();
-            clampedProgress = (float) (0.5 + 0.5 * Math.sin(time * 0.0035));
-        }
-
-        int filledW = Math.round((float) barW * clampedProgress);
-        if (filledW > 0) {
-            for (int i = 0; i < filledW; i++) {
-                float t = (float) i / (float) Math.max(1, barW - 1);
-                int r = Math.round((1.0f - t) * 182f + t * 69f);
-                int g = Math.round((1.0f - t) * 136f + t * 214f);
-                int b = Math.round((1.0f - t) * 255f + t * 245f);
-                int col = (a << 24) | (r << 16) | (g << 8) | b;
-                context.method_25294(barX + i, barY, barX + i + 1, barY + barH, col);
-            }
-
-            int glowAlpha = Math.round(alpha * 38.0f);
+        float p = class_3532.method_15363(progress, 0.0f, 1.0f);
+        int fillW = Math.round(barW * p);
+        if (fillW > 0) {
+            int glowAlpha = Math.round(alpha * 70.0f);
             if (glowAlpha > 0) {
-                int glowCol = (glowAlpha << 24) | 0x0045D6F5;
-                context.method_25294(barX, barY - 1, barX + filledW, barY, glowCol);
-                context.method_25294(barX, barY + barH, barX + filledW, barY + barH + 1, glowCol);
+                context.method_25294(barX - 1, barY - 1, barX + fillW + 1, barY + barH + 1, (glowAlpha << 24) | 0x45D6F5);
             }
+            context.method_25296(barX, barY, barX + fillW, barY + barH, (a << 24) | 0x45D6F5, (a << 24) | 0x8A2BE2);
         }
 
-        // 4. Status-Text
         if (hasStatus && client.field_1772 != null) {
             int textAlpha = Math.round(alpha * 190.0f);
-            int textCol = (textAlpha << 24) | 0xCAD4E0;
-            int textY = barY + barH + 12;
-            context.method_27534(client.field_1772, class_2561.method_43470(statusText), screenW / 2, textY, textCol);
+            int textColor = (textAlpha << 24) | 0xB0C4DE;
+            int textY = barY + barH + 8;
+            context.method_27534(client.field_1772, class_2561.method_43470(statusText), screenW / 2, textY, textColor);
         }
     }
 }

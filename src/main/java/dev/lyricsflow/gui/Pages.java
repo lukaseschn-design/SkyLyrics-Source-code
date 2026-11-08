@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.util.Util
- *  net.minecraft.network.chat.Component
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.Options
- *  net.minecraft.client.gui.GuiGraphicsExtractor
- *  net.minecraft.client.CloudStatus
- *  net.minecraft.server.level.ParticleStatus
- *  net.minecraft.client.gui.screens.Screen
+ *  net.minecraft.class_156
+ *  net.minecraft.class_2561
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
+ *  net.minecraft.class_315
+ *  net.minecraft.class_332
+ *  net.minecraft.class_4063
+ *  net.minecraft.class_4066
+ *  net.minecraft.class_437
  */
 package dev.lyricsflow.gui;
 
@@ -21,12 +21,11 @@ import dev.lyricsflow.app.cosmetic.DeathFx;
 import dev.lyricsflow.app.sky.SkyImage;
 import dev.lyricsflow.app.sky.SkyPreset;
 import dev.lyricsflow.app.sky.WorldSky;
-import dev.lyricsflow.app.util.Fx;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
 import dev.lyricsflow.gui.HudEditorScreen;
 import dev.lyricsflow.gui.Icons;
-import dev.lyricsflow.gui.SkyLyricsScreen;
+import dev.lyricsflow.gui.LyricsFlowScreen;
 import dev.lyricsflow.gui.NowPlaying;
 import dev.lyricsflow.gui.PlayerScreen;
 import dev.lyricsflow.gui.Ui;
@@ -55,14 +54,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.function.IntConsumer;
 import java.util.function.IntSupplier;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.Options;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.CloudStatus;
-import net.minecraft.server.level.ParticleStatus;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.class_156;
+import net.minecraft.class_2561;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
+import net.minecraft.class_315;
+import net.minecraft.class_332;
+import net.minecraft.class_4063;
+import net.minecraft.class_4066;
+import net.minecraft.class_437;
 
 final class Pages {
     private static int skyPage;
@@ -95,7 +95,7 @@ final class Pages {
         return String.format(Locale.ROOT, "%.2fx", v);
     }
 
-    static List<Ui.Widget> build(SkyLyricsScreen.Tab tab, SkyLyricsScreen screen, boolean heroVisible) {
+    static List<Ui.Widget> build(LyricsFlowScreen.Tab tab, LyricsFlowScreen screen, boolean heroVisible) {
         ArrayList<Ui.Widget> l = new ArrayList<Ui.Widget>();
         switch (tab) {
             case NOW: {
@@ -152,7 +152,7 @@ final class Pages {
                 return true;
             }));
         }
-        l.add(new Ui.Card().add(new Ui.Button("lyricsflow.opt.open_player", "lyricsflow.opt.open_player.desc", () -> Ui.tr("lyricsflow.button.open", new Object[0]), "music", true, () -> Minecraft.getInstance().gui.setScreen((Screen)new PlayerScreen()))));
+        l.add(new Ui.Card().add(new Ui.Button("lyricsflow.opt.open_player", "lyricsflow.opt.open_player.desc", () -> Ui.tr("lyricsflow.button.open", new Object[0]), "music", true, () -> class_310.method_1551().method_1507((class_437)new PlayerScreen()))));
         l.add(new Ui.Section("lyricsflow.section.quick"));
         l.add(new Ui.Card().add(new Ui.Toggle("lyricsflow.opt.enabled", "lyricsflow.opt.enabled.desc", () -> Pages.c().enabled, v -> {
             Pages.c().enabled = v;
@@ -176,7 +176,7 @@ final class Pages {
         Pages.source(l);
     }
 
-    private static void lyrics(List<Ui.Widget> l, SkyLyricsScreen screen) {
+    private static void lyrics(List<Ui.Widget> l, LyricsFlowScreen screen) {
         l.add(new Ui.Section("lyricsflow.section.general"));
         l.add(new Ui.Card().add(new Ui.Toggle("lyricsflow.opt.lyrics_on", "lyricsflow.opt.lyrics_on.desc", () -> Pages.c().lyricsOn, v -> {
             Pages.c().lyricsOn = v;
@@ -227,7 +227,7 @@ final class Pages {
         })));
     }
 
-    private static void style(List<Ui.Widget> l, SkyLyricsScreen screen) {
+    private static void style(List<Ui.Widget> l, LyricsFlowScreen screen) {
         l.add(new Ui.Section("lyricsflow.section.font"));
         List<Fonts.LyricFont> fonts = Fonts.lyricsAll();
         l.add(new Ui.Card().add(new Ui.Chips("lyricsflow.section.font", null, (String[])fonts.stream().map(Fonts.LyricFont::name).toArray(String[]::new), () -> Math.max(0, Pages.indexOf(fonts, Pages.c().font)), i -> {
@@ -301,7 +301,7 @@ final class Pages {
         }, v -> Math.round(v) + "\u00b0"){
 
             @Override
-            public void render(GuiGraphicsExtractor g, float ox, float oy, double mx, double my, float a) {
+            public void render(class_332 g, float ox, float oy, double mx, double my, float a) {
                 super.render(g, ox, oy, mx, my, a);
                 Gfx.circle(g, ox + this.x + Gfx.textWidth(Ui.tr(this.label, new Object[0]), Ui.FB, 8.4f) + 10.0f, oy + this.y + 9.5f, 3.6f, Col.alpha(get.getAsInt(), a));
             }
@@ -369,7 +369,7 @@ final class Pages {
         return o;
     }
 
-    private static void sky(List<Ui.Widget> l, SkyLyricsScreen screen) {
+    private static void sky(List<Ui.Widget> l, LyricsFlowScreen screen) {
         Config c = Pages.sc();
         l.add(new Ui.Section("lyricsflow.ui.group.general"));
         l.add(new Ui.Card().add(new Ui.Toggle("lyricsflow.ui.sky.enabled", "lyricsflow.ui.sky.enabled.sub", () -> c.sky >= 0, v -> {
@@ -415,7 +415,7 @@ final class Pages {
                     hov[i] = Anim.approach(hov[i], over ? 1.0f : 0.0f, 14.0f);
                     float ih = cellH - 14.0f;
                     Gfx.round(g, fx - 1.0f, fy - 1.0f, cw + 2.0f, cellH + 2.0f, 7.0f, Col.alpha(on ? Themes.accent() : Col.lerp(-14541264, -13883584, hov[i]), a));
-                    Identifier id = SkyImage.thumb(name);
+                    class_2960 id = SkyImage.thumb(name);
                     if (id != null) {
                         Gfx.image(g, id, 160, 80, fx + 2.0f, fy + 2.0f, cw - 4.0f, ih - 2.0f, Col.alpha(-1, a));
                     } else {
@@ -442,9 +442,9 @@ final class Pages {
         l.add(new Ui.Info(() -> {
             String info = Ui.tr("lyricsflow.ui.sky.picture.info", "4096 x 2048");
             if (c.skyImage && SkyImage.files().isEmpty()) {
-                info += "\n" + Ui.tr("lyricsflow.ui.sky.picture.none", new Object[0]);
+                info = (String)info + "\n" + Ui.tr("lyricsflow.ui.sky.picture.none", new Object[0]);
             } else if (!SkyImage.size().isEmpty()) {
-                info += "\n" + Ui.tr("lyricsflow.ui.sky.picture.loaded", SkyImage.size());
+                info = (String)info + "\n" + Ui.tr("lyricsflow.ui.sky.picture.loaded", SkyImage.size());
             }
             return info;
         }));
@@ -525,7 +525,7 @@ final class Pages {
         })));
     }
 
-    private static void cosmetics(List<Ui.Widget> l, SkyLyricsScreen screen) {
+    private static void cosmetics(List<Ui.Widget> l, LyricsFlowScreen screen) {
         l.add(new Ui.Section("lyricsflow.section.cosmetics"));
         l.add(new Ui.Info(() -> Ui.tr("lyricsflow.opt.cosmetic.desc", new Object[0])));
         String[] ids = Cosmetics.IDS;
@@ -555,7 +555,7 @@ final class Pages {
             death.add(new Ui.Toggle("lyricsflow.ui.style.deathothers", "lyricsflow.ui.style.deathothers.sub", () -> sc.deathOthers, v -> {
                 sc.deathOthers = v;
             })).add(new Ui.Button("lyricsflow.ui.style.deathtest", "lyricsflow.ui.style.deathtest.sub", () -> Ui.tr("lyricsflow.ui.style.deathtest", new Object[0]), "play", true, () -> {
-                Minecraft.getInstance().gui.setScreen(null);
+                class_310.method_1551().method_1507(null);
                 DeathFx.test();
             }));
         }
@@ -634,8 +634,8 @@ final class Pages {
             case "waiting" -> -11414;
             case "error" -> -495247;
             default -> -9541498;
-        })).add(new Ui.Button("lyricsflow.opt.spotify_dashboard", "lyricsflow.opt.spotify_dashboard.desc", () -> Ui.tr("lyricsflow.button.open", new Object[0]), "music", false, () -> Fx.openUri("https://developer.spotify.com/dashboard"))).add(new Ui.Button("lyricsflow.opt.spotify_copy_redirect", "lyricsflow.opt.spotify_copy_redirect.desc", () -> Ui.tr("lyricsflow.button.copy", new Object[0]), "copy", false, () -> {
-            Minecraft.getInstance().keyboardHandler.setClipboard("http://127.0.0.1:8789/callback");
+        })).add(new Ui.Button("lyricsflow.opt.spotify_dashboard", "lyricsflow.opt.spotify_dashboard.desc", () -> Ui.tr("lyricsflow.button.open", new Object[0]), "music", false, () -> class_156.method_668().method_670("https://developer.spotify.com/dashboard"))).add(new Ui.Button("lyricsflow.opt.spotify_copy_redirect", "lyricsflow.opt.spotify_copy_redirect.desc", () -> Ui.tr("lyricsflow.button.copy", new Object[0]), "copy", false, () -> {
+            class_310.method_1551().field_1774.method_1455("http://127.0.0.1:8789/callback");
             Pages.note("lyricsflow.opt.spotify_copied");
         })).add(new Ui.TextField("lyricsflow.opt.spotify_client", "lyricsflow.opt.spotify_client.desc", "lyricsflow.opt.spotify_client.hint", SpotifyWeb::clientId, SpotifyWeb::setClientId)).add(new Ui.Button("lyricsflow.opt.spotify_login", null, () -> Ui.tr(SpotifyWeb.connected() ? "lyricsflow.button.disconnect" : "lyricsflow.button.connect", new Object[0]), "refresh", !SpotifyWeb.connected(), () -> {
             if (SpotifyWeb.connected()) {
@@ -652,7 +652,7 @@ final class Pages {
         l.add(new Ui.Info(() -> Ui.tr("lyricsflow.info.sync_offset", new Object[0])));
     }
 
-    private static void extra(List<Ui.Widget> l, SkyLyricsScreen screen) {
+    private static void extra(List<Ui.Widget> l, LyricsFlowScreen screen) {
         l.add(new Ui.Section("lyricsflow.section.extra_hud"));
         l.add(new Ui.Card().add(new Ui.Toggle("lyricsflow.opt.hud_keys", "lyricsflow.opt.hud_keys.desc", () -> Pages.c().hudKeys, v -> {
             Pages.c().hudKeys = v;
@@ -672,7 +672,7 @@ final class Pages {
             Pages.c().hudColorMode = i;
         })).add(new Ui.Choice("lyricsflow.opt.hud_style", "lyricsflow.opt.hud_style.desc", new String[]{"lyricsflow.hud_style.round", "lyricsflow.hud_style.minecraft"}, () -> Pages.c().hudRound ? 0 : 1, i -> {
             Pages.c().hudRound = i == 0;
-        })).add(new Ui.Button("lyricsflow.opt.hud_move", "lyricsflow.opt.hud_move.desc", () -> Ui.tr("lyricsflow.button.open", new Object[0]), "move", true, () -> Minecraft.getInstance().gui.setScreen((Screen)new HudEditorScreen(screen)))).add(new Ui.Button("lyricsflow.opt.hud_reset", null, () -> Ui.tr("lyricsflow.button.reset", new Object[0]), "refresh", false, () -> {
+        })).add(new Ui.Button("lyricsflow.opt.hud_move", "lyricsflow.opt.hud_move.desc", () -> Ui.tr("lyricsflow.button.open", new Object[0]), "move", true, () -> class_310.method_1551().method_1507((class_437)new HudEditorScreen(screen)))).add(new Ui.Button("lyricsflow.opt.hud_reset", null, () -> Ui.tr("lyricsflow.button.reset", new Object[0]), "refresh", false, () -> {
             ExtraHud.resetPositions();
             ConfigManager.save();
         })));
@@ -704,7 +704,7 @@ final class Pages {
         })));
     }
 
-    private static void saved(List<Ui.Widget> l, SkyLyricsScreen screen) {
+    private static void saved(List<Ui.Widget> l, LyricsFlowScreen screen) {
         MediaManager mm = MediaManager.get();
         l.add(new Ui.Section("lyricsflow.section.timing"));
         l.add(new Ui.Card().add(new Ui.Slider("lyricsflow.opt.sync_offset", -2000.0, 2000.0, 50.0, () -> Pages.c().syncOffsetMs, v -> {
@@ -720,7 +720,7 @@ final class Pages {
             ConfigManager.save();
             screen.rebuildSoon();
         })).add(new Ui.Button("lyricsflow.opt.paste_profile", "lyricsflow.opt.paste_profile.desc", () -> Ui.tr("lyricsflow.button.paste", new Object[0]), "paste", false, () -> {
-            String json = ConfigManager.importCode(Minecraft.getInstance().keyboardHandler.getClipboard());
+            String json = ConfigManager.importCode(class_310.method_1551().field_1774.method_1460());
             if (json == null) {
                 pasteStatus = Ui.tr("lyricsflow.profile.paste_bad", new Object[0]);
                 UiSounds.play(UiSounds.TOGGLE_OFF, 0.8f);
@@ -763,7 +763,7 @@ final class Pages {
                     if (json == null) {
                         return;
                     }
-                    Minecraft.getInstance().keyboardHandler.setClipboard(ConfigManager.exportCode(json));
+                    class_310.method_1551().field_1774.method_1455(ConfigManager.exportCode(json));
                     pasteStatus = Ui.tr("lyricsflow.profile.copied", name[0]);
                     screen.rebuildSoon();
                 }));
@@ -813,7 +813,7 @@ final class Pages {
         ConfigManager.save();
     }
 
-    private static void perf(List<Ui.Widget> l, SkyLyricsScreen screen) {
+    private static void perf(List<Ui.Widget> l, LyricsFlowScreen screen) {
         l.add(new Ui.Section("lyricsflow.section.perf_now"));
         l.add(new Ui.Card().add(new Ui.Custom(w -> Float.valueOf(50.0f), (g, x, y, w, h, mx, my, a) -> {
             String num = Integer.toString(AutoPerf.fps());
@@ -850,26 +850,26 @@ final class Pages {
             Pages.note(i == 0 ? "lyricsflow.perf.profile.chill" : "lyricsflow.perf.profile.pvp");
             screen.rebuildSoon();
         })).add(new Ui.Toggle("lyricsflow.perf.boost", "lyricsflow.perf.boost.desc", () -> Pages.c().fpsBoost, FpsBoost::apply)));
-        Options o = Minecraft.getInstance().options;
+        class_315 o = class_310.method_1551().field_1690;
         l.add(new Ui.Section("lyricsflow.section.perf_game"));
-        l.add(new Ui.Card().add(new Ui.Slider("lyricsflow.perf.render_distance", 2.0, 32.0, 1.0, () -> ((Integer)o.renderDistance().get()).intValue(), v -> {
-            o.renderDistance().set((int)Math.round(v));
-            o.save();
-        }, v -> Math.round(v) + " " + Ui.tr("lyricsflow.perf.chunks", new Object[0]))).add(new Ui.Slider("lyricsflow.perf.max_fps", 30.0, 260.0, 10.0, () -> ((Integer)o.framerateLimit().get()).intValue(), v -> {
-            o.framerateLimit().set((int)Math.round(v));
-            o.save();
-        }, v -> v >= 260.0 ? Ui.tr("lyricsflow.perf.unlimited", new Object[0]) : Math.round(v) + " FPS")).add(new Ui.Choice("lyricsflow.perf.clouds", null, new String[]{"lyricsflow.perf.off", "lyricsflow.perf.fast", "lyricsflow.perf.fancy"}, () -> ((CloudStatus)o.cloudStatus().get()).ordinal(), i -> {
-            o.cloudStatus().set(CloudStatus.values()[i]);
-            o.save();
-        })).add(new Ui.Choice("lyricsflow.perf.particles", null, new String[]{"lyricsflow.perf.all", "lyricsflow.perf.decreased", "lyricsflow.perf.minimal"}, () -> ((ParticleStatus)o.particles().get()).ordinal(), i -> {
-            o.particles().set(ParticleStatus.values()[i]);
-            o.save();
-        })).add(new Ui.Toggle("lyricsflow.perf.shadows", null, () -> (Boolean)o.entityShadows().get(), v -> {
-            o.entityShadows().set(v);
-            o.save();
-        })).add(new Ui.Toggle("lyricsflow.perf.vsync", "lyricsflow.perf.vsync.desc", () -> (Boolean)o.enableVsync().get(), v -> {
-            o.enableVsync().set(v);
-            o.save();
+        l.add(new Ui.Card().add(new Ui.Slider("lyricsflow.perf.render_distance", 2.0, 32.0, 1.0, () -> ((Integer)o.method_42503().method_41753()).intValue(), v -> {
+            o.method_42503().method_41748((int)Math.round(v));
+            o.method_1640();
+        }, v -> Math.round(v) + " " + Ui.tr("lyricsflow.perf.chunks", new Object[0]))).add(new Ui.Slider("lyricsflow.perf.max_fps", 30.0, 260.0, 10.0, () -> ((Integer)o.method_42524().method_41753()).intValue(), v -> {
+            o.method_42524().method_41748((int)Math.round(v));
+            o.method_1640();
+        }, v -> v >= 260.0 ? Ui.tr("lyricsflow.perf.unlimited", new Object[0]) : Math.round(v) + " FPS")).add(new Ui.Choice("lyricsflow.perf.clouds", null, new String[]{"lyricsflow.perf.off", "lyricsflow.perf.fast", "lyricsflow.perf.fancy"}, () -> ((class_4063)o.method_42528().method_41753()).ordinal(), i -> {
+            o.method_42528().method_41748(class_4063.values()[i]);
+            o.method_1640();
+        })).add(new Ui.Choice("lyricsflow.perf.particles", null, new String[]{"lyricsflow.perf.all", "lyricsflow.perf.decreased", "lyricsflow.perf.minimal"}, () -> ((class_4066)o.method_42475().method_41753()).ordinal(), i -> {
+            o.method_42475().method_41748(class_4066.values()[i]);
+            o.method_1640();
+        })).add(new Ui.Toggle("lyricsflow.perf.shadows", null, () -> (Boolean)o.method_42435().method_41753(), v -> {
+            o.method_42435().method_41748(v);
+            o.method_1640();
+        })).add(new Ui.Toggle("lyricsflow.perf.vsync", "lyricsflow.perf.vsync.desc", () -> (Boolean)o.method_42433().method_41753(), v -> {
+            o.method_42433().method_41748(v);
+            o.method_1640();
         })));
         l.add(new Ui.Section("lyricsflow.section.perf_effects"));
         l.add(new Ui.Card().add(new Ui.Toggle("lyricsflow.perf.sky_color", null, () -> Pages.sc().fxSkyColor, v -> {
@@ -900,9 +900,9 @@ final class Pages {
     }
 
     private static void note(String key) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.gui != null) {
-            mc.gui.hud.setOverlayMessage((Component)Component.literal((String)Ui.tr(key, new Object[0])), false);
+        class_310 mc = class_310.method_1551();
+        if (mc.field_1705 != null) {
+            mc.field_1705.method_1758((class_2561)class_2561.method_43470((String)Ui.tr(key, new Object[0])), false);
         }
     }
 
@@ -915,3 +915,4 @@ final class Pages {
         TARGETS = new int[]{0, 60, 90, 120, 144, 240};
     }
 }
+

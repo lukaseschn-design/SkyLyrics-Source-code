@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  com.mojang.blaze3d.platform.NativeImage
- *  net.minecraft.client.renderer.texture.DynamicTexture
- *  net.minecraft.client.renderer.texture.AbstractTexture
- *  net.minecraft.client.renderer.RenderPipelines
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.GuiGraphicsExtractor
+ *  net.minecraft.class_1011
+ *  net.minecraft.class_1043
+ *  net.minecraft.class_1044
+ *  net.minecraft.class_10799
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
+ *  net.minecraft.class_332
  */
 package dev.lyricsflow.app.hud;
 
@@ -36,13 +36,13 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.imageio.ImageIO;
-import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.class_1011;
+import net.minecraft.class_1043;
+import net.minecraft.class_1044;
+import net.minecraft.class_10799;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
+import net.minecraft.class_332;
 
 public final class SkyThumbs {
     public static final int TW = 288;
@@ -205,10 +205,10 @@ public final class SkyThumbs {
         return fArray;
     }
 
-    public static boolean draw(GuiGraphicsExtractor g, SkyPreset p, int x, int y, int w, int h, float alpha) {
+    public static boolean draw(class_332 g, SkyPreset p, int x, int y, int w, int h, float alpha) {
         if (p.painted()) {
-            Identifier img = Identifier.fromNamespaceAndPath((String)"lyricsflow", (String)("textures/gui/skythumbs/" + p.name().toLowerCase(Locale.ROOT) + ".png"));
-            g.blit(RenderPipelines.GUI_TEXTURED, img, x, y, 0.0f, 0.0f, w, h, w, h, Gfx.argb(0xFFFFFF, alpha));
+            class_2960 img = class_2960.method_60655((String)"lyricsflow", (String)("textures/gui/skythumbs/" + p.name().toLowerCase(Locale.ROOT) + ".png"));
+            g.method_25291(class_10799.field_56883, img, x, y, 0.0f, 0.0f, w, h, w, h, Gfx.argb(0xFFFFFF, alpha));
             return true;
         }
         SkyThumbs.upload();
@@ -221,12 +221,12 @@ public final class SkyThumbs {
         if (shown == null) {
             return false;
         }
-        Identifier id = SkyThumbs.id(p);
-        g.blit(RenderPipelines.GUI_TEXTURED, id, x, y, 0.0f, 0.0f, w, h, w, h, Gfx.argb(0xFFFFFF, alpha));
+        class_2960 id = SkyThumbs.id(p);
+        g.method_25291(class_10799.field_56883, id, x, y, 0.0f, 0.0f, w, h, w, h, Gfx.argb(0xFFFFFF, alpha));
         return true;
     }
 
-    public static Identifier texture(SkyPreset p) {
+    public static class_2960 texture(SkyPreset p) {
         SkyThumbs.upload();
         SkyPainter.Spec s = SkyTextures.spec(p);
         String key = SkyTextures.key(s);
@@ -246,8 +246,8 @@ public final class SkyThumbs {
         }
     }
 
-    private static Identifier id(SkyPreset p) {
-        return Identifier.fromNamespaceAndPath((String)"lyricsflow", (String)("thumb/" + p.name().toLowerCase(Locale.ROOT)));
+    private static class_2960 id(SkyPreset p) {
+        return class_2960.method_60655((String)"lyricsflow", (String)("thumb/" + p.name().toLowerCase(Locale.ROOT)));
     }
 
     private static void request(SkyPreset p, SkyPainter.Spec s, String key) {
@@ -256,7 +256,7 @@ public final class SkyThumbs {
                 try {
                     Path file = SkyThumbs.cacheFile(key);
                     if (file != null && Files.isRegularFile(file, new LinkOption[0])) {
-                        DONE.add(new Done(p.name(), key, NativeImage.read((byte[])Files.readAllBytes(file))));
+                        DONE.add(new Done(p.name(), key, class_1011.method_49277((byte[])Files.readAllBytes(file))));
                         return;
                     }
                     float[] lk = SkyThumbs.look(s.kind());
@@ -275,7 +275,7 @@ public final class SkyThumbs {
                             // empty catch block
                         }
                     }
-                    DONE.add(new Done(p.name(), key, NativeImage.read((byte[])png)));
+                    DONE.add(new Done(p.name(), key, class_1011.method_49277((byte[])png)));
                 }
                 catch (Throwable var11) {
                     Core.LOG.debug("Himmel-Vorschau fehlgeschlagen", var11);
@@ -291,7 +291,7 @@ public final class SkyThumbs {
             lastUpload = frame;
             try {
                 SkyPreset p = SkyPreset.valueOf(d.name());
-                Minecraft.getInstance().getTextureManager().register(SkyThumbs.id(p), (AbstractTexture)new DynamicTexture(() -> "lyricsflow_thumb_" + d.name(), d.img()));
+                class_310.method_1551().method_1531().method_4616(SkyThumbs.id(p), (class_1044)new class_1043(() -> "lyricsflow_thumb_" + d.name(), d.img()));
                 SHOWN.put(d.name(), d.key());
             }
             catch (Throwable var4) {
@@ -301,7 +301,7 @@ public final class SkyThumbs {
         }
     }
 
-    private record Done(String name, String key, NativeImage img) {
+    private record Done(String name, String key, class_1011 img) {
     }
 }
 

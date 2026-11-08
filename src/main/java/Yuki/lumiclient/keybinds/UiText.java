@@ -2,8 +2,8 @@ package Yuki.lumiclient.keybinds;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.class_2561;
+import net.minecraft.class_5250;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,13 +18,13 @@ public final class UiText {
     private UiText() {
     }
 
-    public static MutableComponent tr(String key, Object... args) {
+    public static class_5250 tr(String key, Object... args) {
         String translationKey = "studiouskeybinds." + key;
         String fallback = ENGLISH.getOrDefault(translationKey, key.replace('_', ' '));
         if (args == null || args.length == 0) {
-            return Component.translatableWithFallback(translationKey, fallback);
+            return class_2561.method_48321(translationKey, fallback);
         }
-        return Component.translatableWithFallback(translationKey, fallback, args);
+        return class_2561.method_48322(translationKey, fallback, args);
     }
 
     private static Map<String, String> loadEnglish() {

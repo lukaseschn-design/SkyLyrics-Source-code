@@ -2,7 +2,7 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.Minecraft
+ *  net.minecraft.class_310
  */
 package dev.lyricsflow.lyrics;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import net.minecraft.client.Minecraft;
+import net.minecraft.class_310;
 
 public final class Lyrics {
     private static final ThreadLocal<Double> SONG_RATE = ThreadLocal.withInitial(() -> 4.5);
@@ -30,7 +30,7 @@ public final class Lyrics {
         }
         Locale loc = Locale.ROOT;
         try {
-            String lang = Minecraft.getInstance().options.languageCode;
+            String lang = class_310.method_1551().field_1690.field_1883;
             if (lang != null && (lang.startsWith("tr") || lang.startsWith("az"))) {
                 loc = Locale.forLanguageTag("tr");
             }
@@ -248,3 +248,4 @@ public final class Lyrics {
         }
     }
 }
+

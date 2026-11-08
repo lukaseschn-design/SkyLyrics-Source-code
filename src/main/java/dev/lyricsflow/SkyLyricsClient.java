@@ -9,22 +9,21 @@
  *  net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback$RegistrationHelper
  *  net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry
  *  net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements
- *  net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents
+ *  net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents
  *  net.fabricmc.fabric.api.event.player.AttackEntityCallback
- *  net.minecraft.client.renderer.entity.state.AvatarRenderState
- *  net.minecraft.client.renderer.entity.player.AvatarRenderer
- *  net.minecraft.world.InteractionResult
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.renderer.entity.RenderLayerParent
- *  net.minecraft.client.renderer.entity.layers.RenderLayer
- *  net.minecraft.client.model.player.PlayerModel
+ *  net.minecraft.class_10055
+ *  net.minecraft.class_1007
+ *  net.minecraft.class_1269
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_3883
+ *  net.minecraft.class_3887
+ *  net.minecraft.class_591
  */
 package dev.lyricsflow;
 
 import dev.lyricsflow.Keys;
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.app.Core;
-import dev.lyricsflow.compat.LegacyBufferSource;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.media.CosmeticSync;
 import dev.lyricsflow.media.MediaManager;
@@ -39,18 +38,18 @@ import dev.lyricsflow.render.WorldLyrics;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityRenderLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityFeatureRendererRegistrationCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
-import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.minecraft.client.renderer.entity.state.AvatarRenderState;
-import net.minecraft.client.renderer.entity.player.AvatarRenderer;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.model.player.PlayerModel;
+import net.minecraft.class_10055;
+import net.minecraft.class_1007;
+import net.minecraft.class_1269;
+import net.minecraft.class_2960;
+import net.minecraft.class_3883;
+import net.minecraft.class_3887;
+import net.minecraft.class_591;
 
 public class SkyLyricsClient
 implements ClientModInitializer {
@@ -58,38 +57,37 @@ implements ClientModInitializer {
         ConfigManager.load();
         Keys.register();
         Core.init();
-        HudElementRegistry.attachElementBefore((Identifier)VanillaHudElements.MISC_OVERLAYS, (Identifier)SkyLyrics.id("world_lyrics"), Hud::renderWorldLayer);
-        HudElementRegistry.attachElementBefore((Identifier)VanillaHudElements.CHAT, (Identifier)SkyLyrics.id("top_bar"), Hud::renderTopLayer);
-        HudElementRegistry.attachElementBefore((Identifier)VanillaHudElements.CHAT, (Identifier)SkyLyrics.id("extra_hud"), ExtraHud::render);
+        HudElementRegistry.attachElementBefore((class_2960)VanillaHudElements.MISC_OVERLAYS, (class_2960)LyricsFlow.id("world_lyrics"), Hud::renderWorldLayer);
+        HudElementRegistry.attachElementBefore((class_2960)VanillaHudElements.CHAT, (class_2960)LyricsFlow.id("top_bar"), Hud::renderTopLayer);
+        HudElementRegistry.attachElementBefore((class_2960)VanillaHudElements.CHAT, (class_2960)LyricsFlow.id("extra_hud"), ExtraHud::render);
         ExtraHud.init();
         ClientTickEvents.END_CLIENT_TICK.register(Keys::tick);
         ClientTickEvents.END_CLIENT_TICK.register(LivePing::tick);
         ClientTickEvents.END_CLIENT_TICK.register(CosmeticSync::tick);
         ClientTickEvents.END_CLIENT_TICK.register(AutoPerf::tick);
-        LevelRenderEvents.AFTER_TRANSLUCENT_FEATURES.register(ctx -> {
+        WorldRenderEvents.AFTER_ENTITIES.register(ctx -> {
             if (Chroma.drawsLate() || WorldLyrics.lateForShaders()) {
                 Chroma.deferred = true;
                 return;
             }
-            try (LegacyBufferSource.BufferSource buffers = new LegacyBufferSource.BufferSource(ctx.submitNodeCollector())) {
-                Hud.renderWorldSky(ctx.poseStack(), buffers);
-                WorldLyrics.renderWorld(ctx.poseStack(), buffers);
-            }
+            Hud.renderWorldSky(ctx.matrices(), ctx.consumers());
+            WorldLyrics.renderWorld(ctx.matrices(), ctx.consumers());
         });
-        LivingEntityRenderLayerRegistrationCallback.EVENT.register((type, renderer, helper, ctx) -> {
-            if (renderer instanceof AvatarRenderer) {
-                AvatarRenderer r = (AvatarRenderer)renderer;
+        LivingEntityFeatureRendererRegistrationCallback.EVENT.register((type, renderer, helper, ctx) -> {
+            if (renderer instanceof class_1007) {
+                class_1007 r = (class_1007)renderer;
                 SkyLyricsClient.registerLayers(helper, r);
             }
         });
-        AttackEntityCallback.EVENT.register((player, level, hand, entity, hit) -> InteractionResult.PASS);
+        AttackEntityCallback.EVENT.register((player, level, hand, entity, hit) -> class_1269.field_5811);
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> MediaManager.get().start());
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> MediaManager.get().stop());
-        SkyLyrics.LOG.info("SkyLyrics {} ready", (Object)"v1.0");
+        LyricsFlow.LOG.info("SkyLyrics {} ready", (Object)"v1.0");
     }
 
-    private static void registerLayers(LivingEntityRenderLayerRegistrationCallback.RegistrationHelper helper, AvatarRenderer<?> r) {
-        helper.register((RenderLayer)new HelmetLayer((RenderLayerParent<AvatarRenderState, PlayerModel>)r));
-        helper.register((RenderLayer)new CosmeticLayer((RenderLayerParent<AvatarRenderState, PlayerModel>)r));
+    private static void registerLayers(LivingEntityFeatureRendererRegistrationCallback.RegistrationHelper helper, class_1007<?> r) {
+        helper.register((class_3887)new HelmetLayer((class_3883<class_10055, class_591>)r));
+        helper.register((class_3887)new CosmeticLayer((class_3883<class_10055, class_591>)r));
     }
 }
+

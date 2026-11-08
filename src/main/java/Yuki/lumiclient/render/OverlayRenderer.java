@@ -2,10 +2,10 @@ package Yuki.lumiclient.render;
 
 import Yuki.lumiclient.render.nanovg.GlStateSnapshot;
 import Yuki.lumiclient.render.nanovg.NVGRenderer;
-import com.mojang.blaze3d.pipeline.RenderTarget;
-import com.mojang.renderpearl.api.textures.GpuTexture;
-import com.mojang.renderpearl.backend.opengl.GlTexture;
-import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.textures.GpuTexture;
+import net.minecraft.class_10868;
+import net.minecraft.class_276;
+import net.minecraft.class_310;
 import org.lwjgl.opengl.GL33C;
 
 public final class OverlayRenderer {
@@ -16,34 +16,34 @@ public final class OverlayRenderer {
     }
 
     public static float uiScale() {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc == null || mc.getWindow() == null) return 1.0f;
-        return Math.max(1.0f, (float) mc.getWindow().getHeight() / 1080.0f);
+        class_310 mc = class_310.method_1551();
+        if (mc == null || mc.method_22683() == null) return 1.0f;
+        return Math.max(1.0f, (float) mc.method_22683().method_4506() / 1080.0f);
     }
 
     public static void render() {
         if (crashed) return;
-        Minecraft mc = Minecraft.getInstance();
+        class_310 mc = class_310.method_1551();
         if (mc == null) return;
-        if (!(mc.gui.screen() instanceof NvgDrawable nvgDrawable)) return;
+        if (!(mc.field_1755 instanceof NvgDrawable nvgDrawable)) return;
 
-        RenderTarget target = mc.gameRenderer.mainRenderTarget();
+        class_276 target = mc.method_1522();
         if (target == null) return;
-        GpuTexture tex = target.getColorTexture();
-        if (!(tex instanceof GlTexture colorTexture)) return;
+        GpuTexture tex = target.method_30277();
+        if (!(tex instanceof class_10868 colorTexture)) return;
 
         try {
             GlStateSnapshot state = GlStateSnapshot.capture();
             try {
-                if (!bindOverlayFbo(colorTexture, target.width, target.height)) {
+                if (!bindOverlayFbo(colorTexture, target.field_1482, target.field_1481)) {
                     return;
                 }
                 NVGRenderer vg = NVGRenderer.get();
                 if (vg.hasFont()) {
                     float scale = uiScale();
-                    float uiWidth = (float) target.width / scale;
-                    float uiHeight = (float) target.height / scale;
-                    vg.beginFrame(target.width, target.height, 1.0f);
+                    float uiWidth = (float) target.field_1482 / scale;
+                    float uiHeight = (float) target.field_1481 / scale;
+                    vg.beginFrame(target.field_1482, target.field_1481, 1.0f);
                     vg.save();
                     vg.scale(scale);
                     nvgDrawable.renderNvg(vg, uiMouseX(), uiMouseY(), uiWidth, uiHeight);
@@ -58,12 +58,12 @@ public final class OverlayRenderer {
         }
     }
 
-    private static boolean bindOverlayFbo(GlTexture colorTexture, int width, int height) {
+    private static boolean bindOverlayFbo(class_10868 colorTexture, int width, int height) {
         if (fbo == -1) {
             fbo = GL33C.glGenFramebuffers();
         }
         GL33C.glBindFramebuffer(36160, fbo);
-        GL33C.glFramebufferTexture2D(36160, 36064, 3553, colorTexture.glId(), 0);
+        GL33C.glFramebufferTexture2D(36160, 36064, 3553, colorTexture.method_68427(), 0);
         if (GL33C.glCheckFramebufferStatus(36160) != 36053) {
             return false;
         }
@@ -73,33 +73,33 @@ public final class OverlayRenderer {
     }
 
     public static float uiMouseX() {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc == null || mc.mouseHandler == null || mc.getWindow() == null) return 0f;
-        return (float) (mc.mouseHandler.xpos() * (double) mc.getWindow().getWidth() / (double) Math.max(1, mc.getWindow().getScreenWidth())) / uiScale();
+        class_310 mc = class_310.method_1551();
+        if (mc == null || mc.field_1729 == null || mc.method_22683() == null) return 0f;
+        return (float) (mc.field_1729.method_1603() * (double) mc.method_22683().method_4489() / (double) Math.max(1, mc.method_22683().method_4480())) / uiScale();
     }
 
     public static float uiMouseY() {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc == null || mc.mouseHandler == null || mc.getWindow() == null) return 0f;
-        return (float) (mc.mouseHandler.ypos() * (double) mc.getWindow().getHeight() / (double) Math.max(1, mc.getWindow().getScreenHeight())) / uiScale();
+        class_310 mc = class_310.method_1551();
+        if (mc == null || mc.field_1729 == null || mc.method_22683() == null) return 0f;
+        return (float) (mc.field_1729.method_1604() * (double) mc.method_22683().method_4506() / (double) Math.max(1, mc.method_22683().method_4507())) / uiScale();
     }
 
     public static float guiToUi(double guiCoord) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc == null || mc.getWindow() == null) return (float) guiCoord;
-        float pixels = (float) (guiCoord * (double) mc.getWindow().getGuiScale());
+        class_310 mc = class_310.method_1551();
+        if (mc == null || mc.method_22683() == null) return (float) guiCoord;
+        float pixels = (float) (guiCoord * (double) mc.method_22683().method_4495());
         return pixels / uiScale();
     }
 
     public static float uiWidth() {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc == null || mc.getWindow() == null) return 960f;
-        return (float) mc.getWindow().getWidth() / uiScale();
+        class_310 mc = class_310.method_1551();
+        if (mc == null || mc.method_22683() == null) return 960f;
+        return (float) mc.method_22683().method_4489() / uiScale();
     }
 
     public static float uiHeight() {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc == null || mc.getWindow() == null) return 540f;
-        return (float) mc.getWindow().getHeight() / uiScale();
+        class_310 mc = class_310.method_1551();
+        if (mc == null || mc.method_22683() == null) return 540f;
+        return (float) mc.method_22683().method_4506() / uiScale();
     }
 }

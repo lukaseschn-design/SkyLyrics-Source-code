@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.resources.language.I18n
- *  net.minecraft.client.renderer.RenderPipelines
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.GuiGraphicsExtractor
+ *  net.minecraft.class_1074
+ *  net.minecraft.class_10799
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
+ *  net.minecraft.class_332
  */
 package dev.lyricsflow.render;
 
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
 import dev.lyricsflow.gui.CoverArt;
@@ -26,16 +26,16 @@ import dev.lyricsflow.util.Anim;
 import dev.lyricsflow.util.Col;
 import java.time.LocalTime;
 import java.util.List;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.class_1074;
+import net.minecraft.class_10799;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
+import net.minecraft.class_332;
 
 public final class TopBar {
-    private static final Identifier SPOTIFY = SkyLyrics.id("textures/gui/logos/spotify.png");
-    private static final Identifier YOUTUBE = SkyLyrics.id("textures/gui/logos/youtube.png");
-    private static final Identifier YTMUSIC = SkyLyrics.id("textures/gui/logos/ytmusic.png");
+    private static final class_2960 SPOTIFY = LyricsFlow.id("textures/gui/logos/spotify.png");
+    private static final class_2960 YOUTUBE = LyricsFlow.id("textures/gui/logos/youtube.png");
+    private static final class_2960 YTMUSIC = LyricsFlow.id("textures/gui/logos/ytmusic.png");
     private static Phase phase = Phase.TITLE;
     private static long phaseStart = System.nanoTime();
     private static float vis;
@@ -81,7 +81,7 @@ public final class TopBar {
         return (float)(System.nanoTime() - phaseStart) / 1.0E9f;
     }
 
-    public static void render(GuiGraphicsExtractor g, boolean preview) {
+    public static void render(class_332 g, boolean preview) {
         int barBg;
         String key;
         boolean mcStyle;
@@ -125,8 +125,8 @@ public final class TopBar {
         float textY = (h - (font.equals("minecraft") ? ts * 0.78f : ts)) / 2.0f + (font.equals("minecraft") ? 0.5f * k : -0.3f * k);
         if (!c.lyricsOn && !preview) {
             vis = 1.0f;
-            float cx = c.topBarX * (float)g.guiWidth();
-            float cy = Math.max(1.0f, Math.min((float)g.guiHeight() - h - 1.0f, c.topBarY * (float)g.guiHeight()));
+            float cx = c.topBarX * (float)g.method_51421();
+            float cy = Math.max(1.0f, Math.min((float)g.method_51443() - h - 1.0f, c.topBarY * (float)g.method_51443()));
             TopBar.drawChips(g, c, cx, cy, 0.0f, h, ts, font, Hud.focusA);
             return;
         }
@@ -142,16 +142,17 @@ public final class TopBar {
                 word = line.wordAt(t);
             }
         }
-        String title = track != null ? track.title : I18n.get((String)"lyricsflow.topbar.preview_title", (Object[])new Object[0]);
+        String title = track != null ? track.title : class_1074.method_4662((String)"lyricsflow.topbar.preview_title", (Object[])new Object[0]);
         String artist = track != null ? track.artist : "SkyLyrics";
         boolean showLyrics = !simple && phase == Phase.LYRICS && line != null;
         String status = null;
         if (phase == Phase.PAUSED) {
-            status = I18n.get((String)"lyricsflow.topbar.paused", (Object[])new Object[0]);
+            status = class_1074.method_4662((String)"lyricsflow.topbar.paused", (Object[])new Object[0]);
         } else if (phase == Phase.RESUMED) {
-            status = I18n.get((String)"lyricsflow.topbar.resumed", (Object[])new Object[0]);
+            status = class_1074.method_4662((String)"lyricsflow.topbar.resumed", (Object[])new Object[0]);
         }
         key = showLyrics ? "L" + line.index : (status != null ? "S" + String.valueOf((Object)phase) : "T" + title);
+        String string = key;
         if (!key.equals(contentKey)) {
             contentKey = key;
             swap = 0.0f;
@@ -165,14 +166,14 @@ public final class TopBar {
         float iconW = h;
         float barsW = 14.0f * k;
         float pad = 7.0f * k;
-        float maxText = Math.min(330.0f * k, (float)g.guiWidth() * 0.62f);
+        float maxText = Math.min(330.0f * k, (float)g.method_51421() * 0.62f);
         float targetW = iconW + Math.min(textW, maxText) + barsW + pad * 2.0f;
         targetW = Math.max(targetW, 150.0f * k);
         width = Anim.approach(width, targetW, 8.0f);
-        float x = c.topBarX * (float)g.guiWidth() - width / 2.0f;
-        float y = c.topBarY * (float)g.guiHeight() + (1.0f - Anim.easeOutCubic(vis)) * -10.0f;
-        x = Math.max(2.0f, Math.min((float)g.guiWidth() - width - 2.0f, x));
-        y = Math.max(1.0f, Math.min((float)g.guiHeight() - h - 1.0f, y));
+        float x = c.topBarX * (float)g.method_51421() - width / 2.0f;
+        float y = c.topBarY * (float)g.method_51443() + (1.0f - Anim.easeOutCubic(vis)) * -10.0f;
+        x = Math.max(2.0f, Math.min((float)g.method_51421() - width - 2.0f, x));
+        y = Math.max(1.0f, Math.min((float)g.method_51443() - h - 1.0f, y));
         lastX = x;
         lastY = y;
         lastW = width;
@@ -218,17 +219,17 @@ public final class TopBar {
             boolean yt = !"Spotify".equals(src);
             float s = Gfx.scale();
             int px = Math.max(1, Math.round(rr * 2.15f * s));
-            g.pose().pushMatrix();
-            g.pose().translate(icx, icy);
-            g.pose().scale(1.0f / s, 1.0f / s);
-            g.blit(RenderPipelines.GUI_TEXTURED, "YT Music".equals(src) ? YTMUSIC : (yt ? YOUTUBE : SPOTIFY), -px / 2, -px / 2, 0.0f, 0.0f, px, px, 128, 128, 128, 128, Col.alpha(-1, a));
-            g.pose().popMatrix();
+            g.method_51448().pushMatrix();
+            g.method_51448().translate(icx, icy);
+            g.method_51448().scale(1.0f / s, 1.0f / s);
+            g.method_25293(class_10799.field_56883, "YT Music".equals(src) ? YTMUSIC : (yt ? YOUTUBE : SPOTIFY), -px / 2, -px / 2, 0.0f, 0.0f, px, px, 128, 128, 128, 128, Col.alpha(-1, a));
+            g.method_51448().popMatrix();
         }
         float tx = x + iconW + 2.0f * k;
         float tw = width - iconW - barsW - pad - 2.0f * k;
         int sx0 = (int)Math.floor(tx);
         int sx1 = (int)Math.ceil(tx + tw);
-        g.enableScissor(sx0, (int)y, sx1, (int)Math.ceil(y + h));
+        g.method_44379(sx0, (int)y, sx1, (int)Math.ceil(y + h));
         float slide = (1.0f - Anim.easeOutCubic(swap)) * 6.0f * k;
         float ta = a * Anim.easeOutCubic(swap);
         if (showLyrics) {
@@ -246,7 +247,7 @@ public final class TopBar {
                 }
             }
         }
-        g.disableScissor();
+        g.method_44380();
         float bx = x + width - barsW - pad + 3.0f * k;
         float by = y + h / 2.0f;
         boolean playing = track != null && track.playing;
@@ -259,7 +260,7 @@ public final class TopBar {
         }
     }
 
-    private static void drawKaraoke(GuiGraphicsExtractor g, Lyrics.Line line, int word, long t, String font, float ts, float tx, float ty, float tw, float a, int accent) {
+    private static void drawKaraoke(class_332 g, Lyrics.Line line, int word, long t, String font, float ts, float tx, float ty, float tw, float a, int accent) {
         float target;
         List<Lyrics.Word> words = line.words;
         float space = Gfx.textWidth(" ", font, ts);
@@ -304,9 +305,9 @@ public final class TopBar {
         }
     }
 
-    private static void drawChips(GuiGraphicsExtractor g, LFConfig c, float x, float y, float w, float h, float ts, String font, float a) {
+    private static void drawChips(class_332 g, LFConfig c, float x, float y, float w, float h, float ts, String font, float a) {
         Object s;
-        Minecraft mc = Minecraft.getInstance();
+        class_310 mc = class_310.method_1551();
         float ch = h * 0.82f;
         float cy = y + (h - ch) / 2.0f;
         float textY = cy + (ch - ts) / 2.0f - 0.3f;
@@ -319,7 +320,7 @@ public final class TopBar {
             Gfx.text(g, (String)s, font, cx + 5.0f, textY, ts, Col.alpha(-1514251, a));
         }
         float rx = x + w + 10.0f;
-        if (c.ping && mc.getConnection() != null && mc.player != null) {
+        if (c.ping && mc.method_1562() != null && mc.field_1724 != null) {
             int i;
             int ms = LivePing.get(mc);
             int bars = ms <= 0 ? 0 : (ms < 60 ? 4 : (ms < 120 ? 3 : (ms < 250 ? 2 : 1)));
@@ -350,13 +351,13 @@ public final class TopBar {
             rx = bx + 16.0f * k;
         }
         if (c.fps) {
-            s = mc.getFps() + " fps";
+            s = mc.method_47599() + " fps";
             Gfx.text(g, (String)s, font, rx + 0.6f, textY + 0.7f, ts, Col.alpha(-16777216, a * 0.5f));
             Gfx.text(g, (String)s, font, rx, textY, ts, Col.alpha(-6450248, a * 0.85f));
         }
     }
 
-    private static void drawArc(GuiGraphicsExtractor g, float cx, float cy, float r, float thick, int color, float part) {
+    private static void drawArc(class_332 g, float cx, float cy, float r, float thick, int color, float part) {
         int n = 18;
         int m = Math.max(2, Math.round((float)n * part) + 1);
         float[] xs = new float[m];
@@ -386,3 +387,4 @@ public final class TopBar {
 
     }
 }
+

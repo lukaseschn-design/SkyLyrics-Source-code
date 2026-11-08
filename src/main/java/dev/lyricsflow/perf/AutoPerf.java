@@ -2,13 +2,13 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.Minecraft
+ *  net.minecraft.class_310
  */
 package dev.lyricsflow.perf;
 
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
-import net.minecraft.client.Minecraft;
+import net.minecraft.class_310;
 
 public final class AutoPerf {
     public static final int MAX = 6;
@@ -55,11 +55,11 @@ public final class AutoPerf {
         int t = c.targetFps <= 0 ? 60 : c.targetFps;
         try {
             int lim;
-            Minecraft mc = Minecraft.getInstance();
-            if (((Boolean)mc.options.enableVsync().get()).booleanValue()) {
+            class_310 mc = class_310.method_1551();
+            if (((Boolean)mc.field_1690.method_42433().method_41753()).booleanValue()) {
                 t = Math.min(t, 57);
             }
-            if ((lim = ((Integer)mc.options.framerateLimit().get()).intValue()) > 0 && lim < 260) {
+            if ((lim = ((Integer)mc.field_1690.method_42524().method_41753()).intValue()) > 0 && lim < 260) {
                 t = Math.min(t, lim - 3);
             }
         }
@@ -85,7 +85,7 @@ public final class AutoPerf {
         frameAcc = 0.0;
     }
 
-    public static void tick(Minecraft mc) {
+    public static void tick(class_310 mc) {
         boolean modMatters;
         if (!ConfigManager.get().enabled) {
             return;
@@ -96,8 +96,8 @@ public final class AutoPerf {
         }
         lastCheck = now;
         LFConfig c = ConfigManager.get();
-        lastFps = mc.getFps();
-        if (!c.autoPerf || mc.level == null || mc.player == null || mc.gui.screen() != null) {
+        lastFps = mc.method_47599();
+        if (!c.autoPerf || mc.field_1687 == null || mc.field_1724 == null || mc.field_1755 != null) {
             okTicks = 0;
             lowTicks = 0;
             return;

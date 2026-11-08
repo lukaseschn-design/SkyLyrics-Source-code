@@ -1,9 +1,9 @@
 package Yuki.lumiclient.keybinds;
 
-import net.minecraft.network.chat.Component;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.class_2561;
+import net.minecraft.class_327;
+import net.minecraft.class_332;
+import net.minecraft.class_5250;
 import org.joml.Matrix3x2fStack;
 
 public final class Theme {
@@ -17,25 +17,25 @@ public final class Theme {
     public Theme() {
     }
 
-    public static MutableComponent tr(String key, Object... args) {
+    public static class_5250 tr(String key, Object... args) {
         return UiText.tr(key, args);
     }
 
-    public static void rounded(GuiGraphicsExtractor g, int x, int y, int w, int h, int color) {
+    public static void rounded(class_332 g, int x, int y, int w, int h, int color) {
         if (w < 5 || h < 5) {
-            g.fill(x, y, x + w, y + h, color);
+            g.method_25294(x, y, x + w, y + h, color);
             return;
         }
-        g.fill(x + 2, y, x + w - 2, y + h, color);
-        g.fill(x + 1, y + 1, x + w - 1, y + h - 1, color);
-        g.fill(x, y + 2, x + w, y + h - 2, color);
+        g.method_25294(x + 2, y, x + w - 2, y + h, color);
+        g.method_25294(x + 1, y + 1, x + w - 1, y + h - 1, color);
+        g.method_25294(x, y + 2, x + w, y + h - 2, color);
     }
 
-    public static void panel(GuiGraphicsExtractor g, int x, int y, int w, int h) {
+    public static void panel(class_332 g, int x, int y, int w, int h) {
         Theme.rounded(g, x, y + 3, w, h, -2063597568);
         Theme.rounded(g, x, y, w, h, -12168865);
         Theme.rounded(g, x + 1, y + 1, w - 2, h - 2, -15262427);
-        g.fill(x + 7, y + 1, x + w - 7, y + 2, -11116176);
+        g.method_25294(x + 7, y + 1, x + w - 7, y + 2, -11116176);
     }
 
     public static int mix(int a, int b, double amount) {
@@ -49,21 +49,21 @@ public final class Theme {
         return color;
     }
 
-    public static String fit(Font font, String value, int width) {
-        if (font.width(value) <= width) {
+    public static String fit(class_327 font, String value, int width) {
+        if (font.method_1727(value) <= width) {
             return value;
         }
-        return font.plainSubstrByWidth(value, Math.max(0, width - font.width("…"))) + "…";
+        return font.method_27523(value, Math.max(0, width - font.method_1727("…"))) + "…";
     }
 
-    public static void centeredFit(GuiGraphicsExtractor g, Font font, String text, int cx, int cy, int width, int color) {
-        float scale = (float) Math.min(1.0, (double) Math.max(1, width) / (double) Math.max(1, font.width(text)));
-        Matrix3x2fStack matrices = g.pose();
+    public static void centeredFit(class_332 g, class_327 font, String text, int cx, int cy, int width, int color) {
+        float scale = (float) Math.min(1.0, (double) Math.max(1, width) / (double) Math.max(1, font.method_1727(text)));
+        Matrix3x2fStack matrices = g.method_51448();
         matrices.pushMatrix();
         matrices.translate((float) cx, (float) cy);
         matrices.scale(scale, scale);
-        int n = -font.width(text) / 2;
-        g.text(font, text, n, -9 / 2, color, false);
+        int n = -font.method_1727(text) / 2;
+        g.method_51433(font, text, n, -9 / 2, color, false);
         matrices.popMatrix();
     }
 }

@@ -17,7 +17,8 @@
     "FogRendererMixin",
     "CustomCrosshairCompatMixin",
     "ClientPacketListenerAccessor",
-    "PingDebugMonitorMixin"
+    "PingDebugMonitorMixin",
+    "RenderLayerInvoker"
   ],
   "injectors": {
     "defaultRequire": 0

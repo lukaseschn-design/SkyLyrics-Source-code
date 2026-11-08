@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.GuiGraphicsExtractor
- *  com.mojang.blaze3d.vertex.PoseStack
- *  dev.lyricsflow.compat.LegacyBufferSource
- *  net.minecraft.client.DeltaTracker
+ *  net.minecraft.class_310
+ *  net.minecraft.class_332
+ *  net.minecraft.class_4587
+ *  net.minecraft.class_4597
+ *  net.minecraft.class_9779
  */
 package dev.lyricsflow.render;
 
@@ -20,11 +20,11 @@ import dev.lyricsflow.render.Proj;
 import dev.lyricsflow.render.TopBar;
 import dev.lyricsflow.render.WorldLyrics;
 import dev.lyricsflow.util.Anim;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import com.mojang.blaze3d.vertex.PoseStack;
-import dev.lyricsflow.compat.LegacyBufferSource;
-import net.minecraft.client.DeltaTracker;
+import net.minecraft.class_310;
+import net.minecraft.class_332;
+import net.minecraft.class_4587;
+import net.minecraft.class_4597;
+import net.minecraft.class_9779;
 
 public final class Hud {
     public static float beat;
@@ -45,8 +45,8 @@ public final class Hud {
         boolean waiting;
         MediaManager.Event e;
         Anim.frame();
-        Minecraft mcw = Minecraft.getInstance();
-        Proj.update(mcw.getWindow().getGuiScaledWidth(), mcw.getWindow().getGuiScaledHeight());
+        class_310 mcw = class_310.method_1551();
+        Proj.update(mcw.method_22683().method_4486(), mcw.method_22683().method_4502());
         if (Anim.frameId() == lastFrame) {
             return;
         }
@@ -59,7 +59,7 @@ public final class Hud {
             if (e.type() != MediaManager.EventType.SONG || !ConfigManager.get().enabled || !ConfigManager.get().lyricsOn || !ConfigManager.get().songChime) continue;
             UiSounds.play(UiSounds.SONG, 1.0f);
         }
-        boolean active = mcw.isWindowActive();
+        boolean active = mcw.method_1569();
         if (active && !wasActive) {
             mm.resync();
             backAt = System.nanoTime();
@@ -88,15 +88,15 @@ public final class Hud {
         beat = Math.max(0.0f, beat - Anim.dt() * 3.2f);
     }
 
-    public static void renderWorldSky(PoseStack pose, LegacyBufferSource buffers) {
+    public static void renderWorldSky(class_4587 pose, class_4597 buffers) {
         Hud.renderWorldFx(pose, buffers, false);
     }
 
     public static void renderFarSky() {
-        Hud.renderWorldFx(new PoseStack(), null, true);
+        Hud.renderWorldFx(new class_4587(), null, true);
     }
 
-    private static void renderWorldFx(PoseStack pose, LegacyBufferSource buffers, boolean sky) {
+    private static void renderWorldFx(class_4587 pose, class_4597 buffers, boolean sky) {
         AutoPerf.begin();
         try {
             Hud.renderWorldFx0(pose, buffers, sky);
@@ -106,9 +106,9 @@ public final class Hud {
         }
     }
 
-    private static void renderWorldFx0(PoseStack pose, LegacyBufferSource buffers, boolean sky) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null || mc.player == null || !ConfigManager.get().enabled) {
+    private static void renderWorldFx0(class_4587 pose, class_4597 buffers, boolean sky) {
+        class_310 mc = class_310.method_1551();
+        if (mc.field_1687 == null || mc.field_1724 == null || !ConfigManager.get().enabled) {
             return;
         }
         Hud.frame();
@@ -123,13 +123,13 @@ public final class Hud {
             return;
         }
         if (buffers == null) {
-            buffers = LegacyBufferSource.current();
+            buffers = mc.method_22940().method_23000();
         }
     }
 
-    public static void renderWorldLayer(GuiGraphicsExtractor g, DeltaTracker tick) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null || mc.player == null || !ConfigManager.get().enabled) {
+    public static void renderWorldLayer(class_332 g, class_9779 tick) {
+        class_310 mc = class_310.method_1551();
+        if (mc.field_1687 == null || mc.field_1724 == null || !ConfigManager.get().enabled) {
             return;
         }
         Hud.frame();
@@ -148,9 +148,9 @@ public final class Hud {
     /*
      * WARNING - Removed try catching itself - possible behaviour change.
      */
-    public static void renderTopLayer(GuiGraphicsExtractor g, DeltaTracker tick) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null || mc.player == null || hideForScreenshot) {
+    public static void renderTopLayer(class_332 g, class_9779 tick) {
+        class_310 mc = class_310.method_1551();
+        if (mc.field_1687 == null || mc.field_1724 == null || hideForScreenshot) {
             return;
         }
         LFConfig c = ConfigManager.get();

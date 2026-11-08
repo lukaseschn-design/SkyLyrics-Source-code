@@ -6,14 +6,14 @@
 
 <p align="center">
   <strong>Live synchronized 3D song lyrics for Minecraft</strong><br>
-  <em>Fabric · Minecraft 26.3 · Java 25</em>
+  <em>Fabric · Minecraft 1.21.11 · Java 21</em>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Minecraft-26.3-brightgreen" alt="Minecraft 26.3" />
+  <img src="https://img.shields.io/badge/Minecraft-1.21.11-brightgreen" alt="Minecraft 1.21.11" />
   <img src="https://img.shields.io/badge/Loader-Fabric-blue" alt="Fabric" />
   <img src="https://img.shields.io/badge/Version-1.0-orange" alt="Version 1.0" />
-  <img src="https://img.shields.io/badge/Java-25+-red" alt="Java 25+" />
+  <img src="https://img.shields.io/badge/Java-21+-red" alt="Java 21+" />
   <img src="https://img.shields.io/badge/License-ARR-lightgrey" alt="License ARR" />
 </p>
 
@@ -58,20 +58,18 @@ All keybinds are fully configurable in the dashboard.
 
 ## 📦 Installation
 
-> **Minecraft 26.3 build available:** the JAR has been compiled for 26.3, but has not yet been verified in-game.
-
-1. Install [Fabric Loader](https://fabricmc.net/use/) (>= 0.19.3) for **Minecraft 26.3**
-2. Install [Fabric API](https://modrinth.com/mod/fabric-api)
-3. Download [SkyLyrics-1.0+26.3.jar](releases/SkyLyrics-1.0+26.3.jar)
+1. Install [Fabric Loader](https://fabricmc.net/use/) (>= 0.17.0) for **Minecraft 1.21.11**
+2. Install [Fabric API](https://modrinth.com/mod/fabric-api) (0.141.6+1.21.11)
+3. Download [SkyLyrics-v1.0+1.21.11.jar](releases/SkyLyrics-v1.0+1.21.11.jar)
 4. Drop it into your `.minecraft/mods` folder
 5. Launch the game, play any song on Spotify or YouTube, and enjoy!
 
 ### Requirements
 
-- Minecraft **26.3.x**
-- Fabric Loader **>= 0.19.3**
-- Fabric API
-- Java **25+**
+- Minecraft **1.21.11**
+- Fabric Loader **>= 0.17.0**
+- Fabric API **0.141.6+1.21.11**
+- Java **21+**
 - Windows 10 / 11 (for automatic media detection via SMTC)
 
 ### Optional (Recommended)

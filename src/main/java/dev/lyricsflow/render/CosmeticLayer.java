@@ -6,37 +6,38 @@
  *  com.google.gson.JsonElement
  *  com.google.gson.JsonObject
  *  com.google.gson.JsonParser
- *  net.minecraft.client.renderer.entity.state.AxolotlRenderState
- *  net.minecraft.client.renderer.entity.state.AvatarRenderState
- *  net.minecraft.client.renderer.SubmitNodeCollector
- *  net.minecraft.client.renderer.rendertype.RenderTypes
- *  net.minecraft.world.entity.EquipmentSlot
- *  net.minecraft.world.entity.player.Player
- *  net.minecraft.client.renderer.rendertype.RenderType
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
- *  net.minecraft.util.Mth
- *  net.minecraft.client.renderer.entity.RenderLayerParent
- *  net.minecraft.client.renderer.entity.layers.RenderLayer
- *  com.mojang.blaze3d.vertex.PoseStack
- *  com.mojang.blaze3d.vertex.PoseStack$Pose
- *  com.mojang.blaze3d.vertex.VertexConsumer
- *  net.minecraft.client.renderer.texture.OverlayTexture
- *  net.minecraft.client.model.geom.ModelLayers
- *  net.minecraft.world.entity.animal.axolotl.Axolotl$Variant
- *  net.minecraft.client.model.animal.axolotl.AxolotlModel
- *  net.minecraft.client.model.player.PlayerModel
- *  net.minecraft.client.model.geom.ModelPart
- *  com.mojang.math.Axis
+ *  net.minecraft.class_10000
+ *  net.minecraft.class_10055
+ *  net.minecraft.class_11659
+ *  net.minecraft.class_12249
+ *  net.minecraft.class_1304
+ *  net.minecraft.class_1657
+ *  net.minecraft.class_1921
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
+ *  net.minecraft.class_3532
+ *  net.minecraft.class_3883
+ *  net.minecraft.class_3887
+ *  net.minecraft.class_4587
+ *  net.minecraft.class_4587$class_4665
+ *  net.minecraft.class_4588
+ *  net.minecraft.class_4608
+ *  net.minecraft.class_5602
+ *  net.minecraft.class_5762$class_5767
+ *  net.minecraft.class_5772
+ *  net.minecraft.class_591
+ *  net.minecraft.class_630
+ *  net.minecraft.class_7833
  *  org.joml.Quaternionfc
  */
 package dev.lyricsflow.render;
+import net.minecraft.class_10017;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.render.Cosmetics;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,68 +48,69 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import net.minecraft.client.renderer.entity.state.AxolotlRenderState;
-import net.minecraft.client.renderer.entity.state.AvatarRenderState;
-import net.minecraft.client.renderer.SubmitNodeCollector;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.Mth;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
-import net.minecraft.client.model.animal.axolotl.AdultAxolotlModel;
-import net.minecraft.client.model.player.PlayerModel;
-import net.minecraft.client.model.geom.ModelPart;
-import com.mojang.math.Axis;
+import net.minecraft.class_10000;
+import net.minecraft.class_10055;
+import net.minecraft.class_11659;
+import net.minecraft.class_12249;
+import net.minecraft.class_1304;
+import net.minecraft.class_1657;
+import net.minecraft.class_1921;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
+import net.minecraft.class_3532;
+import net.minecraft.class_3883;
+import net.minecraft.class_3887;
+import net.minecraft.class_4587;
+import net.minecraft.class_4588;
+import net.minecraft.class_4608;
+import net.minecraft.class_5602;
+import net.minecraft.class_5762;
+import net.minecraft.class_5772;
+import net.minecraft.class_591;
+import net.minecraft.class_630;
+import net.minecraft.class_7833;
 import org.joml.Quaternionfc;
 
 public final class CosmeticLayer
-extends RenderLayer<AvatarRenderState, PlayerModel> {
-    private static final Identifier WHITE = SkyLyrics.id("textures/misc/white.png");
+extends class_3887<class_10055, class_591> {
+    private static final class_2960 WHITE = LyricsFlow.id("textures/misc/white.png");
     private static final float PX = 0.0625f;
     static final float HELMET_FIT = 1.17f;
     private static Map<String, List<Group>> all;
-    private static final Identifier RING;
-    private static final Identifier GLOW;
-    private static final Identifier AXOLOTL_BLUE;
-    private static AdultAxolotlModel axolotlModel;
-    private static final AxolotlRenderState AXO_STATE;
+    private static final class_2960 RING;
+    private static final class_2960 GLOW;
+    private static final class_2960 AXOLOTL_BLUE;
+    private static class_5772 axolotlModel;
+    private static final class_10000 AXO_STATE;
     private static final float AXOLOTL_SCALE = 0.5f;
 
-    public CosmeticLayer(RenderLayerParent<AvatarRenderState, PlayerModel> parent) {
+    public CosmeticLayer(class_3883<class_10055, class_591> parent) {
         super(parent);
     }
 
-    public void submit(PoseStack pose, SubmitNodeCollector queue, int light, AvatarRenderState state, float yRot, float xRot) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || state.isInvisible || state.isSpectator) {
+    @Override
+    public void method_4199(class_4587 pose, class_11659 queue, int light, class_10055 state, float yRot, float xRot) {
+        class_310 mc = class_310.method_1551();
+        if (mc.field_1724 == null || state.field_53333 || state.field_53542) {
             return;
         }
-        Player owner = Cosmetics.playerOf(state.id);
+        class_1657 owner = Cosmetics.playerOf(state.field_53528);
         if (owner == null) {
             return;
         }
-        for (String cos : Cosmetics.forEntity(state.id)) {
+        for (String cos : Cosmetics.forEntity(state.field_53528)) {
             this.one(pose, queue, light, state, yRot, xRot, owner, cos);
         }
     }
 
-    private void one(PoseStack pose, SubmitNodeCollector queue, int light, AvatarRenderState state, float yRot, float xRot, Player owner, String cos) {
+    private void one(class_4587 pose, class_11659 queue, int light, class_10055 state, float yRot, float xRot, class_1657 owner, String cos) {
         List<Group> groups;
         if ("axolotl".equals(cos)) {
             this.axolotl(pose, queue, light, owner);
             return;
         }
         if ("kuz3y_wqq".equals(cos)) {
-            this.buddy(pose, queue, light, owner, state.id, yRot, xRot);
+            this.buddy(pose, queue, light, owner, state.field_53528, yRot, xRot);
             return;
         }
         if (all == null) {
@@ -118,78 +120,78 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
             return;
         }
         double t = (double)System.nanoTime() / 1.0E9 % 3600.0;
-        PlayerModel model = (PlayerModel)this.getParentModel();
-        boolean helmetOn = !owner.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
+        class_591 model = (class_591)this.method_17165();
+        boolean helmetOn = !owner.method_6118(class_1304.field_6169).method_7960();
         for (Group g : groups) {
             String a;
-            ModelPart part;
-            ModelPart class_6302 = part = "body".equals(g.part()) ? model.body : model.head;
-            if (!part.visible) continue;
-            pose.pushPose();
-            part.translateAndRotate(pose);
+            class_630 part;
+            class_630 class_6302 = part = "body".equals(g.part()) ? model.field_3391 : model.field_3398;
+            if (!part.field_3665) continue;
+            pose.method_22903();
+            part.method_22703(pose);
             float lift = g.lift();
             if ("head".equals(g.part()) && helmetOn) {
                 lift *= 1.17f;
             }
             if (lift != 1.0f) {
-                pose.translate(0.0f, -0.25f, 0.0f);
-                pose.scale(lift, lift, lift);
-                pose.translate(0.0f, 0.25f, 0.0f);
+                pose.method_46416(0.0f, -0.25f, 0.0f);
+                pose.method_22905(lift, lift, lift);
+                pose.method_46416(0.0f, 0.25f, 0.0f);
             }
             if ((a = g.anim()).equals("bob")) {
-                pose.translate(0.0f, -((float)Math.sin(t * 2.2)) * 0.6f * 0.0625f, 0.0f);
+                pose.method_46416(0.0f, -((float)Math.sin(t * 2.2)) * 0.6f * 0.0625f, 0.0f);
             } else if (a.startsWith("sway:")) {
                 String[] q = a.split(":");
                 float deg = Float.parseFloat(q[1]) * (float)Math.sin(t * 2.4);
                 float py = Float.parseFloat(q[3]) * 0.0625f;
                 float pz = Float.parseFloat(q[4]) * 0.0625f;
-                pose.translate(0.0f, py, pz);
-                pose.rotate((Quaternionfc)(switch (q[2]) {
-                    case "x" -> Axis.XP.rotationDegrees(deg);
-                    case "y" -> Axis.YP.rotationDegrees(deg);
-                    default -> Axis.ZP.rotationDegrees(deg);
+                pose.method_46416(0.0f, py, pz);
+                pose.method_22907((Quaternionfc)(switch (q[2]) {
+                    case "x" -> class_7833.field_40714.rotationDegrees(deg);
+                    case "y" -> class_7833.field_40716.rotationDegrees(deg);
+                    default -> class_7833.field_40718.rotationDegrees(deg);
                 }));
-                pose.translate(0.0f, -py, -pz);
+                pose.method_46416(0.0f, -py, -pz);
             } else if (a.startsWith("flap:")) {
                 int side = Integer.parseInt(a.substring(5));
                 float beat = (float)(0.5 + 0.5 * Math.sin(t * 2.6));
                 float deg = (float)(-side) * (6.0f + 30.0f * beat);
-                pose.translate(0.0f, 0.0f, 0.21875f);
-                pose.rotate((Quaternionfc)Axis.YP.rotationDegrees(deg));
-                pose.rotate((Quaternionfc)Axis.ZP.rotationDegrees((float)side * 6.0f * (beat - 0.5f)));
-                pose.translate(0.0f, 0.0f, -0.21875f);
+                pose.method_46416(0.0f, 0.0f, 0.21875f);
+                pose.method_22907((Quaternionfc)class_7833.field_40716.rotationDegrees(deg));
+                pose.method_22907((Quaternionfc)class_7833.field_40718.rotationDegrees((float)side * 6.0f * (beat - 0.5f)));
+                pose.method_46416(0.0f, 0.0f, -0.21875f);
             }
-            RenderType type = g.alpha() < 255 && !g.glow() ? RenderTypes.entityTranslucent((Identifier)WHITE) : RenderTypes.entityCutout((Identifier)WHITE);
+            class_1921 type = g.alpha() < 255 && !g.glow() ? class_12249.method_76000((class_2960)WHITE) : class_12249.method_75994((class_2960)WHITE);
             int lt = g.glow() ? 0xF000F0 : light;
-            queue.submitCustomGeometry(pose, type, (p, vc) -> CosmeticLayer.emit(vc, p, g, lt));
-            pose.popPose();
+            queue.method_73483(pose, type, (p, vc) -> CosmeticLayer.emit(vc, p, g, lt));
+            pose.method_22909();
         }
         if ("halo".equals(cos)) {
             this.haloGlow(pose, queue, helmetOn, t);
         }
     }
 
-    private void haloGlow(PoseStack pose, SubmitNodeCollector queue, boolean helmetOn, double t) {
-        ModelPart head = ((PlayerModel)this.getParentModel()).head;
-        if (!head.visible) {
+    private void haloGlow(class_4587 pose, class_11659 queue, boolean helmetOn, double t) {
+        class_630 head = ((class_591)this.method_17165()).field_3398;
+        if (!head.field_3665) {
             return;
         }
-        pose.pushPose();
-        head.translateAndRotate(pose);
+        pose.method_22903();
+        head.method_22703(pose);
         float lift = helmetOn ? 1.2636f : 1.08f;
-        pose.translate(0.0f, -0.25f, 0.0f);
-        pose.scale(lift, lift, lift);
-        pose.translate(0.0f, 0.25f, 0.0f);
-        pose.translate(0.015625f, -0.6875f - (float)Math.sin(t * 2.2) * 0.6f * 0.0625f, 0.015625f);
+        pose.method_46416(0.0f, -0.25f, 0.0f);
+        pose.method_22905(lift, lift, lift);
+        pose.method_46416(0.0f, 0.25f, 0.0f);
+        pose.method_46416(0.015625f, -0.6875f - (float)Math.sin(t * 2.2) * 0.6f * 0.0625f, 0.015625f);
         float pulse = 0.82f + 0.18f * (float)Math.sin(t * 3.1);
         int ring = (int)(235.0f * pulse) << 24 | 0xFFD54A;
         int soft = (int)(120.0f * pulse) << 24 | 0xFFC23A;
-        queue.submitCustomGeometry(pose, RenderTypes.eyes((Identifier)RING), (p, vc) -> CosmeticLayer.flat(vc, p, 0.45f, ring));
-        queue.submitCustomGeometry(pose, RenderTypes.eyes((Identifier)GLOW), (p, vc) -> CosmeticLayer.flat(vc, p, 0.6875f, soft));
-        pose.popPose();
+        queue.method_73483(pose, class_12249.method_76014((class_2960)RING), (p, vc) -> CosmeticLayer.flat(vc, p, 0.45f, ring));
+        queue.method_73483(pose, class_12249.method_76014((class_2960)GLOW), (p, vc) -> CosmeticLayer.flat(vc, p, 0.6875f, soft));
+        pose.method_22909();
     }
 
-    private static void flat(VertexConsumer vc, PoseStack.Pose p, float r, int col) {
+    private static void flat(class_4588 vc, class_4587.class_4665 p, float r, int col) {
         int k;
         float[][] c = new float[][]{{-r, -r, 0.0f, 0.0f}, {r, -r, 1.0f, 0.0f}, {r, r, 1.0f, 1.0f}, {-r, r, 0.0f, 1.0f}};
         for (k = 0; k < 4; ++k) {
@@ -200,57 +202,57 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
         }
     }
 
-    private static void fv(VertexConsumer vc, PoseStack.Pose p, float x, float z, float u, float v, int col) {
-        vc.addVertex(p, x, 0.0f, z).setColor(col).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(0xF000F0).setNormal(p, 0.0f, -1.0f, 0.0f);
+    private static void fv(class_4588 vc, class_4587.class_4665 p, float x, float z, float u, float v, int col) {
+        vc.method_56824(p, x, 0.0f, z).method_39415(col).method_22913(u, v).method_22922(class_4608.field_21444).method_60803(0xF000F0).method_60831(p, 0.0f, -1.0f, 0.0f);
     }
 
-    private void axolotl(PoseStack pose, SubmitNodeCollector queue, int light, Player owner) {
-        ModelPart head = ((PlayerModel)this.getParentModel()).head;
-        if (!head.visible) {
+    private void axolotl(class_4587 pose, class_11659 queue, int light, class_1657 owner) {
+        class_630 head = ((class_591)this.method_17165()).field_3398;
+        if (!head.field_3665) {
             return;
         }
         try {
             if (axolotlModel == null) {
-                axolotlModel = new AdultAxolotlModel(Minecraft.getInstance().getEntityModels().bakeLayer(ModelLayers.AXOLOTL));
+                axolotlModel = new class_5772(class_310.method_1551().method_31974().method_32072(class_5602.field_28383));
             }
             AxolotlRenderStateSetup.apply(AXO_STATE, (float)((double)System.nanoTime() / 1.0E9 % 3600.0 * 20.0));
-            axolotlModel.setupAnim(AXO_STATE);
-            pose.pushPose();
-            head.translateAndRotate(pose);
-            boolean helm = !owner.getItemBySlot(EquipmentSlot.HEAD).isEmpty();
-            pose.translate(0.0f, (helm ? -9.2f : -8.0f) * 0.0625f, 0.0f);
-            pose.scale(0.5f, 0.5f, 0.5f);
-            pose.translate(0.0f, -1.375f, 0.0f);
-            queue.submitModelPart(axolotlModel.root(), pose, RenderTypes.entityCutout((Identifier)AXOLOTL_BLUE), light, OverlayTexture.NO_OVERLAY, null);
-            pose.popPose();
+            axolotlModel.method_33293(AXO_STATE);
+            pose.method_22903();
+            head.method_22703(pose);
+            boolean helm = !owner.method_6118(class_1304.field_6169).method_7960();
+            pose.method_46416(0.0f, (helm ? -9.2f : -8.0f) * 0.0625f, 0.0f);
+            pose.method_22905(0.5f, 0.5f, 0.5f);
+            pose.method_46416(0.0f, -1.375f, 0.0f);
+            queue.method_73491(axolotlModel.method_63512(), pose, class_12249.method_75994((class_2960)AXOLOTL_BLUE), light, class_4608.field_21444, null);
+            pose.method_22909();
         }
         catch (Throwable e) {
-            SkyLyrics.LOG.warn("[SkyLyrics] Axolotl cosmetic failed: {}", (Object)e.toString());
+            LyricsFlow.LOG.warn("[SkyLyrics] Axolotl cosmetic failed: {}", (Object)e.toString());
         }
     }
 
-    private void buddy(PoseStack pose, SubmitNodeCollector queue, int light, Player owner, int id, float headYaw, float headPitch) {
-        ModelPart body = ((PlayerModel)this.getParentModel()).body;
-        if (!body.visible) {
+    private void buddy(class_4587 pose, class_11659 queue, int light, class_1657 owner, int id, float headYaw, float headPitch) {
+        class_630 body = ((class_591)this.method_17165()).field_3391;
+        if (!body.field_3665) {
             return;
         }
-        PlayerModel b = Cosmetics.buddyFor(id, (double)System.nanoTime() / 1.0E9 % 3600.0, headYaw, headPitch);
+        class_591 b = Cosmetics.buddyFor(id, (double)System.nanoTime() / 1.0E9 % 3600.0, headYaw, headPitch);
         if (b == null) {
             return;
         }
-        boolean chest = !owner.getItemBySlot(EquipmentSlot.CHEST).isEmpty();
-        pose.pushPose();
-        body.translateAndRotate(pose);
-        pose.translate((chest ? -6.9f : -6.2f) * 0.0625f, (chest ? -1.2f : -0.2f) * 0.0625f, 0.0f);
+        boolean chest = !owner.method_6118(class_1304.field_6174).method_7960();
+        pose.method_22903();
+        body.method_22703(pose);
+        pose.method_46416((chest ? -6.9f : -6.2f) * 0.0625f, (chest ? -1.2f : -0.2f) * 0.0625f, 0.0f);
         float k = 0.32f;
-        pose.scale(k, k, k);
-        pose.translate(0.0f, -0.75f, 0.0f);
-        pose.rotate((Quaternionfc)Axis.YP.rotation((float)Math.toRadians(Mth.clamp((float)headYaw, (float)-80.0f, (float)80.0f))));
-        queue.submitModelPart(b.root(), pose, RenderTypes.entityTranslucent((Identifier)Cosmetics.KUZ3Y), light, OverlayTexture.NO_OVERLAY, null);
-        pose.popPose();
+        pose.method_22905(k, k, k);
+        pose.method_46416(0.0f, -0.75f, 0.0f);
+        pose.method_22907((Quaternionfc)class_7833.field_40716.rotation((float)Math.toRadians(class_3532.method_15363((float)headYaw, (float)-80.0f, (float)80.0f))));
+        queue.method_73491(b.method_63512(), pose, class_12249.method_76000((class_2960)Cosmetics.KUZ3Y), light, class_4608.field_21444, null);
+        pose.method_22909();
     }
 
-    private static void emit(VertexConsumer vc, PoseStack.Pose p, Group g, int light) {
+    private static void emit(class_4588 vc, class_4587.class_4665 p, Group g, int light) {
         float[] q = g.quads();
         int alpha = g.alpha() << 24;
         boolean both = false;
@@ -270,8 +272,8 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
         }
     }
 
-    private static void v(VertexConsumer vc, PoseStack.Pose p, float x, float y, float z, int col, int light, float nx, float ny, float nz) {
-        vc.addVertex(p, x, y, z).setColor(col).setUv(0.5f, 0.5f).setOverlay(OverlayTexture.NO_OVERLAY).setLight(light).setNormal(p, nx, ny, nz);
+    private static void v(class_4588 vc, class_4587.class_4665 p, float x, float y, float z, int col, int light, float nx, float ny, float nz) {
+        vc.method_56824(p, x, y, z).method_39415(col).method_22913(0.5f, 0.5f).method_22922(class_4608.field_21444).method_60803(light).method_60831(p, nx, ny, nz);
     }
 
     private static synchronized void load() {
@@ -293,7 +295,7 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
             }
         }
         catch (Exception ex) {
-            SkyLyrics.LOG.warn("[SkyLyrics] Could not load cosmetics: {}", (Object)ex.toString());
+            LyricsFlow.LOG.warn("[SkyLyrics] Could not load cosmetics: {}", (Object)ex.toString());
         }
         all = out;
     }
@@ -372,10 +374,10 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
     }
 
     static {
-        RING = SkyLyrics.id("textures/gui/shape/ring.png");
-        GLOW = SkyLyrics.id("textures/gui/shape/glow.png");
-        AXOLOTL_BLUE = Identifier.withDefaultNamespace((String)"textures/entity/axolotl/axolotl_blue.png");
-        AXO_STATE = new AxolotlRenderState();
+        RING = LyricsFlow.id("textures/gui/shape/ring.png");
+        GLOW = LyricsFlow.id("textures/gui/shape/glow.png");
+        AXOLOTL_BLUE = class_2960.method_60656((String)"textures/entity/axolotl/axolotl_blue.png");
+        AXO_STATE = new class_10000();
     }
 
     private record Group(String part, String anim, boolean glow, int alpha, float[] quads, float lift) {
@@ -385,17 +387,18 @@ extends RenderLayer<AvatarRenderState, PlayerModel> {
         private AxolotlRenderStateSetup() {
         }
 
-        static void apply(AxolotlRenderState s, float age) {
-            s.variant = Axolotl.Variant.BLUE;
-            s.onGroundFactor = 1.0f;
-            s.inWaterFactor = 0.0f;
-            s.movingFactor = 0.0f;
-            s.playingDeadFactor = 0.0f;
-            s.ageInTicks = age;
-            s.xRot = 0.0f;
-            s.yRot = 0.0f;
-            s.walkAnimationPos = 0.0f;
-            s.walkAnimationSpeed = 0.0f;
+        static void apply(class_10000 s, float age) {
+            s.field_53260 = class_5762.class_5767.field_28345;
+            s.field_53264 = 1.0f;
+            s.field_53263 = 0.0f;
+            s.field_53262 = 0.0f;
+            s.field_53261 = 0.0f;
+            s.field_53328 = age;
+            s.field_53448 = 0.0f;
+            s.field_53447 = 0.0f;
+            s.field_53450 = 0.0f;
+            s.field_53451 = 0.0f;
         }
     }
 }
+

@@ -889,11 +889,8 @@ public final class SkyPainter {
     }
 
     private static float cornerAlpha(int x, int y, int w, int h, int rad) {
-        if (rad <= 0) {
-            return 1.0f;
-        }
-        float cx = x < rad ? rad : (x >= w - rad ? w - rad : -1.0f);
-        float cy = y < rad ? rad : (y >= h - rad ? h - rad : -1.0f);
+        float cx = x < rad ? (float)rad : (x >= w - rad ? (float)(w - rad) : -1.0f);
+        float cy = y < rad ? (float)rad : (y >= h - rad ? (float)(h - rad) : -1.0f);
         if (!(cx < 0.0f) && !(cy < 0.0f)) {
             float d = (float)Math.hypot((float)x + 0.5f - cx, (float)y + 0.5f - cy);
             return Math.max(0.0f, Math.min(1.0f, (float)rad - d + 0.5f));
@@ -1121,3 +1118,4 @@ public final class SkyPainter {
         public float at(float var1, float var2, float var3);
     }
 }
+

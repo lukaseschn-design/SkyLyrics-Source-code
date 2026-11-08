@@ -637,23 +637,46 @@ public final class LiveSky {
     }
 
     private static int hsv(double h, double s, double v) {
+        double rr = 0.0;
+        double gg = 0.0;
         double hh = (h % 1.0 + 1.0) % 1.0 * 6.0;
         double f = hh - Math.floor(hh);
         double p = v * (1.0 - s);
         double q = v * (1.0 - s * f);
         double u = v * (1.0 - s * (1.0 - f));
-        double r;
-        double g;
-        double b;
-        switch ((int)Math.floor(hh)) {
-            case 0 -> { r = v; g = u; b = p; }
-            case 1 -> { r = q; g = v; b = p; }
-            case 2 -> { r = p; g = v; b = u; }
-            case 3 -> { r = p; g = q; b = v; }
-            case 4 -> { r = u; g = p; b = v; }
-            default -> { r = v; g = p; b = q; }
-        }
-        return (int)Math.round(r * 255.0) << 16 | (int)Math.round(g * 255.0) << 8 | (int)Math.round(b * 255.0);
+        double bb = switch ((int)Math.floor(hh)) {
+            case 0 -> {
+                rr = v;
+                gg = u;
+                yield p;
+            }
+            case 1 -> {
+                rr = q;
+                gg = v;
+                yield p;
+            }
+            case 2 -> {
+                rr = p;
+                gg = v;
+                yield u;
+            }
+            case 3 -> {
+                rr = p;
+                gg = q;
+                yield v;
+            }
+            case 4 -> {
+                rr = u;
+                gg = p;
+                yield v;
+            }
+            default -> {
+                rr = v;
+                gg = p;
+                yield q;
+            }
+        };
+        return (int)Math.round(rr * 255.0) << 16 | (int)Math.round(gg * 255.0) << 8 | (int)Math.round(bb * 255.0);
     }
 
     private void aurora(double az, float el, float strength) {
@@ -956,3 +979,4 @@ public final class LiveSky {
         public static final int SYNTH = 3;
     }
 }
+

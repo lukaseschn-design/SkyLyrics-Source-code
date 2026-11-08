@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  com.mojang.blaze3d.platform.NativeImage
- *  net.minecraft.client.renderer.texture.DynamicTexture
- *  net.minecraft.client.renderer.texture.AbstractTexture
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
+ *  net.minecraft.class_1011
+ *  net.minecraft.class_1043
+ *  net.minecraft.class_1044
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
  */
 package dev.lyricsflow.app.sky;
 
@@ -21,16 +21,16 @@ import java.io.ByteArrayOutputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.imageio.ImageIO;
-import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
+import net.minecraft.class_1011;
+import net.minecraft.class_1043;
+import net.minecraft.class_1044;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
 
 public final class SkyTextures {
-    public static final Identifier SPRITES = Identifier.fromNamespaceAndPath((String)"lyricsflow", (String)"sky/sprites");
-    public static final Identifier SNOWFLAKE = Identifier.fromNamespaceAndPath((String)"lyricsflow", (String)"sky/snowflake");
-    private static volatile NativeImage flakePending;
+    public static final class_2960 SPRITES = class_2960.method_60655((String)"lyricsflow", (String)"sky/sprites");
+    public static final class_2960 SNOWFLAKE = class_2960.method_60655((String)"lyricsflow", (String)"sky/snowflake");
+    private static volatile class_1011 flakePending;
     private static boolean flakeReady;
     public static final int W = 2048;
     public static final int H = 512;
@@ -43,7 +43,7 @@ public final class SkyTextures {
     private static int version;
     private static boolean spritesReady;
     private static boolean spritesFailed;
-    private static volatile NativeImage spritePending;
+    private static volatile class_1011 spritePending;
     private static boolean spritesRequested;
     private static long shownAt;
 
@@ -90,8 +90,8 @@ public final class SkyTextures {
 
     public static void update() {
         Pending pd;
-        NativeImage fl;
-        NativeImage sp;
+        class_1011 fl;
+        class_1011 sp;
         if (!spritesRequested) {
             spritesRequested = true;
             EXEC.execute(() -> {
@@ -108,7 +108,7 @@ public final class SkyTextures {
         if ((sp = spritePending) != null) {
             spritePending = null;
             try {
-                Minecraft.getInstance().getTextureManager().register(SPRITES, (AbstractTexture)new DynamicTexture(() -> "lyricsflow_sprites", sp));
+                class_310.method_1551().method_1531().method_4616(SPRITES, (class_1044)new class_1043(() -> "lyricsflow_sprites", sp));
                 spritesReady = true;
             }
             catch (Throwable var2) {
@@ -118,7 +118,7 @@ public final class SkyTextures {
         if ((fl = flakePending) != null) {
             flakePending = null;
             try {
-                Minecraft.getInstance().getTextureManager().register(SNOWFLAKE, (AbstractTexture)new DynamicTexture(() -> "lyricsflow_snowflake", fl));
+                class_310.method_1551().method_1531().method_4616(SNOWFLAKE, (class_1044)new class_1043(() -> "lyricsflow_snowflake", fl));
                 flakeReady = true;
             }
             catch (Throwable throwable) {
@@ -169,12 +169,12 @@ public final class SkyTextures {
         return Anim.outCubic(Anim.since(shownAt, 1400L));
     }
 
-    private static NativeImage image(int[] argb, int w, int h) throws Exception {
+    private static class_1011 image(int[] argb, int w, int h) throws Exception {
         BufferedImage img = new BufferedImage(w, h, 2);
         img.setRGB(0, 0, w, h, argb, 0, w);
         ByteArrayOutputStream out = new ByteArrayOutputStream(w * h);
         ImageIO.write((RenderedImage)img, "png", out);
-        return NativeImage.read((byte[])out.toByteArray());
+        return class_1011.method_49277((byte[])out.toByteArray());
     }
 
     static {

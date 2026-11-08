@@ -2,16 +2,16 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.gui.GuiGraphicsExtractor
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_332
  */
 package dev.lyricsflow.render;
 
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.render.Gfx;
 import dev.lyricsflow.util.Col;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.class_2960;
+import net.minecraft.class_332;
 
 public final class HotbarStyle {
     private static float selX = Float.NaN;
@@ -19,11 +19,11 @@ public final class HotbarStyle {
     private HotbarStyle() {
     }
 
-    public static boolean draw(GuiGraphicsExtractor g, Identifier id, int x, int y, int w, int h) {
-        if (!(ConfigManager.get().enabled && ConfigManager.get().customHotbar && "minecraft".equals(id.getNamespace()))) {
+    public static boolean draw(class_332 g, class_2960 id, int x, int y, int w, int h) {
+        if (!(ConfigManager.get().enabled && ConfigManager.get().customHotbar && "minecraft".equals(id.method_12836()))) {
             return false;
         }
-        String path = id.getPath();
+        String path = id.method_12832();
         int custom = ConfigManager.get().hotbarColor;
         int accent = custom != 0 ? custom | 0xFF000000 : -6325530;
         int barCol = ConfigManager.get().hotbarBarColor;

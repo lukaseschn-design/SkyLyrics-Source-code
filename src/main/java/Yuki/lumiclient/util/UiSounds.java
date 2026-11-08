@@ -8,13 +8,9 @@ import net.minecraft.class_3414;
 public final class UiSounds {
     private static long lastHover = 0;
 
-    // Custom UI Sound Events (direkt verknüpft mit den OGG-Sounds in sounds.json)
     public static final class_3414 SOUND_SELECT = class_3414.method_47908(class_2960.method_60655("lumiclient", "ui.select"));
     public static final class_3414 SOUND_HOVER = class_3414.method_47908(class_2960.method_60655("lumiclient", "ui.hover"));
 
-    /**
-     * Custom Hover Sound: cleaner, dezent-leiser Pop/Tick (kein Vanilla Sound).
-     */
     public static void hover() {
         long now = System.currentTimeMillis();
         if (now - lastHover < 65) return;
@@ -27,9 +23,6 @@ public final class UiSounds {
         } catch (Throwable ignored) {}
     }
 
-    /**
-     * Custom Click Sound: satter, ultra-cleaner Tactile Pop/Click (kein Vanilla Sound).
-     */
     public static void select() {
         try {
             class_310 mc = class_310.method_1551();

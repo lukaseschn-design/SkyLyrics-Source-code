@@ -2,12 +2,12 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.input.CharacterEvent
- *  net.minecraft.client.input.KeyEvent
- *  net.minecraft.client.input.MouseButtonEvent
- *  net.minecraft.network.chat.Component
- *  net.minecraft.client.gui.GuiGraphicsExtractor
- *  net.minecraft.client.gui.screens.Screen
+ *  net.minecraft.class_11905
+ *  net.minecraft.class_11908
+ *  net.minecraft.class_11909
+ *  net.minecraft.class_2561
+ *  net.minecraft.class_332
+ *  net.minecraft.class_437
  */
 package dev.lyricsflow.gui;
 
@@ -25,15 +25,15 @@ import dev.lyricsflow.util.Anim;
 import dev.lyricsflow.util.Col;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.input.MouseButtonEvent;
-import net.minecraft.network.chat.Component;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.class_11905;
+import net.minecraft.class_11908;
+import net.minecraft.class_11909;
+import net.minecraft.class_2561;
+import net.minecraft.class_332;
+import net.minecraft.class_437;
 
-public class SkyLyricsScreen
-extends Screen {
+public class LyricsFlowScreen
+extends class_437 {
     private static Tab lastTab = Tab.LYRICS;
     private Tab tab = lastTab;
     private final List<Ui.Widget> widgets = new ArrayList<Ui.Widget>();
@@ -71,19 +71,19 @@ extends Screen {
     private float contentY;
     private float contentW;
     private float contentHgt;
-    private final Screen parent;
+    private final class_437 parent;
     private float fit = 1.0f;
     private double lastMx;
     private double lastMy;
     private final float[] modeHover = new float[2];
     private float modePill = -1.0f;
 
-    public SkyLyricsScreen() {
+    public LyricsFlowScreen() {
         this(null);
     }
 
-    public SkyLyricsScreen(Screen parent) {
-        super((Component)Component.literal((String)"SkyLyrics"));
+    public LyricsFlowScreen(class_437 parent) {
+        super((class_2561)class_2561.method_43470((String)"SkyLyrics"));
         this.parent = parent;
     }
 
@@ -91,12 +91,12 @@ extends Screen {
         this.rebuild = true;
     }
 
-    protected void init() {
+    protected void method_25426() {
         UiSounds.play(UiSounds.OPEN, 1.0f);
         this.rebuild = true;
     }
 
-    public boolean isPauseScreen() {
+    public boolean method_25421() {
         return false;
     }
 
@@ -106,13 +106,13 @@ extends Screen {
     }
 
     private void computeFit() {
-        float f = Math.min((float)this.width / 812.0f, (float)this.height / 424.0f);
+        float f = Math.min((float)this.field_22789 / 812.0f, (float)this.field_22790 / 424.0f);
         this.fit = Math.max(0.75f, Math.min(1.5f, f * 0.98f));
     }
 
     private void layout() {
-        float W = (float)this.width / this.fit;
-        float H = (float)this.height / this.fit;
+        float W = (float)this.field_22789 / this.fit;
+        float H = (float)this.field_22790 / this.fit;
         this.heroVisible = W >= 640.0f;
         this.hw = this.heroVisible ? Math.min(158.0f, W * 0.22f) : 0.0f;
         float gap = this.heroVisible ? 10.0f : 0.0f;
@@ -155,13 +155,13 @@ extends Screen {
         UiSounds.play(UiSounds.TAB, 0.95f + (float)t.ordinal() * 0.03f);
     }
 
-    public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
-        if (this.parent != null || this.minecraft == null || this.minecraft.level == null) {
-            super.extractBackground(g, mouseX, mouseY, partialTick);
+    public void method_25420(class_332 g, int mouseX, int mouseY, float partialTick) {
+        if (this.parent != null || this.field_22787 == null || this.field_22787.field_1687 == null) {
+            super.method_25420(g, mouseX, mouseY, partialTick);
         }
     }
 
-    public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+    public void method_25394(class_332 g, int mouseX, int mouseY, float partialTick) {
         float ck;
         Anim.frame();
         String oldF = Ui.F;
@@ -185,34 +185,34 @@ extends Screen {
         }
         this.openT = ck = this.closing ? 1.0f - Anim.easeOutCubic(Math.min(1.0f, (float)(nowMs - this.closedAt) / 160.0f)) : 1.0f;
         if (this.closing && ck < 0.02f) {
-            if (this.parent != null && this.minecraft != null) {
-                this.minecraft.gui.setScreen(this.parent);
+            if (this.parent != null && this.field_22787 != null) {
+                this.field_22787.method_1507(this.parent);
             } else {
-                super.onClose();
+                super.method_25419();
             }
             return;
         }
         this.tabT = Anim.approach(this.tabT, 1.0f, 10.0f);
         float bgA = Anim.easeOutCubic(Math.min(1.0f, t / 0.25f)) * ck;
-        float eh = SkyLyricsScreen.easeOutQuint(Math.max(0.0f, Math.min(1.0f, (t - 0.02f) / 0.55f)));
-        float ep = SkyLyricsScreen.easeOutQuint(Math.max(0.0f, Math.min(1.0f, (t - 0.1f) / 0.6f)));
+        float eh = LyricsFlowScreen.easeOutQuint(Math.max(0.0f, Math.min(1.0f, (t - 0.02f) / 0.55f)));
+        float ep = LyricsFlowScreen.easeOutQuint(Math.max(0.0f, Math.min(1.0f, (t - 0.1f) / 0.6f)));
         float out = 1.0f - ck;
         float a = Math.min(1.0f, Math.max(0.0f, t / 0.2f)) * ck;
         float aH = Math.min(1.0f, eh * 1.6f) * ck;
         float aP = Math.min(1.0f, ep * 1.6f) * ck;
-        Gfx.gradientV(g, 0.0f, 0.0f, this.width, this.height, Col.alpha(-1341585646, bgA), Col.alpha(-804714734, bgA));
+        Gfx.gradientV(g, 0.0f, 0.0f, this.field_22789, this.field_22790, Col.alpha(-1341585646, bgA), Col.alpha(-804714734, bgA));
         float fl = Math.max(0.0f, 1.0f - Math.abs(t - 0.1f) / 0.1f);
         if (fl > 0.01f) {
-            Gfx.rect(g, 0.0f, 0.0f, this.width, this.height, Col.alpha(-1, 0.06f * fl));
+            Gfx.rect(g, 0.0f, 0.0f, this.field_22789, this.field_22790, Col.alpha(-1, 0.06f * fl));
         }
-        g.pose().pushMatrix();
-        g.pose().scale(this.fit, this.fit);
-        float cx = (float)this.width / this.fit / 2.0f;
-        float cy = (float)this.height / this.fit / 2.0f;
+        g.method_51448().pushMatrix();
+        g.method_51448().scale(this.fit, this.fit);
+        float cx = (float)this.field_22789 / this.fit / 2.0f;
+        float cy = (float)this.field_22790 / this.fit / 2.0f;
         float sc = 1.0f - 0.03f * out;
-        g.pose().translate(cx, cy + out * 8.0f);
-        g.pose().scale(sc, sc);
-        g.pose().translate(-cx, -cy);
+        g.method_51448().translate(cx, cy + out * 8.0f);
+        g.method_51448().scale(sc, sc);
+        g.method_51448().translate(-cx, -cy);
         double vmx = (float)mouseX / this.fit;
         double vmy = (float)mouseY / this.fit;
         double mx = (vmx - (double)cx) / (double)sc + (double)cx;
@@ -221,25 +221,25 @@ extends Screen {
         this.lastMy = my;
         if (this.heroVisible) {
             float hs = 0.96f + 0.04f * eh;
-            g.pose().pushMatrix();
-            g.pose().translate(this.hx + this.hw / 2.0f - (1.0f - eh) * 46.0f, this.hy + this.hh / 2.0f);
-            g.pose().scale(hs, hs);
-            g.pose().translate(-(this.hx + this.hw / 2.0f), -(this.hy + this.hh / 2.0f));
+            g.method_51448().pushMatrix();
+            g.method_51448().translate(this.hx + this.hw / 2.0f - (1.0f - eh) * 46.0f, this.hy + this.hh / 2.0f);
+            g.method_51448().scale(hs, hs);
+            g.method_51448().translate(-(this.hx + this.hw / 2.0f), -(this.hy + this.hh / 2.0f));
             NowPlaying.renderHero(g, this.hx, this.hy, this.hw, this.hh, mx, my, aH);
-            g.pose().popMatrix();
+            g.method_51448().popMatrix();
         }
         float ps = 0.96f + 0.04f * ep;
-        g.pose().pushMatrix();
-        g.pose().translate(this.px + this.pw / 2.0f + (1.0f - ep) * 46.0f, this.py + this.ph / 2.0f);
-        g.pose().scale(ps, ps);
-        g.pose().translate(-(this.px + this.pw / 2.0f), -(this.py + this.ph / 2.0f));
+        g.method_51448().pushMatrix();
+        g.method_51448().translate(this.px + this.pw / 2.0f + (1.0f - ep) * 46.0f, this.py + this.ph / 2.0f);
+        g.method_51448().scale(ps, ps);
+        g.method_51448().translate(-(this.px + this.pw / 2.0f), -(this.py + this.ph / 2.0f));
         a = aP;
         this.renderPanel(g, mx, my, a);
-        g.pose().popMatrix();
-        g.pose().popMatrix();
+        g.method_51448().popMatrix();
+        g.method_51448().popMatrix();
     }
 
-    private void renderPanel(GuiGraphicsExtractor g, double mx, double my, float a) {
+    private void renderPanel(class_332 g, double mx, double my, float a) {
         int accent = Themes.accent();
         Gfx.shadow(g, this.px, this.py, this.pw, this.ph, 16.0f, 14.0f, Col.alpha(-16777216, a * 0.55f));
         Gfx.round(g, this.px, this.py, this.pw, this.ph, 16.0f, Col.alpha(-233697255, a));
@@ -289,16 +289,16 @@ extends Screen {
         boolean overClose = Ui.inside(mx, my, ccx - cr, ccy - cr, cr * 2.0f, cr * 2.0f);
         this.closeHover = Anim.approach(this.closeHover, overClose ? 1.0f : 0.0f, 14.0f);
         Gfx.circle(g, ccx, ccy, cr + this.closeHover * 1.2f, Col.alpha(Col.lerp(-14541264, -42374, this.closeHover * 0.85f), a));
-        g.pose().pushMatrix();
-        g.pose().translate(ccx, ccy);
-        g.pose().rotate(this.closeHover * (float)Math.PI / 2.0f);
+        g.method_51448().pushMatrix();
+        g.method_51448().translate(ccx, ccy);
+        g.method_51448().rotate(this.closeHover * (float)Math.PI / 2.0f);
         Icons.draw(g, "close", 0.0f, 0.0f, 8.0f, Col.alpha(-1, a));
-        g.pose().popMatrix();
+        g.method_51448().popMatrix();
         this.drawModeSwitch(g, mx, my, a);
         float maxScroll = Math.max(0.0f, this.contentH - this.contentHgt);
         this.scrollTarget = Math.max(0.0f, Math.min(maxScroll, this.scrollTarget));
         this.scroll = Anim.approach(this.scroll, this.scrollTarget, 16.0f);
-        g.enableScissor((int)this.contentX - 10, (int)this.contentY, (int)Math.ceil(this.contentX + this.contentW + 10.0f), (int)Math.ceil(this.contentY + this.contentHgt));
+        g.method_44379((int)this.contentX - 10, (int)this.contentY, (int)Math.ceil(this.contentX + this.contentW + 10.0f), (int)Math.ceil(this.contentY + this.contentHgt));
         float ox = this.contentX;
         float oy = this.contentY - this.scroll + tOff * 1.4f;
         for (Ui.Widget w : this.widgets) {
@@ -306,7 +306,7 @@ extends Screen {
             boolean inView = my >= (double)this.contentY && my <= (double)(this.contentY + this.contentHgt);
             w.render(g, ox, oy, inView ? mx : -9999.0, inView ? my : -9999.0, ta);
         }
-        g.disableScissor();
+        g.method_44380();
         if (this.scroll > 1.0f) {
             Gfx.gradientV(g, this.contentX - 10.0f, this.contentY, this.contentW + 20.0f, 10.0f, Col.alpha(-233697255, a), Col.alpha(-233697255, 0.0f));
         }
@@ -329,7 +329,7 @@ extends Screen {
     private float[] modeBox() {
         float h = 14.0f;
         float w = 0.0f;
-        String[] l = SkyLyricsScreen.modeLabels();
+        String[] l = LyricsFlowScreen.modeLabels();
         float[] ws = new float[2];
         for (int i = 0; i < 2; ++i) {
             ws[i] = Gfx.textWidth(l[i], Ui.FB, 6.6f) + 14.0f;
@@ -344,7 +344,7 @@ extends Screen {
         return new String[]{Ui.tr("lyricsflow.ui.menu.normal", new Object[0]), Ui.tr("lyricsflow.ui.menu.world", new Object[0])};
     }
 
-    private void drawModeSwitch(GuiGraphicsExtractor g, double mx, double my, float a) {
+    private void drawModeSwitch(class_332 g, double mx, double my, float a) {
         float target;
         float[] b = this.modeBox();
         int sel = Core.cfg().menuMode == 1 ? 1 : 0;
@@ -356,7 +356,7 @@ extends Screen {
         this.modePill = Anim.approach(this.modePill, target, 16.0f);
         float pwid = sel == 0 ? b[4] : b[5];
         Gfx.round(g, this.modePill + 1.0f, b[1] + 1.0f, pwid - 2.0f, b[3] - 2.0f, (b[3] - 2.0f) / 2.0f, Col.alpha(-724481, a));
-        String[] l = SkyLyricsScreen.modeLabels();
+        String[] l = LyricsFlowScreen.modeLabels();
         float x = b[0];
         for (int i = 0; i < 2; ++i) {
             boolean over = Ui.inside(mx, my, x, b[1], b[4 + i], b[3]);
@@ -388,17 +388,17 @@ extends Screen {
         return this.contentY - this.scroll;
     }
 
-    public boolean mouseClicked(MouseButtonEvent e, boolean doubleClick) {
+    public boolean method_25402(class_11909 e, boolean doubleClick) {
         if (this.closing) {
             return true;
         }
         double mx = this.lastMx;
         double my = this.lastMy;
-        if (e.button() != 0) {
-            return super.mouseClicked(e, doubleClick);
+        if (e.method_74245() != 0) {
+            return super.method_25402(e, doubleClick);
         }
         if (Ui.inside(mx, my, this.px + this.pw - 27.0f, this.py + 9.0f, 18.0f, 18.0f)) {
-            this.onClose();
+            this.method_25419();
             return true;
         }
         if (this.clickModeSwitch(mx, my)) {
@@ -430,10 +430,10 @@ extends Screen {
                 return true;
             }
         }
-        return super.mouseClicked(e, doubleClick);
+        return super.method_25402(e, doubleClick);
     }
 
-    public boolean mouseDragged(MouseButtonEvent e, double dx, double dy) {
+    public boolean method_25403(class_11909 e, double dx, double dy) {
         if (this.barDrag) {
             this.dragBar(this.lastMy);
             return true;
@@ -448,7 +448,7 @@ extends Screen {
         return true;
     }
 
-    public void mouseMoved(double x, double y) {
+    public void method_16014(double x, double y) {
         if (this.barDrag) {
             this.dragBar(this.lastMy);
             return;
@@ -461,7 +461,7 @@ extends Screen {
         }
     }
 
-    public boolean mouseReleased(MouseButtonEvent e) {
+    public boolean method_25406(class_11909 e) {
         this.barDrag = false;
         NowPlaying.releaseBar();
         if (this.dragging != null) {
@@ -480,7 +480,7 @@ extends Screen {
         this.scroll = this.scrollTarget = k * this.barMax;
     }
 
-    public boolean mouseScrolled(double x, double y, double h, double v) {
+    public boolean method_25401(double x, double y, double h, double v) {
         this.scrollTarget -= (float)v * 28.0f;
         return true;
     }
@@ -493,37 +493,37 @@ extends Screen {
         return false;
     }
 
-    public boolean keyPressed(KeyEvent e) {
+    public boolean method_25404(class_11908 e) {
         for (Ui.Widget w : this.widgets) {
             if (!w.capturesKeys() || !w.key(e)) continue;
             return true;
         }
-        if (!this.anyCapturing() && Keys.openMenu != null && Keys.openMenu.matches(e)) {
-            this.onClose();
+        if (!this.anyCapturing() && Keys.openMenu != null && Keys.openMenu.method_1417(e)) {
+            this.method_25419();
             return true;
         }
-        if (e.key() == 256) {
-            this.onClose();
+        if (e.comp_4795() == 256) {
+            this.method_25419();
             return true;
         }
-        if (e.key() == 264 || e.key() == 265) {
-            int d = e.key() == 264 ? 1 : -1;
+        if (e.comp_4795() == 264 || e.comp_4795() == 265) {
+            int d = e.comp_4795() == 264 ? 1 : -1;
             Tab[] t = Tab.values();
             this.switchTab(t[(this.tab.ordinal() + d + t.length) % t.length]);
             return true;
         }
-        return super.keyPressed(e);
+        return super.method_25404(e);
     }
 
-    public boolean charTyped(CharacterEvent e) {
+    public boolean method_25400(class_11905 e) {
         for (Ui.Widget w : this.widgets) {
             if (!w.chr(e)) continue;
             return true;
         }
-        return super.charTyped(e);
+        return super.method_25400(e);
     }
 
-    public void onClose() {
+    public void method_25419() {
         if (this.closing) {
             return;
         }
@@ -532,7 +532,7 @@ extends Screen {
         UiSounds.play(UiSounds.CLOSE, 1.0f);
     }
 
-    public boolean shouldCloseOnEsc() {
+    public boolean method_25422() {
         return false;
     }
 
@@ -565,3 +565,4 @@ extends Screen {
         }
     }
 }
+

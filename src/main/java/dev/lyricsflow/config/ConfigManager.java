@@ -18,7 +18,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.app.Core;
 import dev.lyricsflow.config.LFConfig;
 import java.io.ByteArrayOutputStream;
@@ -242,7 +242,7 @@ public final class ConfigManager {
                 }
             }
             catch (Exception e) {
-                SkyLyrics.LOG.warn("Could not read config, using defaults", (Throwable)e);
+                LyricsFlow.LOG.warn("Could not read config, using defaults", (Throwable)e);
             }
         }
         ConfigManager.save();
@@ -348,7 +348,7 @@ public final class ConfigManager {
             ConfigManager.save();
         }
         catch (Exception e) {
-            SkyLyrics.LOG.warn("Could not apply profile", (Throwable)e);
+            LyricsFlow.LOG.warn("Could not apply profile", (Throwable)e);
         }
     }
 
@@ -376,3 +376,4 @@ public final class ConfigManager {
         DROP = Set.of("connection", "spotifyClientId", "spotifyRefreshToken");
     }
 }
+

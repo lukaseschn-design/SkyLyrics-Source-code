@@ -2,33 +2,33 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  com.mojang.renderpearl.api.buffers.GpuBufferSlice
+ *  com.mojang.blaze3d.buffers.GpuBufferSlice
  *  com.mojang.blaze3d.systems.RenderSystem
- *  net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext
- *  net.minecraft.client.renderer.rendertype.RenderTypes
- *  net.minecraft.world.level.Level
- *  net.minecraft.world.phys.Vec3
- *  net.minecraft.network.chat.Component
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.Font
- *  net.minecraft.client.gui.Font$DisplayMode
- *  net.minecraft.client.Camera
- *  com.mojang.blaze3d.vertex.PoseStack
- *  com.mojang.blaze3d.vertex.VertexConsumer
- *  dev.lyricsflow.compat.LegacyBufferSource
- *  dev.lyricsflow.compat.LegacyBufferSource$BufferSource
- *  net.minecraft.client.renderer.texture.OverlayTexture
- *  net.minecraft.client.player.LocalPlayer
- *  net.minecraft.client.renderer.fog.FogRenderer
- *  net.minecraft.client.renderer.fog.FogRenderer$FogMode
+ *  net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext
+ *  net.minecraft.class_12249
+ *  net.minecraft.class_1937
+ *  net.minecraft.class_243
+ *  net.minecraft.class_2561
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
+ *  net.minecraft.class_327
+ *  net.minecraft.class_327$class_6415
+ *  net.minecraft.class_4184
+ *  net.minecraft.class_4587
+ *  net.minecraft.class_4588
+ *  net.minecraft.class_4597
+ *  net.minecraft.class_4597$class_4598
+ *  net.minecraft.class_4608
+ *  net.minecraft.class_746
+ *  net.minecraft.class_758
+ *  net.minecraft.class_758$class_4596
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  *  org.joml.Vector4f
  */
 package dev.lyricsflow.app.sky;
 
-import com.mojang.renderpearl.api.buffers.GpuBufferSlice;
+import com.mojang.blaze3d.buffers.GpuBufferSlice;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.lyricsflow.app.Core;
 import dev.lyricsflow.app.config.Config;
@@ -57,21 +57,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import net.fabricmc.fabric.api.client.rendering.v1.level.LevelRenderContext;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.Camera;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import dev.lyricsflow.compat.LegacyBufferSource;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.fog.FogRenderer;
+import net.fabricmc.fabric.api.client.rendering.v1.world.WorldRenderContext;
+import net.minecraft.class_12249;
+import net.minecraft.class_1937;
+import net.minecraft.class_243;
+import net.minecraft.class_2561;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
+import net.minecraft.class_327;
+import net.minecraft.class_4184;
+import net.minecraft.class_4587;
+import net.minecraft.class_4588;
+import net.minecraft.class_4597;
+import net.minecraft.class_4608;
+import net.minecraft.class_746;
+import net.minecraft.class_758;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 import org.joml.Vector4f;
@@ -113,7 +113,7 @@ public final class WorldSky {
     private static final int[] Q_DOME;
     private static final int[] Q_MOON;
     private static final int[] Q_GLOW;
-    private static VertexConsumer quads;
+    private static class_4588 quads;
     private static final double[][] RING;
     private static int ringPos;
     private static final float[] DAY_AL;
@@ -181,7 +181,7 @@ public final class WorldSky {
     private static final Matrix4f TMP;
     private static final Matrix4f WM;
     private static final Matrix4f SCR;
-    private static final Map<String, Component> COMP;
+    private static final Map<String, class_2561> COMP;
     private static int compFont;
     public static final int[] LYRIC_COLORS;
     private static boolean warned;
@@ -198,31 +198,25 @@ public final class WorldSky {
     /*
      * WARNING - Removed try catching itself - possible behaviour change.
      */
-    public static void render(LevelRenderContext ctx) {
+    public static void render(WorldRenderContext ctx) {
         if (!ConfigManager.get().enabled) {
             fogMix = 0.0f;
             return;
         }
-        try (LegacyBufferSource.BufferSource buffers = new LegacyBufferSource.BufferSource(ctx.submitNodeCollector())) {
-            WorldSky.render(ctx, buffers);
-        }
-    }
-
-    private static void render(LevelRenderContext ctx, LegacyBufferSource buffers) {
         AutoPerf.begin();
         GpuBufferSlice oldFog = null;
         try {
-            Minecraft mcf = Minecraft.getInstance();
+            class_310 mcf = class_310.method_1551();
             oldFog = RenderSystem.getShaderFog();
-            FogRenderer fr = ((GameRendererAccessor)mcf.gameRenderer).lyricsflow$fogRenderer();
-            RenderSystem.setShaderFog((GpuBufferSlice)fr.getBuffer(FogRenderer.FogMode.NONE));
+            class_758 fr = ((GameRendererAccessor)mcf.field_1773).lyricsflow$fogRenderer();
+            RenderSystem.setShaderFog((GpuBufferSlice)fr.method_71109(class_758.class_4596.field_60101));
         }
         catch (Throwable ignored) {
             oldFog = null;
         }
         try {
             if (ConfigManager.get().enabled) {
-                WorldSky.renderSky(ctx, buffers);
+                WorldSky.renderSky(ctx);
             }
         }
         catch (Throwable e) {
@@ -239,20 +233,20 @@ public final class WorldSky {
         }
     }
 
-    private static void renderSky(LevelRenderContext ctx, LegacyBufferSource buffers) {
+    private static void renderSky(WorldRenderContext ctx) {
         fogMix = 0.0f;
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && mc.level != null) {
+        class_310 mc = class_310.method_1551();
+        if (mc.field_1724 != null && mc.field_1687 != null) {
             long tod;
             Config c = Core.cfg();
             SkyPreset p = SkyPreset.get(c.sky);
             long nowNs = System.nanoTime();
             float dt = Math.min(0.1f, (float)(nowNs - lastNanos) / 1.0E9f);
             lastNanos = nowNs;
-            float pt = mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
-            Camera mainCam = mc.gameRenderer.mainCamera();
-            camYaw = mainCam.yRot();
-            camPitch = mainCam.xRot();
+            float pt = mc.method_61966().method_60637(false);
+            class_4184 mainCam = mc.field_1773.method_19418();
+            camYaw = mainCam.method_19330();
+            camPitch = mainCam.method_19329();
             double y = Math.toRadians(camYaw);
             double pi = Math.toRadians(camPitch);
             fx = -Math.sin(y) * Math.cos(pi);
@@ -264,17 +258,18 @@ public final class WorldSky {
             ux = ry * fz - rz * fy;
             uy = rz * fx - rx * fz;
             uz = rx * fy - ry * fx;
-            dist = Math.max(40.0, Math.min(180.0, (double)(mc.options.getEffectiveRenderDistance() * 16) * 0.7));
-            texDist = Math.max(dist * 0.975, (double)(mc.options.getEffectiveRenderDistance() * 16) * 0.8);
-            skyD = Math.max(dist, (double)(mc.options.getEffectiveRenderDistance() * 16) * 1.04 + 8.0);
-            boolean overworld = Core.skyWorld((Level)mc.level);
+            dist = Math.max(40.0, Math.min(180.0, (double)(mc.field_1690.method_38521() * 16) * 0.7));
+            texDist = Math.max(dist * 0.975, (double)(mc.field_1690.method_38521() * 16) * 0.8);
+            skyD = Math.max(dist, (double)(mc.field_1690.method_38521() * 16) * 1.04 + 8.0);
+            boolean overworld = Core.skyWorld((class_1937)mc.field_1687);
             float vis = visible.target(p != null && overworld ? 1.0 : 0.0).get();
-            skyOpen = mc.level.canSeeSky(mc.player.blockPosition().above());
+            skyOpen = mc.field_1687.method_8311(mc.field_1724.method_24515().method_10084());
             float out = outside.target(skyOpen ? 1.0 : 0.0).get();
             breathT += (double)(dt * c.skyBreath) * 1.3;
             double t = skyTime += (double)(dt * Math.max(0.1f, Math.min(3.0f, c.skySpeed)));
-            PoseStack ps = ctx.poseStack();
-            base = new Matrix4f((Matrix4fc)ps.last().pose());
+            class_4587 ps = ctx.matrices();
+            base = new Matrix4f((Matrix4fc)ps.method_23760().method_23761());
+            class_4597 buffers = ctx.consumers();
             NowPlaying npm = SpotifyClient.now();
             float beat = 0.0f;
             float calm = 1.0f;
@@ -285,7 +280,7 @@ public final class WorldSky {
                 boolean singing = li >= 0 && pr <= npm.lineEnd(li) + 300L;
                 calm = musicCalm.target(singing ? 1.0 : (double)0.7f).get();
             }
-            float nightF = (tod = Math.floorMod(mc.level.getOverworldClockTime(), 24000L)) >= 13000L && tod <= 23000L ? 1.0f : (tod > 12000L && tod < 13000L ? (float)(tod - 12000L) / 1000.0f : (tod > 23000L ? 1.0f - (float)(tod - 23000L) / 1000.0f : 0.0f));
+            float nightF = (tod = Math.floorMod(mc.field_1687.method_8532(), 24000L)) >= 13000L && tod <= 23000L ? 1.0f : (tod > 12000L && tod < 13000L ? (float)(tod - 12000L) / 1000.0f : (tod > 23000L ? 1.0f - (float)(tod - 23000L) / 1000.0f : 0.0f));
             float cover = 0.0f;
             float night = 1.0f;
             if (c.skyDay) {
@@ -302,7 +297,7 @@ public final class WorldSky {
                 SkyPreset.Weather wx;
                 SkyTextures.update();
                 float strength = p.strength * c.skyStrength * vis * night;
-                quads = buffers.getBuffer(RenderTypes.debugQuads());
+                quads = buffers.method_73477(class_12249.method_76023());
                 if (c.fxSkyColor || cover > 0.01f) {
                     WorldSky.drawDome(p, strength, cover * vis, mc);
                 }
@@ -314,7 +309,7 @@ public final class WorldSky {
                     WorldSky.drawLiveSky(liveA, liveB, mc);
                 }
                 quads = null;
-                quads = buffers.getBuffer(RenderTypes.debugQuads());
+                quads = buffers.method_73477(class_12249.method_76023());
                 if (p.stars > 0.0f && c.fxStars && AutoPerf.allow(5)) {
                     WorldSky.drawStars(p, vis * night * (0.85f + 0.3f * beat), t);
                 }
@@ -331,19 +326,19 @@ public final class WorldSky {
                 quads = null;
                 SkyPreset.Weather weather = wx = c.snow ? SkyPreset.Weather.SNOW : p.weather;
                 if (c.fxWeather && SkyTextures.spritesReady() && AutoPerf.allow(4) && overworld && c.weatherAmount > 0.01f && wx != SkyPreset.Weather.NONE && out > 0.01f) {
-                    Vec3 cam = mainCam.position();
+                    class_243 cam = ctx.worldState().field_63082.field_63078;
                     WorldSky.drawWeather(buffers, wx, c.weatherAmount * (AutoPerf.allow(3) ? 1.0f : 0.5f), out, dt, t, cam);
                 }
             } else if (c.snow && overworld && out > 0.01f && AutoPerf.allow(4)) {
                 SkyTextures.update();
                 if (SkyTextures.spritesReady()) {
-                    Vec3 cam = mainCam.position();
+                    class_243 cam = ctx.worldState().field_63082.field_63078;
                     WorldSky.drawWeather(buffers, SkyPreset.Weather.SNOW, Math.max(0.3f, c.weatherAmount), out, dt, t, cam);
                 }
             }
             int lyricCol = c.lyricsColor >= 0 ? LYRIC_COLORS[Math.floorMod(c.lyricsColor, LYRIC_COLORS.length)] : (p == null ? Theme.accent() : p.lyricColor);
             LFConfig lf = ConfigManager.get();
-            if (lf.enabled && lf.lyricsShown() && lf.lyricsStyle == LFConfig.LyricsStyle.SKY && !mc.gui.hud.isHidden() && !Hud.hideForScreenshot) {
+            if (lf.enabled && lf.lyricsShown() && lf.lyricsStyle == LFConfig.LyricsStyle.SKY && !mc.field_1690.field_1842 && !Hud.hideForScreenshot) {
                 c.lyricsOpacity = Math.max(0.2f, Math.min(1.0f, lf.textOpacity));
                 c.lyricsUnderground = lf.showUnderground;
                 c.lyricsGlow = lf.glow;
@@ -360,7 +355,7 @@ public final class WorldSky {
                 exiting.clear();
                 activeIdx = -2;
             }
-            Vec3 camV = mainCam.position();
+            class_243 camV = ctx.worldState().field_63082.field_63078;
             DeathFx.render(mc, buffers, base, camV, pt);
             base = null;
         }
@@ -383,7 +378,7 @@ public final class WorldSky {
     }
 
     private static void v(double x, double y, double z, int rgb, float a) {
-        quads.addVertex((Matrix4fc)base, (float)x, (float)y, (float)z).setColor(Gfx.argbRaw(rgb, a));
+        quads.method_22918((Matrix4fc)base, (float)x, (float)y, (float)z).method_39415(Gfx.argbRaw(rgb, a));
     }
 
     private static void quad(double[] p0, double[] p1, double[] p2, double[] p3, int c0, float a0, int c1, float a1, int c2, float a2, int c3, float a3) {
@@ -470,7 +465,7 @@ public final class WorldSky {
         return g;
     }
 
-    private static void drawDome(SkyPreset p, float s, float cover, Minecraft mc) {
+    private static void drawDome(SkyPreset p, float s, float cover, class_310 mc) {
         double d = skyD * 1.25;
         int step = Q_DOME[WorldSky.q()];
         double[][][] grid = WorldSky.domeGrid(step);
@@ -610,7 +605,7 @@ public final class WorldSky {
         }
     }
 
-    private static void drawSongIntro(Minecraft mc, Config c, LegacyBufferSource buffers, int color) {
+    private static void drawSongIntro(class_310 mc, Config c, class_4597 buffers, int color) {
         NowPlaying np = SpotifyClient.now();
         if (np.hasTrack()) {
             float a;
@@ -627,7 +622,7 @@ public final class WorldSky {
                 double d = dist * 0.88;
                 double dpp = WorldSky.degPerPx(mc, c);
                 float k = (float)(Math.toRadians(dpp) * d);
-                Font font = mc.font;
+                class_327 font = mc.field_1772;
                 String title = np.title.length() > 32 ? np.title.substring(0, 31) + "\u2026" : np.title;
                 WorldSky.drawFlat(font, buffers, title, introAz, introEl + 2.0 + (double)((1.0f - Math.min(1.0f, (float)age / 700.0f)) * 2.0f), d, k * 1.6f, color, a);
                 if (!np.artist.isBlank()) {
@@ -637,7 +632,7 @@ public final class WorldSky {
         }
     }
 
-    private static void drawFlat(Font font, LegacyBufferSource buffers, String text, double azDeg, double elDeg, double d, float k, int col, float a) {
+    private static void drawFlat(class_327 font, class_4597 buffers, String text, double azDeg, double elDeg, double d, float k, int col, float a) {
         double az = Math.toRadians(azDeg);
         double el = Math.toRadians(elDeg);
         double dx = -Math.sin(az) * Math.cos(el);
@@ -679,8 +674,8 @@ public final class WorldSky {
         }
     }
 
-    private static void drawWeather(LegacyBufferSource buffers, SkyPreset.Weather w, float amount, float out, float dt, double t, Vec3 eye) {
-        VertexConsumer vc = buffers.getBuffer(RenderTypes.text((Identifier)SkyTextures.SPRITES));
+    private static void drawWeather(class_4597 buffers, SkyPreset.Weather w, float amount, float out, float dt, double t, class_243 eye) {
+        class_4588 vc = buffers.method_73477(class_12249.method_76022((class_2960)SkyTextures.SPRITES));
         boolean crystals = w == SkyPreset.Weather.SNOW && SkyTextures.flakeReady();
         FLAKES.clear();
         int n = switch (w) {
@@ -698,9 +693,9 @@ public final class WorldSky {
         if (partType != w || parts.length != n) {
             partType = w;
             for (double[] q : parts = new double[n][11]) {
-                q[0] = eye.x + (RND.nextDouble() * 2.0 - 1.0) * box;
-                q[1] = eye.y + (RND.nextDouble() * 2.0 - 1.0) * hb;
-                q[2] = eye.z + (RND.nextDouble() * 2.0 - 1.0) * box;
+                q[0] = eye.field_1352 + (RND.nextDouble() * 2.0 - 1.0) * box;
+                q[1] = eye.field_1351 + (RND.nextDouble() * 2.0 - 1.0) * hb;
+                q[2] = eye.field_1350 + (RND.nextDouble() * 2.0 - 1.0) * box;
                 q[3] = RND.nextDouble() * 6.28;
                 q[4] = 0.6 + RND.nextDouble() * 0.8;
                 double ax = RND.nextGaussian();
@@ -755,12 +750,12 @@ public final class WorldSky {
             q[0] = q[0] + vx * (double)dt;
             q[1] = q[1] + vy * (double)dt;
             q[2] = q[2] + vz * (double)dt;
-            double dx = WorldSky.wrap(q[0] - eye.x, box);
-            double dy = WorldSky.wrap(q[1] - eye.y, hb);
-            double dz = WorldSky.wrap(q[2] - eye.z, box);
-            q[0] = eye.x + dx;
-            q[1] = eye.y + dy;
-            q[2] = eye.z + dz;
+            double dx = WorldSky.wrap(q[0] - eye.field_1352, box);
+            double dy = WorldSky.wrap(q[1] - eye.field_1351, hb);
+            double dz = WorldSky.wrap(q[2] - eye.field_1350, box);
+            q[0] = eye.field_1352 + dx;
+            q[1] = eye.field_1351 + dy;
+            q[2] = eye.field_1350 + dz;
             if (dx * fx + dy * fy + dz * fz < 0.3) continue;
             double dd = Math.sqrt(dx * dx + dy * dy + dz * dz);
             float near = (float)Math.min(1.0, 5.0 / Math.max(0.5, dd));
@@ -802,7 +797,7 @@ public final class WorldSky {
             }
         }
         if (!FLAKES.isEmpty()) {
-            VertexConsumer fv = buffers.getBuffer(RenderTypes.text((Identifier)SkyTextures.SNOWFLAKE));
+            class_4588 fv = buffers.method_73477(class_12249.method_76022((class_2960)SkyTextures.SNOWFLAKE));
             for (double[] f : FLAKES) {
                 WorldSky.flake(fv, f[0], f[1], f[2], f[3], f[4], (float)f[5]);
             }
@@ -810,7 +805,7 @@ public final class WorldSky {
         }
     }
 
-    private static void flake(VertexConsumer vc, double cx, double cy, double cz, double size, double rot, float a) {
+    private static void flake(class_4588 vc, double cx, double cy, double cz, double size, double rot, float a) {
         if (a <= 0.02f) {
             return;
         }
@@ -827,11 +822,11 @@ public final class WorldSky {
         WorldSky.tquad(vc, WorldSky.p(cx - ax - bx, cy - ay - by, cz - az - bz), WorldSky.p(cx + ax - bx, cy + ay - by, cz + az - bz), WorldSky.p(cx + ax + bx, cy + ay + by, cz + az + bz), WorldSky.p(cx - ax + bx, cy - ay + by, cz - az + bz), 0.0f, 0.0f, 1.0f, 1.0f, col);
     }
 
-    private static void tv(VertexConsumer vc, double x, double y, double z, float u, float v, int argb) {
-        vc.addVertex((Matrix4fc)base, (float)x, (float)y, (float)z).setColor(argb).setUv(u, v).setOverlay(OverlayTexture.NO_OVERLAY).setLight(0xF000F0).setNormal(0.0f, 1.0f, 0.0f);
+    private static void tv(class_4588 vc, double x, double y, double z, float u, float v, int argb) {
+        vc.method_22918((Matrix4fc)base, (float)x, (float)y, (float)z).method_39415(argb).method_22913(u, v).method_22922(class_4608.field_21444).method_60803(0xF000F0).method_22914(0.0f, 1.0f, 0.0f);
     }
 
-    private static void tquad(VertexConsumer vc, double[] p0, double[] p1, double[] p2, double[] p3, float u0, float v0, float u1, float v1, int col) {
+    private static void tquad(class_4588 vc, double[] p0, double[] p1, double[] p2, double[] p3, float u0, float v0, float u1, float v1, int col) {
         double ay = p1[1] - p0[1];
         double bz = p2[2] - p0[2];
         double az = p1[2] - p0[2];
@@ -854,7 +849,7 @@ public final class WorldSky {
         }
     }
 
-    private static void sprite(VertexConsumer vc, double cx, double cy, double cz, double size, int k, int rgb, float a) {
+    private static void sprite(class_4588 vc, double cx, double cy, double cz, double size, int k, int rgb, float a) {
         if (!(a <= 0.02f)) {
             double s = size / 2.0;
             int col = Gfx.argbRaw(rgb, a);
@@ -864,7 +859,7 @@ public final class WorldSky {
         }
     }
 
-    private static void spriteStreak(VertexConsumer vc, double ax, double ay, double az, double bx, double by, double bz, double w, int rgb, float a) {
+    private static void spriteStreak(class_4588 vc, double ax, double ay, double az, double bx, double by, double bz, double w, int rgb, float a) {
         double sz;
         double dx;
         double vx;
@@ -882,7 +877,7 @@ public final class WorldSky {
         }
     }
 
-    private static void petal(VertexConsumer vc, double cx, double cy, double cz, double size, double kx, double ky, double kz, double ang, int rgb, float a) {
+    private static void petal(class_4588 vc, double cx, double cy, double cz, double size, double kx, double ky, double kz, double ang, int rgb, float a) {
         if (!(a <= 0.02f)) {
             double c = Math.cos(ang);
             double s = Math.sin(ang);
@@ -899,11 +894,11 @@ public final class WorldSky {
         }
     }
 
-    private static void texDome(VertexConsumer vc, float alpha, float uOff, float wave, double t) {
+    private static void texDome(class_4588 vc, float alpha, float uOff, float wave, double t) {
         WorldSky.texDome(vc, alpha, 1.0f, texDist, uOff, wave, t);
     }
 
-    private static void texDome(VertexConsumer vc, float bright, float opacity, double d, float uOff, float wave, double t) {
+    private static void texDome(class_4588 vc, float bright, float opacity, double d, float uOff, float wave, double t) {
         if (!(bright <= 0.01f) && !(opacity <= 0.01f)) {
             int gray = Math.round(Math.min(1.0f, bright) * 255.0f);
             int col = Math.round(Math.min(1.0f, opacity) * 255.0f) << 24 | gray << 16 | gray << 8 | gray;
@@ -918,7 +913,7 @@ public final class WorldSky {
         }
     }
 
-    private static void texQuad(VertexConsumer vc, double az0, double az1, double el0, double el1, double d, float uOff, float wave, double t, int col) {
+    private static void texQuad(class_4588 vc, double az0, double az1, double el0, double el1, double d, float uOff, float wave, double t, int col) {
         double u1;
         double u0 = az0 / 360.0 + (double)uOff;
         if ((u1 = (u0 -= Math.floor(u0)) + (az1 - az0) / 360.0) > 1.0000001) {
@@ -930,7 +925,7 @@ public final class WorldSky {
         }
     }
 
-    private static void texPart(VertexConsumer vc, double az0, double az1, double u0, double u1, double el0, double el1, double d, float wave, double t, int col) {
+    private static void texPart(class_4588 vc, double az0, double az1, double u0, double u1, double el0, double el1, double d, float wave, double t, int col) {
         float v0 = (float)((90.0 - el1) / 98.0);
         float v1 = (float)((90.0 - el0) / 98.0);
         double w00 = WorldSky.waveAt(az0, el0, t) * (double)wave;
@@ -1117,7 +1112,7 @@ public final class WorldSky {
         }
     }
 
-    private static void drawSkyMesh(float alpha, float night, float fxA, double drift, double d, Minecraft mc) {
+    private static void drawSkyMesh(float alpha, float night, float fxA, double drift, double d, class_310 mc) {
         if (!(alpha <= 0.01f)) {
             double step = WorldSky.q() != 0 && AutoPerf.allow(3) ? (WorldSky.q() == 1 ? 1.25 : 1.0) : 2.0;
             if (meshVer != SkyTextures.version() || step != meshStep || mX == null) {
@@ -1128,12 +1123,12 @@ public final class WorldSky {
             ++frameNo;
             double fov = 70.0;
             try {
-                fov = ((Integer)mc.options.fov().get()).intValue();
+                fov = ((Integer)mc.field_1690.method_41808().method_41753()).intValue();
             }
             catch (Throwable throwable) {
                 // empty catch block
             }
-            double aspect = (double)mc.getWindow().getWidth() / (double)Math.max(1, mc.getWindow().getHeight());
+            double aspect = (double)mc.method_22683().method_4489() / (double)Math.max(1, mc.method_22683().method_4506());
             double halfDiag = Math.toDegrees(Math.atan(Math.tan(Math.toRadians(Math.min(170.0, fov * 1.6) / 2.0)) * Math.sqrt(1.0 + aspect * aspect)));
             double lim = Math.toRadians(Math.min(135.0, halfDiag + 45.0 + step));
             double cosLim = Math.cos(lim);
@@ -1249,7 +1244,7 @@ public final class WorldSky {
         return c;
     }
 
-    private static void drawLiveSky(float alpha, float bright, Minecraft mc) {
+    private static void drawLiveSky(float alpha, float bright, class_310 mc) {
         if (!(alpha <= 0.01f)) {
             double step = WorldSky.q() != 0 && AutoPerf.allow(3) ? (WorldSky.q() == 1 ? 2.0 : 1.5) : 3.0;
             if (lX == null || step != liveStep) {
@@ -1258,12 +1253,12 @@ public final class WorldSky {
             ++frameNo;
             double fov = 70.0;
             try {
-                fov = ((Integer)mc.options.fov().get()).intValue();
+                fov = ((Integer)mc.field_1690.method_41808().method_41753()).intValue();
             }
             catch (Throwable throwable) {
                 // empty catch block
             }
-            double aspect = (double)mc.getWindow().getWidth() / (double)Math.max(1, mc.getWindow().getHeight());
+            double aspect = (double)mc.method_22683().method_4489() / (double)Math.max(1, mc.method_22683().method_4506());
             double halfDiag = Math.toDegrees(Math.atan(Math.tan(Math.toRadians(Math.min(170.0, fov * 1.6) / 2.0)) * Math.sqrt(1.0 + aspect * aspect)));
             double cosLim = Math.cos(Math.toRadians(Math.min(135.0, halfDiag + 45.0 + step)));
             double d2 = skyD;
@@ -1332,12 +1327,12 @@ public final class WorldSky {
         fogMix = Math.max(0.0f, Math.min(1.0f, mix));
     }
 
-    private static boolean drawLiveShader(SkyPreset p, float alpha, float bright, double t, Config c, LegacyBufferSource buffers, Minecraft mc) {
-        LegacyBufferSource.BufferSource bs;
+    private static boolean drawLiveShader(SkyPreset p, float alpha, float bright, double t, Config c, class_4597 buffers, class_310 mc) {
+        class_4597.class_4598 bs;
         block11: {
             block10: {
-                if (!(buffers instanceof LegacyBufferSource.BufferSource)) break block10;
-                bs = (LegacyBufferSource.BufferSource)buffers;
+                if (!(buffers instanceof class_4597.class_4598)) break block10;
+                bs = (class_4597.class_4598)buffers;
                 if (LiveSkyShader.ready()) break block11;
             }
             return false;
@@ -1346,20 +1341,20 @@ public final class WorldSky {
             return true;
         }
         try {
-            bs.endBatch(RenderTypes.debugQuads());
+            bs.method_22994(class_12249.method_76023());
             LiveSkyShader.params(p, WorldSky.aurora1(p), WorldSky.aurora2(p), t, c, base);
-            VertexConsumer vc = buffers.getBuffer(LiveSkyShader.type());
+            class_4588 vc = buffers.method_73477(LiveSkyShader.type());
             float st = (float)(t * 2.2);
             int br = Math.max(0, Math.min(255, Math.round(bright / 2.0f * 255.0f)));
             int al = Math.max(0, Math.min(255, Math.round(alpha * 255.0f)));
             double fov = 70.0;
             try {
-                fov = ((Integer)mc.options.fov().get()).intValue();
+                fov = ((Integer)mc.field_1690.method_41808().method_41753()).intValue();
             }
             catch (Throwable throwable) {
                 // empty catch block
             }
-            double aspect = (double)mc.getWindow().getWidth() / (double)Math.max(1, mc.getWindow().getHeight());
+            double aspect = (double)mc.method_22683().method_4489() / (double)Math.max(1, mc.method_22683().method_4506());
             double halfDiag = Math.toDegrees(Math.atan(Math.tan(Math.toRadians(Math.min(170.0, fov * 1.6) / 2.0)) * Math.sqrt(1.0 + aspect * aspect)));
             double cosLim = Math.cos(Math.toRadians(Math.min(135.0, halfDiag + 50.0)));
             double d = skyD;
@@ -1389,13 +1384,13 @@ public final class WorldSky {
                     float x3 = (float)(q3[0] * d);
                     float y3 = (float)(q3[1] * d);
                     float z3 = (float)(q3[2] * d);
-                    vc.addVertex((Matrix4fc)base, x0, y0, z0).setUv(st, 0.0f).setColor(br, 0, 0, al);
-                    vc.addVertex((Matrix4fc)base, x1, y1, z1).setUv(st, 0.0f).setColor(br, 0, 0, al);
-                    vc.addVertex((Matrix4fc)base, x2, y2, z2).setUv(st, 0.0f).setColor(br, 0, 0, al);
-                    vc.addVertex((Matrix4fc)base, x3, y3, z3).setUv(st, 0.0f).setColor(br, 0, 0, al);
+                    vc.method_22918((Matrix4fc)base, x0, y0, z0).method_22913(st, 0.0f).method_1336(br, 0, 0, al);
+                    vc.method_22918((Matrix4fc)base, x1, y1, z1).method_22913(st, 0.0f).method_1336(br, 0, 0, al);
+                    vc.method_22918((Matrix4fc)base, x2, y2, z2).method_22913(st, 0.0f).method_1336(br, 0, 0, al);
+                    vc.method_22918((Matrix4fc)base, x3, y3, z3).method_22913(st, 0.0f).method_1336(br, 0, 0, al);
                 }
             }
-            bs.endBatch(LiveSkyShader.type());
+            bs.method_22994(LiveSkyShader.type());
             return true;
         }
         catch (Throwable var53) {
@@ -1550,47 +1545,47 @@ public final class WorldSky {
         }
     }
 
-    private static void drawPlayerFx(Minecraft mc, Config c, LegacyBufferSource buffers, Vec3 cam, float pt, double t, SkyPreset p) {
-        LocalPlayer pl = mc.player;
-        if (pl != null && !pl.isInvisible()) {
+    private static void drawPlayerFx(class_310 mc, Config c, class_4597 buffers, class_243 cam, float pt, double t, SkyPreset p) {
+        class_746 pl = mc.field_1724;
+        if (pl != null && !pl.method_5767()) {
             int skyCol;
-            Vec3 pos = pl.getPosition(pt);
+            class_243 pos = pl.method_30950(pt);
             long now = System.currentTimeMillis();
             NowPlaying np = SpotifyClient.now();
             float beat = np.playing ? np.beatPulse(np.progressNow(c.lyricsOffsetMs)) : 0.0f;
             int acc = Theme.accent();
             int n = skyCol = p != null ? WorldSky.aurora1(p) : acc;
             if (c.trail > 0 && SkyTextures.spritesReady()) {
-                double mvx = pos.x - lastTx;
-                double mvz = pos.z - lastTz;
+                double mvx = pos.field_1352 - lastTx;
+                double mvz = pos.field_1350 - lastTz;
                 if (now - lastTrail > 35L && mvx * mvx + mvz * mvz > 9.0E-4) {
                     lastTrail = now;
-                    lastTx = pos.x;
-                    lastTz = pos.z;
+                    lastTx = pos.field_1352;
+                    lastTz = pos.field_1350;
                     double jx = (Math.random() - 0.5) * 0.35;
                     double jz = (Math.random() - 0.5) * 0.35;
-                    TRAIL.addLast(new double[]{pos.x + jx, pos.y + 0.12 + Math.random() * 0.25, pos.z + jz, now, (double)now / 1400.0 % 1.0});
+                    TRAIL.addLast(new double[]{pos.field_1352 + jx, pos.field_1351 + 0.12 + Math.random() * 0.25, pos.field_1350 + jz, now, (double)now / 1400.0 % 1.0});
                 }
                 while (!TRAIL.isEmpty() && (double)now - TRAIL.peekFirst()[3] > 1300.0) {
                     TRAIL.pollFirst();
                 }
                 if (!TRAIL.isEmpty()) {
-                    VertexConsumer ts = buffers.getBuffer(RenderTypes.text((Identifier)SkyTextures.SPRITES));
+                    class_4588 ts = buffers.method_73477(class_12249.method_76022((class_2960)SkyTextures.SPRITES));
                     for (double[] q : TRAIL) {
                         float age = (float)(((double)now - q[3]) / 1300.0);
                         int col = c.trail == 2 ? Gfx.hsv((float)q[4], 0.65f, 1.0f) : (c.trail == 3 ? skyCol : acc);
                         double rise = (double)age * 0.35;
-                        WorldSky.sprite(ts, q[0] - cam.x, q[1] + rise - cam.y, q[2] - cam.z, 0.32 * (1.0 - (double)age * 0.6) * (1.0 + 0.4 * (double)beat), 2, col, (1.0f - age) * 0.9f);
+                        WorldSky.sprite(ts, q[0] - cam.field_1352, q[1] + rise - cam.field_1351, q[2] - cam.field_1350, 0.32 * (1.0 - (double)age * 0.6) * (1.0 + 0.4 * (double)beat), 2, col, (1.0f - age) * 0.9f);
                     }
                 }
             } else if (!TRAIL.isEmpty()) {
                 TRAIL.clear();
             }
             if (c.aura) {
-                quads = buffers.getBuffer(RenderTypes.debugQuads());
-                double fx0 = pos.x - cam.x;
-                double fy0 = pos.y + 0.03 - cam.y;
-                double fz0 = pos.z - cam.z;
+                quads = buffers.method_73477(class_12249.method_76023());
+                double fx0 = pos.field_1352 - cam.field_1352;
+                double fy0 = pos.field_1351 + 0.03 - cam.field_1351;
+                double fz0 = pos.field_1350 - cam.field_1350;
                 int seg = 40;
                 float pulse = 0.35f + 0.65f * beat;
                 double r0 = 0.55 + 0.08 * (double)beat;
@@ -1613,13 +1608,13 @@ public final class WorldSky {
         return Core.cfg().lyricsUnderground && !skyOpen ? base : Math.max(-6.0, Math.min(45.0, base));
     }
 
-    private static double degPerPx(Minecraft mc, Config c) {
-        double guiH = mc.getWindow().getGuiScaledHeight();
+    private static double degPerPx(class_310 mc, Config c) {
+        double guiH = mc.method_22683().method_4502();
         double focalRef = Math.max(1.0, guiH) / 2.0 / Math.tan(Math.toRadians(35.0));
         return Math.toDegrees((double)c.lyricsSize / focalRef);
     }
 
-    private static void drawLyrics(Minecraft mc, Config c, LegacyBufferSource buffers, int color, float dt) {
+    private static void drawLyrics(class_310 mc, Config c, class_4597 buffers, int color, float dt) {
         NowPlaying np = SpotifyClient.now();
         long now = System.currentTimeMillis();
         int li = -1;
@@ -1656,7 +1651,7 @@ public final class WorldSky {
         return ((a - b) % 360.0 + 540.0) % 360.0 - 180.0;
     }
 
-    private static void drawLine(Minecraft mc, Config c, LegacyBufferSource buffers, SkyLine s, int color, float wp, long now, float dt, double dpp) {
+    private static void drawLine(class_310 mc, Config c, class_4597 buffers, SkyLine s, int color, float wp, long now, float dt, double dpp) {
         float exit;
         float lineA;
         if (c.lyricsFollow && !c.lyricsViewLock && s.exitAt == 0L) {
@@ -1672,7 +1667,7 @@ public final class WorldSky {
         if (!((lineA = (1.0f - Anim.outCubic(exit = s.exitAt == 0L ? 0.0f : Anim.clamp((float)(now - s.exitAt) / 480.0f))) * c.lyricsOpacity) <= 0.01f)) {
             String[] words = s.line.words();
             int cur = wp < 0.0f ? words.length : (int)Math.floor(wp);
-            Font font = mc.font;
+            class_327 font = mc.field_1772;
             double d = dist * 0.9;
             float k = (float)(Math.toRadians(dpp) * d);
             int space = Gfx.w(" ", Gfx.LYRICS);
@@ -1765,7 +1760,7 @@ public final class WorldSky {
                     }
                     LFConfig lfc = ConfigManager.get();
                     Themes.Theme lth = Themes.current();
-                    boolean bl3 = clean = lfc.textStyle == LFConfig.TextStyle.CLEAN;
+                    clean = lfc.textStyle == LFConfig.TextStyle.CLEAN;
                     int sc;
                     if (lfc.textShadow == 1) {
                         sc = lfc.shadowColor != 0 ? lfc.shadowColor : (clean ? 1381162 : Col.darken(lth.a(), 0.75f));
@@ -1783,7 +1778,7 @@ public final class WorldSky {
         }
     }
 
-    private static Component lyricComp(String w) {
+    private static class_2561 lyricComp(String w) {
         String f = String.valueOf(ConfigManager.get().font);
         if (!f.equals(compFontId)) {
             COMP.clear();
@@ -1795,10 +1790,10 @@ public final class WorldSky {
         return COMP.computeIfAbsent(w, k -> Gfx.comp(k, Gfx.LYRICS));
     }
 
-    private static void word(Font font, LegacyBufferSource buffers, Matrix4f m, String w, float x, float y, float z, int rgb, float a, boolean through) {
+    private static void word(class_327 font, class_4597 buffers, Matrix4f m, String w, float x, float y, float z, int rgb, float a, boolean through) {
         if (!(a <= 0.03f)) {
             Matrix4f mm = SCR.set((Matrix4fc)m).translate(x, y, z);
-            buffers.drawText(WorldSky.lyricComp(w), 0.0f, 0.0f, Gfx.argbRaw(rgb, a), false, mm, through ? Font.DisplayMode.SEE_THROUGH : Font.DisplayMode.NORMAL, 0, 0xF000F0);
+            font.method_27522(WorldSky.lyricComp(w), 0.0f, 0.0f, Gfx.argbRaw(rgb, a), false, mm, buffers, through ? class_327.class_6415.field_33994 : class_327.class_6415.field_33993, 0, 0xF000F0);
         }
     }
 
@@ -1857,7 +1852,7 @@ public final class WorldSky {
         TMP = new Matrix4f();
         WM = new Matrix4f();
         SCR = new Matrix4f();
-        COMP = new HashMap<String, Component>();
+        COMP = new HashMap<String, class_2561>();
         compFont = -1;
         LYRIC_COLORS = new int[]{13219327, 0xFFFFFF, 16747224, 9098495, 0x8CFFC8, 16765562, 0xFF7A7A, 11635967};
         FLAKES = new ArrayList();
@@ -1874,6 +1869,7 @@ public final class WorldSky {
         long exitAt = 0L;
 
         SkyLine(NowPlaying.Line l, double az, double el, double degPerPx) {
+            int rowsN;
             this.line = l;
             this.shown = new long[l.words().length];
             this.baseAz = az;
@@ -1898,7 +1894,7 @@ public final class WorldSky {
             }
             double gap = (double)space * 3.4 * degPerPx;
             int n = this.chunks.size();
-            int rowsN = n <= 2 ? 1 : (n >= 6 && RND.nextFloat() < 0.35f ? 3 : 2);
+            rowsN = n <= 2 ? 1 : (n >= 6 && RND.nextFloat() < 0.35f ? 3 : 2);
             if (n == 3 && RND.nextFloat() < 0.35f) {
                 rowsN = 1;
             }
@@ -1924,7 +1920,7 @@ public final class WorldSky {
             double lift = 2.5 + RND.nextDouble() * 6.0;
             double stair = (double)(RND.nextBoolean() ? 1 : -1) * (5.0 + RND.nextDouble() * 8.0);
             for (int r = 0; r < rows.size(); ++r) {
-                List<Chunk> rr = rows.get(r);
+                List<Chunk> rr = (List<Chunk>)rows.get(r);
                 double total = -gap;
                 for (Chunk c : rr) {
                     total += gap + (double)c.widthPx * degPerPx * (double)c.size;
@@ -1968,3 +1964,4 @@ public final class WorldSky {
         }
     }
 }
+

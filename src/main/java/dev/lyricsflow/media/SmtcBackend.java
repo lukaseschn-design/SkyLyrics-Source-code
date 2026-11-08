@@ -13,7 +13,7 @@ import com.sun.jna.Memory;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.PointerByReference;
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.config.LFConfig;
 import dev.lyricsflow.media.Com;
 import dev.lyricsflow.media.MediaBackend;
@@ -61,7 +61,7 @@ implements MediaBackend {
             return true;
         }
         catch (Throwable t) {
-            SkyLyrics.LOG.warn("Windows media controls unavailable", t);
+            LyricsFlow.LOG.warn("Windows media controls unavailable", t);
             this.failed = true;
             return false;
         }

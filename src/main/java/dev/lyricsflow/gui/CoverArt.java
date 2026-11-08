@@ -2,17 +2,17 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  com.mojang.blaze3d.platform.NativeImage
- *  net.minecraft.client.renderer.texture.DynamicTexture
- *  net.minecraft.client.renderer.texture.AbstractTexture
- *  net.minecraft.client.renderer.RenderPipelines
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.GuiGraphicsExtractor
+ *  net.minecraft.class_1011
+ *  net.minecraft.class_1043
+ *  net.minecraft.class_1044
+ *  net.minecraft.class_10799
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
+ *  net.minecraft.class_332
  */
 package dev.lyricsflow.gui;
 
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.media.MediaManager;
 import dev.lyricsflow.render.Gfx;
 import dev.lyricsflow.util.Col;
@@ -20,17 +20,17 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import javax.imageio.ImageIO;
-import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.class_1011;
+import net.minecraft.class_1043;
+import net.minecraft.class_1044;
+import net.minecraft.class_10799;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
+import net.minecraft.class_332;
 
 public final class CoverArt {
-    private static final Identifier ID = SkyLyrics.id("dynamic/cover");
-    private static final Identifier ID_ROUND = SkyLyrics.id("dynamic/cover_round");
+    private static final class_2960 ID = LyricsFlow.id("dynamic/cover");
+    private static final class_2960 ID_ROUND = LyricsFlow.id("dynamic/cover_round");
     private static long loadedSeq = -2L;
     private static boolean has;
     private static int w;
@@ -43,7 +43,7 @@ public final class CoverArt {
     private CoverArt() {
     }
 
-    public static Identifier id() {
+    public static class_2960 id() {
         return ID;
     }
 
@@ -103,32 +103,32 @@ public final class CoverArt {
         try {
             int s;
             int size = px[0];
-            NativeImage ni = new NativeImage(size, size, false);
+            class_1011 ni = new class_1011(size, size, false);
             for (int y = 0; y < size; ++y) {
                 for (int x = 0; x < size; ++x) {
-                    ni.setPixel(x, y, px[1 + y * size + x]);
+                    ni.method_61941(x, y, px[1 + y * size + x]);
                 }
             }
-            Minecraft.getInstance().getTextureManager().register(ID, (AbstractTexture)new DynamicTexture(() -> "lyricsflow cover", ni));
+            class_310.method_1551().method_1531().method_4616(ID, (class_1044)new class_1043(() -> "lyricsflow cover", ni));
             int rs = Math.min(size, 96);
-            NativeImage rn = new NativeImage(rs, rs, false);
+            class_1011 rn = new class_1011(rs, rs, false);
             float c = (float)rs / 2.0f;
             for (int y = 0; y < rs; ++y) {
                 for (int x = 0; x < rs; ++x) {
                     float d = (float)Math.hypot((float)x + 0.5f - c, (float)y + 0.5f - c);
                     float al = Math.max(0.0f, Math.min(1.0f, c - d));
                     int src = px[1 + y * size / rs * size + x * size / rs];
-                    rn.setPixel(x, y, (int)(al * 255.0f) << 24 | src & 0xFFFFFF);
+                    rn.method_61941(x, y, (int)(al * 255.0f) << 24 | src & 0xFFFFFF);
                 }
             }
-            Minecraft.getInstance().getTextureManager().register(ID_ROUND, (AbstractTexture)new DynamicTexture(() -> "lyricsflow cover round", rn));
+            class_310.method_1551().method_1531().method_4616(ID_ROUND, (class_1044)new class_1043(() -> "lyricsflow cover round", rn));
             rw = rs;
             vivid = CoverArt.vividOf(px);
             w = h = (s = size);
             has = true;
         }
         catch (Throwable t) {
-            SkyLyrics.LOG.debug("Cover art failed", t);
+            LyricsFlow.LOG.debug("Cover art failed", t);
             has = false;
         }
     }
@@ -156,29 +156,29 @@ public final class CoverArt {
         return Color.HSBtoRGB(hsv[0], Math.max(0.45f, hsv[1]), Math.max(0.85f, hsv[2])) & 0xFFFFFF;
     }
 
-    public static void drawRound(GuiGraphicsExtractor g, float cx, float cy, float r, float a) {
+    public static void drawRound(class_332 g, float cx, float cy, float r, float a) {
         if (!has) {
             return;
         }
         float sc = Gfx.scale();
         int px = Math.max(2, Math.round(r * 2.0f * sc));
-        g.pose().pushMatrix();
-        g.pose().translate(cx, cy);
-        g.pose().scale(1.0f / sc, 1.0f / sc);
-        g.blit(RenderPipelines.GUI_TEXTURED, ID_ROUND, -px / 2, -px / 2, 0.0f, 0.0f, px, px, rw, rw, rw, rw, Col.alpha(-1, a));
-        g.pose().popMatrix();
+        g.method_51448().pushMatrix();
+        g.method_51448().translate(cx, cy);
+        g.method_51448().scale(1.0f / sc, 1.0f / sc);
+        g.method_25293(class_10799.field_56883, ID_ROUND, -px / 2, -px / 2, 0.0f, 0.0f, px, px, rw, rw, rw, rw, Col.alpha(-1, a));
+        g.method_51448().popMatrix();
     }
 
     private static void release() {
         if (has) {
             try {
-                Minecraft.getInstance().getTextureManager().release(ID);
+                class_310.method_1551().method_1531().method_4615(ID);
             }
             catch (Throwable throwable) {
                 // empty catch block
             }
             try {
-                Minecraft.getInstance().getTextureManager().release(ID_ROUND);
+                class_310.method_1551().method_1531().method_4615(ID_ROUND);
             }
             catch (Throwable throwable) {
                 // empty catch block
@@ -187,17 +187,17 @@ public final class CoverArt {
         has = false;
     }
 
-    public static void draw(GuiGraphicsExtractor g, float x, float y, float size, float a) {
+    public static void draw(class_332 g, float x, float y, float size, float a) {
         if (!has) {
             return;
         }
         float sc = Gfx.scale();
         int px = Math.round(size * sc);
-        g.pose().pushMatrix();
-        g.pose().translate(x, y);
-        g.pose().scale(1.0f / sc, 1.0f / sc);
-        g.blit(RenderPipelines.GUI_TEXTURED, ID, 0, 0, 0.0f, 0.0f, px, px, w, h, w, h, Col.alpha(-1, a));
-        g.pose().popMatrix();
+        g.method_51448().pushMatrix();
+        g.method_51448().translate(x, y);
+        g.method_51448().scale(1.0f / sc, 1.0f / sc);
+        g.method_25293(class_10799.field_56883, ID, 0, 0, 0.0f, 0.0f, px, px, w, h, w, h, Col.alpha(-1, a));
+        g.method_51448().popMatrix();
     }
 
     static {

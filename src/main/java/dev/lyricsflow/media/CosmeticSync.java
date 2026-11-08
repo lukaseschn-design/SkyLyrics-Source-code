@@ -4,13 +4,13 @@
  * Could not load the following classes:
  *  com.google.gson.JsonObject
  *  com.google.gson.JsonParser
- *  net.minecraft.client.Minecraft
+ *  net.minecraft.class_310
  */
 package dev.lyricsflow.media;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
 import dev.lyricsflow.util.Http;
@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Stream;
-import net.minecraft.client.Minecraft;
+import net.minecraft.class_310;
 
 public final class CosmeticSync {
     private static final String TOPIC = "https://ntfy.sh/lyricsflow-cosmetics-v1-7f3a9c";
@@ -58,12 +58,12 @@ public final class CosmeticSync {
         return others.getOrDefault(id, "none");
     }
 
-    public static void tick(Minecraft mc) {
+    public static void tick(class_310 mc) {
         LFConfig c = ConfigManager.get();
-        if (mc.player == null || mc.level == null || !c.enabled) {
+        if (mc.field_1724 == null || mc.field_1687 == null || !c.enabled) {
             return;
         }
-        CosmeticSync.startLive(mc.getUser().getProfileId());
+        CosmeticSync.startLive(mc.method_1548().method_44717());
         long now = System.currentTimeMillis();
         ArrayList<String> w = new ArrayList<String>();
         for (String x : c.worn()) {
@@ -71,7 +71,7 @@ public final class CosmeticSync {
             w.add(x);
         }
         String mine = w.isEmpty() ? "none" : String.join((CharSequence)",", w);
-        UUID me = mc.getUser().getProfileId();
+        UUID me = mc.method_1548().method_44717();
         if (!(me == null || mine.equals(sent) && now - sentAt <= 18000000L)) {
             if (!mine.equals(pending)) {
                 pending = mine;
@@ -93,7 +93,7 @@ public final class CosmeticSync {
                     }
                 }
                 catch (Throwable e) {
-                    SkyLyrics.LOG.info("[SkyLyrics] Could not share the cosmetic: {}", (Object)e.toString());
+                    LyricsFlow.LOG.info("[SkyLyrics] Could not share the cosmetic: {}", (Object)e.toString());
                 }
                 finally {
                     sending = false;

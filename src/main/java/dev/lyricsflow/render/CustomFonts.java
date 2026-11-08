@@ -2,20 +2,20 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.network.chat.Component
- *  net.minecraft.server.packs.PathPackResources$PathResourcesSupplier
- *  net.minecraft.server.packs.PackType
- *  net.minecraft.server.packs.repository.RepositorySource
- *  net.minecraft.server.packs.repository.Pack
- *  net.minecraft.server.packs.repository.Pack$Position
- *  net.minecraft.server.packs.repository.Pack$ResourcesSupplier
- *  net.minecraft.server.packs.repository.PackSource
- *  net.minecraft.server.packs.PackLocationInfo
- *  net.minecraft.server.packs.PackSelectionConfig
+ *  net.minecraft.class_2561
+ *  net.minecraft.class_3259$class_8619
+ *  net.minecraft.class_3264
+ *  net.minecraft.class_3285
+ *  net.minecraft.class_3288
+ *  net.minecraft.class_3288$class_3289
+ *  net.minecraft.class_3288$class_7680
+ *  net.minecraft.class_5352
+ *  net.minecraft.class_9224
+ *  net.minecraft.class_9225
  */
 package dev.lyricsflow.render;
 
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.render.Fonts;
 import java.awt.Font;
@@ -38,14 +38,14 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.packs.PathPackResources;
-import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.repository.RepositorySource;
-import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.server.packs.PackLocationInfo;
-import net.minecraft.server.packs.PackSelectionConfig;
+import net.minecraft.class_2561;
+import net.minecraft.class_3259;
+import net.minecraft.class_3264;
+import net.minecraft.class_3285;
+import net.minecraft.class_3288;
+import net.minecraft.class_5352;
+import net.minecraft.class_9224;
+import net.minecraft.class_9225;
 
 public final class CustomFonts {
     private static final List<Fonts.LyricFont> FONTS = new ArrayList<Fonts.LyricFont>();
@@ -127,7 +127,7 @@ public final class CustomFonts {
                         shift = (float)((8.0 - center) / 16.0);
                     }
                     catch (Throwable t) {
-                        SkyLyrics.LOG.warn("Skipping font {} (not a TrueType font?)", (Object)file);
+                        LyricsFlow.LOG.warn("Skipping font {} (not a TrueType font?)", (Object)file);
                         continue;
                     }
                 }
@@ -138,7 +138,7 @@ public final class CustomFonts {
             }
         }
         catch (Throwable t) {
-            SkyLyrics.LOG.warn("Could not build the custom font pack", t);
+            LyricsFlow.LOG.warn("Could not build the custom font pack", t);
         }
         Fonts.clearCaches();
     }
@@ -154,11 +154,11 @@ public final class CustomFonts {
         }
     }
 
-    public static RepositorySource source() {
+    public static class_3285 source() {
         return consumer -> {
             CustomFonts.rebuild();
-            PackLocationInfo info = new PackLocationInfo("lyricsflow_fonts", (Component)Component.literal((String)"SkyLyrics fonts"), PackSource.BUILT_IN, Optional.empty());
-            Pack p = Pack.readMetaAndCreate((PackLocationInfo)info, (Pack.ResourcesSupplier)new PathPackResources.PathResourcesSupplier(CustomFonts.packDir()), (PackType)PackType.CLIENT_RESOURCES, (PackSelectionConfig)new PackSelectionConfig(true, Pack.Position.TOP, false));
+            class_9224 info = new class_9224("lyricsflow_fonts", (class_2561)class_2561.method_43470((String)"SkyLyrics fonts"), class_5352.field_25348, Optional.empty());
+            class_3288 p = class_3288.method_45275((class_9224)info, (class_3288.class_7680)new class_3259.class_8619(CustomFonts.packDir()), (class_3264)class_3264.field_14188, (class_9225)new class_9225(true, class_3288.class_3289.field_14280, false));
             if (p != null) {
                 consumer.accept(p);
             }

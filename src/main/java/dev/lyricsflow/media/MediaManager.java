@@ -7,7 +7,7 @@
 package dev.lyricsflow.media;
 
 import com.google.gson.Gson;
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
 import dev.lyricsflow.lyrics.Lyrics;
@@ -240,7 +240,7 @@ public final class MediaManager {
                         r.run();
                     }
                     catch (Throwable t) {
-                        SkyLyrics.LOG.debug("media command failed", t);
+                        LyricsFlow.LOG.debug("media command failed", t);
                     }
                 }
                 if (!ConfigManager.get().enabled) {
@@ -256,7 +256,7 @@ public final class MediaManager {
                 this.tick();
             }
             catch (Throwable t) {
-                SkyLyrics.LOG.debug("media poll failed", t);
+                LyricsFlow.LOG.debug("media poll failed", t);
             }
             long interval = 250L;
             if (this.pollSoon) {
@@ -353,7 +353,7 @@ public final class MediaManager {
                 boolean apiLive = c.source == LFConfig.Source.SPOTIFY && SpotifyWeb.positionFor(t) >= 0L;
                 boolean bl = trusted = seek && this.stable >= 1 || fresh && this.stable >= 2 && !apiLive;
                 if (trusted && diff > (long)(this.forceSync ? 120 : 250)) {
-                    SkyLyrics.LOG.debug("[SkyLyrics sync] re-sync {} ms (ours {} -> windows {}), fresh={}, seek={}, stable={}", new Object[]{offset, ours, t.positionMs, fresh, seek, this.stable});
+                    LyricsFlow.LOG.debug("[SkyLyrics sync] re-sync {} ms (ours {} -> windows {}), fresh={}, seek={}, stable={}", new Object[]{offset, ours, t.positionMs, fresh, seek, this.stable});
                     t = Track.at(t, t.positionMs);
                     this.lastOffset = 0L;
                 } else {
@@ -383,7 +383,7 @@ public final class MediaManager {
                 long med = s[n / 2];
                 boolean bl = big = Math.abs(off) > 1500L;
                 if (big || n >= 3 && Math.abs(med) > 90L) {
-                    SkyLyrics.LOG.debug("[SkyLyrics sync] spotify re-sync {} ms", (Object)(big ? off : med));
+                    LyricsFlow.LOG.debug("[SkyLyrics sync] spotify re-sync {} ms", (Object)(big ? off : med));
                     t = Track.at(t, t.positionNow() + (big ? off : med));
                     this.apiN = 0;
                 }

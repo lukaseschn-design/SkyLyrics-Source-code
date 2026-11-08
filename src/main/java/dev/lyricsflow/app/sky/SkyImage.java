@@ -2,15 +2,15 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  com.mojang.blaze3d.platform.NativeImage
- *  net.minecraft.client.renderer.texture.DynamicTexture
- *  net.minecraft.client.renderer.texture.AbstractTexture
- *  net.minecraft.client.renderer.rendertype.RenderTypes
- *  net.minecraft.util.Util
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
- *  com.mojang.blaze3d.vertex.VertexConsumer
- *  dev.lyricsflow.compat.LegacyBufferSource
+ *  net.minecraft.class_1011
+ *  net.minecraft.class_1043
+ *  net.minecraft.class_1044
+ *  net.minecraft.class_12249
+ *  net.minecraft.class_156
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
+ *  net.minecraft.class_4588
+ *  net.minecraft.class_4597
  *  org.joml.Matrix4f
  *  org.joml.Matrix4fc
  */
@@ -19,11 +19,9 @@ package dev.lyricsflow.app.sky;
 import dev.lyricsflow.app.Core;
 import dev.lyricsflow.app.config.Config;
 import dev.lyricsflow.app.config.Storage;
-import dev.lyricsflow.app.util.Fx;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
@@ -37,21 +35,21 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.stream.Stream;
 import javax.imageio.ImageIO;
-import com.mojang.blaze3d.platform.NativeImage;
-import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.util.Util;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import dev.lyricsflow.compat.LegacyBufferSource;
+import net.minecraft.class_1011;
+import net.minecraft.class_1043;
+import net.minecraft.class_1044;
+import net.minecraft.class_12249;
+import net.minecraft.class_156;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
+import net.minecraft.class_4588;
+import net.minecraft.class_4597;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
 
 public final class SkyImage {
     public static final String RECOMMENDED = "4096 x 2048";
-    private static final Identifier ID = Identifier.fromNamespaceAndPath((String)"lyricsflow", (String)"sky_picture");
+    private static final class_2960 ID = class_2960.method_60655((String)"lyricsflow", (String)"sky_picture");
     private static final int MAX_W = 4096;
     private static final int MAX_H = 2048;
     private static String loadedName;
@@ -59,7 +57,7 @@ public final class SkyImage {
     private static String error;
     private static int imgW;
     private static int imgH;
-    private static final Map<String, Identifier> THUMBS;
+    private static final Map<String, class_2960> THUMBS;
     private static final Map<String, int[]> DECODED;
     private static final Set<String> LOADING;
     private static final ExecutorService THUMB_EXEC;
@@ -77,20 +75,14 @@ public final class SkyImage {
 
     public static List<String> files() {
         try {
-            Files.createDirectories(SkyImage.dir(), new FileAttribute[0]);
-            try (Stream<Path> files = Files.list(SkyImage.dir())) {
-                return files.filter(path -> Files.isRegularFile(path, new LinkOption[0]))
-                    .map(path -> path.getFileName().toString())
-                    .filter(name -> {
-                        String lowerName = name.toLowerCase(Locale.ROOT);
-                        return lowerName.endsWith(".png") || lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg");
-                    })
-                    .sorted()
-                    .toList();
+            Files.createDirectories(SkyImage.dir());
+            try (Stream<Path> s = Files.list(SkyImage.dir())) {
+                return s.filter(x$0 -> Files.isRegularFile(x$0, new LinkOption[0])).map(p -> p.getFileName().toString()).filter(n -> {
+                    String l = n.toLowerCase(Locale.ROOT);
+                    return l.endsWith(".png") || l.endsWith(".jpg") || l.endsWith(".jpeg");
+                }).sorted().toList();
             }
-        } catch (IOException e) {
-            Core.LOG.warn("Could not list SkyLyrics sky images", e);
-            Fx.error("Could not read the sky image folder.");
+        } catch (Exception e) {
             return List.of();
         }
     }
@@ -103,21 +95,21 @@ public final class SkyImage {
         return ready ? imgW + " x " + imgH : "";
     }
 
-    public static Identifier thumb(String name) {
-        Identifier id = THUMBS.get(name);
+    public static class_2960 thumb(String name) {
+        class_2960 id = THUMBS.get(name);
         if (id != null) {
             return id;
         }
         int[] px = DECODED.remove(name);
         if (px != null) {
-            NativeImage ni = new NativeImage(160, 80, false);
+            class_1011 ni = new class_1011(160, 80, false);
             for (int y = 0; y < 80; ++y) {
                 for (int x = 0; x < 160; ++x) {
-                    ni.setPixel(x, y, px[y * 160 + x]);
+                    ni.method_61941(x, y, px[y * 160 + x]);
                 }
             }
-            id = Identifier.fromNamespaceAndPath((String)"lyricsflow", (String)("sky_thumb/" + Integer.toHexString(name.hashCode())));
-            Minecraft.getInstance().getTextureManager().register(id, (AbstractTexture)new DynamicTexture(() -> "lyricsflow sky preview", ni));
+            id = class_2960.method_60655((String)"lyricsflow", (String)("sky_thumb/" + Integer.toHexString(name.hashCode())));
+            class_310.method_1551().method_1531().method_4616(id, (class_1044)new class_1043(() -> "lyricsflow sky preview", ni));
             THUMBS.put(name, id);
             return id;
         }
@@ -150,8 +142,8 @@ public final class SkyImage {
     }
 
     public static void reload() {
-        for (Identifier id : THUMBS.values()) {
-            Minecraft.getInstance().getTextureManager().release(id);
+        for (class_2960 id : THUMBS.values()) {
+            class_310.method_1551().method_1531().method_4615(id);
         }
         THUMBS.clear();
         LOADING.clear();
@@ -163,11 +155,10 @@ public final class SkyImage {
     public static void openFolder() {
         try {
             Files.createDirectories(SkyImage.dir(), new FileAttribute[0]);
-            Fx.openPath(SkyImage.dir());
+            class_156.method_668().method_60932(SkyImage.dir());
         }
-        catch (IOException e) {
-            Core.LOG.warn("Could not open SkyLyrics folder", e);
-            Fx.error("Could not open the folder.");
+        catch (Exception exception) {
+            // empty catch block
         }
     }
 
@@ -226,13 +217,13 @@ public final class SkyImage {
                 g.drawImage(src, 0, 0, tw, th, null);
                 g.dispose();
             }
-            NativeImage ni = new NativeImage(tw, th, false);
+            class_1011 ni = new class_1011(tw, th, false);
             for (int y = 0; y < th; ++y) {
                 for (int x = 0; x < tw; ++x) {
-                    ni.setPixel(x, y, img.getRGB(x, y) | 0xFF000000);
+                    ni.method_61941(x, y, img.getRGB(x, y) | 0xFF000000);
                 }
             }
-            Minecraft.getInstance().getTextureManager().register(ID, (AbstractTexture)new DynamicTexture(() -> "lyricsflow sky picture", ni));
+            class_310.method_1551().method_1531().method_4616(ID, (class_1044)new class_1043(() -> "lyricsflow sky picture", ni));
             imgW = w;
             imgH = h;
             ready = true;
@@ -243,11 +234,11 @@ public final class SkyImage {
         }
     }
 
-    static void draw(LegacyBufferSource buffers, Matrix4f base, double dist, float alpha, float brightness) {
+    static void draw(class_4597 buffers, Matrix4f base, double dist, float alpha, float brightness) {
         if (!ready || alpha < 0.01f) {
             return;
         }
-        VertexConsumer vc = buffers.getBuffer(RenderTypes.text((Identifier)ID));
+        class_4588 vc = buffers.method_73477(class_12249.method_76022((class_2960)ID));
         int b = Math.round(255.0f * Math.max(0.0f, Math.min(1.0f, brightness)));
         int col = Math.round(255.0f * Math.min(1.0f, alpha)) << 24 | b << 16 | b << 8 | b;
         int na = 64;
@@ -285,13 +276,13 @@ public final class SkyImage {
         return new float[]{(float)(-Math.sin(a) * ce * d), (float)(Math.sin(e) * d), (float)(Math.cos(a) * ce * d)};
     }
 
-    private static void v(VertexConsumer vc, Matrix4f m, float[] p, float u, float v, int col) {
-        vc.addVertex((Matrix4fc)m, p[0], p[1], p[2]).setColor(col).setUv(u, v).setLight(0xF000F0);
+    private static void v(class_4588 vc, Matrix4f m, float[] p, float u, float v, int col) {
+        vc.method_22918((Matrix4fc)m, p[0], p[1], p[2]).method_39415(col).method_22913(u, v).method_60803(0xF000F0);
     }
 
     static {
         error = "";
-        THUMBS = new ConcurrentHashMap<String, Identifier>();
+        THUMBS = new ConcurrentHashMap<String, class_2960>();
         DECODED = new ConcurrentHashMap<String, int[]>();
         LOADING = ConcurrentHashMap.newKeySet();
         THUMB_EXEC = Executors.newSingleThreadExecutor(r -> {
@@ -302,3 +293,4 @@ public final class SkyImage {
         cached = List.of();
     }
 }
+

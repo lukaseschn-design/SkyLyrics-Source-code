@@ -4,17 +4,18 @@
  * Could not load the following classes:
  *  net.fabricmc.fabric.api.client.screen.v1.ScreenEvents
  *  net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents
- *  com.mojang.blaze3d.platform.Window
- *  net.minecraft.client.resources.language.I18n
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.GuiGraphicsExtractor
- *  com.mojang.blaze3d.platform.InputConstants
- *  net.minecraft.client.gui.screens.ChatScreen
- *  net.minecraft.client.gui.screens.Screen
- *  net.minecraft.client.DeltaTracker
+ *  net.minecraft.class_1041
+ *  net.minecraft.class_1074
+ *  net.minecraft.class_310
+ *  net.minecraft.class_332
+ *  net.minecraft.class_3675
+ *  net.minecraft.class_408
+ *  net.minecraft.class_437
+ *  net.minecraft.class_9779
  *  org.lwjgl.glfw.GLFW
  */
 package dev.lyricsflow.render;
+import net.minecraft.class_11909;
 
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
@@ -34,14 +35,15 @@ import dev.lyricsflow.util.Col;
 import java.util.ArrayDeque;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenMouseEvents;
-import com.mojang.blaze3d.platform.Window;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import com.mojang.blaze3d.platform.InputConstants;
-import net.minecraft.client.gui.screens.ChatScreen;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.DeltaTracker;
+import net.minecraft.class_1041;
+import net.minecraft.class_1074;
+import net.minecraft.class_310;
+import net.minecraft.class_332;
+import net.minecraft.class_3675;
+import net.minecraft.class_408;
+import net.minecraft.class_437;
+import net.minecraft.class_9779;
+import org.lwjgl.glfw.GLFW;
 
 public final class ExtraHud {
     public static final int KEYS = 0;
@@ -105,13 +107,14 @@ public final class ExtraHud {
     }
 
     static boolean chatOpen() {
-        return Minecraft.getInstance().gui.screen() instanceof ChatScreen;
+        return class_310.method_1551().field_1755 instanceof class_408;
     }
 
     static void countClicks() {
-        Minecraft mc = Minecraft.getInstance();
-        boolean l = mc.gui.screen() == null && mc.mouseHandler.isLeftPressed();
-        boolean r = mc.gui.screen() == null && mc.mouseHandler.isRightPressed();
+        class_310 mc = class_310.method_1551();
+        long w = mc.method_22683().method_4490();
+        boolean l = mc.field_1755 == null && GLFW.glfwGetMouseButton((long)w, (int)0) == 1;
+        boolean r = mc.field_1755 == null && GLFW.glfwGetMouseButton((long)w, (int)1) == 1;
         long now = System.currentTimeMillis();
         if (l && !wasL) {
             LEFT.addLast(now);
@@ -129,10 +132,10 @@ public final class ExtraHud {
         }
     }
 
-    public static void render(GuiGraphicsExtractor g, DeltaTracker tick) {
-        Minecraft mc = Minecraft.getInstance();
+    public static void render(class_332 g, class_9779 tick) {
+        class_310 mc = class_310.method_1551();
         LFConfig c = ConfigManager.get();
-        if (!c.enabled || mc.level == null || mc.player == null || mc.gui.hud.isHidden() || Hud.hideForScreenshot) {
+        if (!c.enabled || mc.field_1687 == null || mc.field_1724 == null || mc.field_1690.field_1842 || Hud.hideForScreenshot) {
             return;
         }
         if (!(c.hudKeys || c.hudCps || c.hudPlayer)) {
@@ -140,8 +143,8 @@ public final class ExtraHud {
         }
         Anim.frame();
         ExtraHud.countClicks();
-        double mx = mc.mouseHandler.getScaledXPos(mc.getWindow());
-        double my = mc.mouseHandler.getScaledYPos(mc.getWindow());
+        double mx = mc.field_1729.method_68879(mc.method_22683());
+        double my = mc.field_1729.method_68883(mc.method_22683());
         boolean edit = ExtraHud.chatOpen();
         if (c.hudKeys) {
             ExtraHud.keys(g, c, edit);
@@ -162,7 +165,7 @@ public final class ExtraHud {
         }
     }
 
-    public static void renderPreview(GuiGraphicsExtractor g, double mx, double my) {
+    public static void renderPreview(class_332 g, double mx, double my) {
         LFConfig c = ConfigManager.get();
         ExtraHud.countClicks();
         ExtraHud.keys(g, c, true);
@@ -183,8 +186,8 @@ public final class ExtraHud {
         return Math.max(1.0f, Math.min(screen - size - 1.0f, v));
     }
 
-    static void keys(GuiGraphicsExtractor g, LFConfig c, boolean preview) {
-        Minecraft mc = Minecraft.getInstance();
+    static void keys(class_332 g, LFConfig c, boolean preview) {
+        class_310 mc = class_310.method_1551();
         float s = c.keysScale;
         float u = 13.0f * s;
         float gap = 2.0f * s;
@@ -200,10 +203,11 @@ public final class ExtraHud {
         float mouseW = 19.0f * s;
         float mouseH = 3.0f * (u + gap);
         float W = kbW + 6.0f * s + mouseW;
-        float x0 = ExtraHud.place(c.keysX, 4.0f, W, g.guiWidth());
-        float y0 = ExtraHud.place(c.keysY, 16.0f, H, g.guiHeight());
+        float x0 = ExtraHud.place(c.keysX, 4.0f, W, g.method_51421());
+        float y0 = ExtraHud.place(c.keysY, 16.0f, H, g.method_51443());
         ExtraHud.BOX[0] = new float[]{x0, y0, W, H};
-        boolean playing = mc.gui.screen() == null || preview;
+        long win = mc.method_22683().method_4490();
+        boolean playing = mc.field_1755 == null || preview;
         int col = ExtraHud.color();
         String f = ExtraHud.font();
         int idx = 0;
@@ -212,7 +216,7 @@ public final class ExtraHud {
             float x = x0;
             for (Key k : row) {
                 float w = k.w * u + (k.w - 1.0f) * 0.0f;
-                boolean down = playing && InputConstants.isKeyDown(k.code);
+                boolean down = playing && class_3675.method_15987((class_1041)mc.method_22683(), (int)k.code);
                 ExtraHud.KEY_ANIM[idx] = Anim.approach(KEY_ANIM[idx], down ? 1.0f : 0.0f, down ? 30.0f : 10.0f);
                 float p = KEY_ANIM[idx];
                 int fill = Col.lerp(ExtraHud.bg(), col, p);
@@ -232,8 +236,8 @@ public final class ExtraHud {
         }
         float mx0 = x0 + kbW + 6.0f * s;
         float my0 = y0 + (H - mouseH) / 2.0f;
-        boolean l = playing && mc.mouseHandler.isLeftPressed();
-        boolean r = playing && mc.mouseHandler.isRightPressed();
+        boolean l = playing && GLFW.glfwGetMouseButton((long)win, (int)0) == 1;
+        boolean r = playing && GLFW.glfwGetMouseButton((long)win, (int)1) == 1;
         mouseL = Anim.approach(mouseL, l ? 1.0f : 0.0f, l ? 30.0f : 10.0f);
         mouseR = Anim.approach(mouseR, r ? 1.0f : 0.0f, r ? 30.0f : 10.0f);
         float mr = ExtraHud.rad(mouseW / 2.0f);
@@ -241,12 +245,12 @@ public final class ExtraHud {
         float bh = mouseH * 0.42f;
         int sx0 = (int)Math.floor(mx0);
         int sy0 = (int)Math.floor(my0);
-        g.enableScissor(sx0, sy0, (int)Math.ceil(mx0 + mouseW / 2.0f - 0.6f * s), (int)Math.ceil(my0 + bh));
+        g.method_44379(sx0, sy0, (int)Math.ceil(mx0 + mouseW / 2.0f - 0.6f * s), (int)Math.ceil(my0 + bh));
         Gfx.round(g, mx0, my0, mouseW, mouseH, mr, Col.alpha(col, mouseL));
-        g.disableScissor();
-        g.enableScissor((int)Math.floor(mx0 + mouseW / 2.0f + 0.6f * s), sy0, (int)Math.ceil(mx0 + mouseW), (int)Math.ceil(my0 + bh));
+        g.method_44380();
+        g.method_44379((int)Math.floor(mx0 + mouseW / 2.0f + 0.6f * s), sy0, (int)Math.ceil(mx0 + mouseW), (int)Math.ceil(my0 + bh));
         Gfx.round(g, mx0, my0, mouseW, mouseH, mr, Col.alpha(col, mouseR));
-        g.disableScissor();
+        g.method_44380();
         Gfx.rect(g, mx0 + mouseW / 2.0f - 0.5f * s, my0 + 2.0f * s, 1.0f * s, bh - 2.0f * s, 0x40FFFFFF);
         Gfx.rect(g, mx0 + 3.0f * s, my0 + bh, mouseW - 6.0f * s, 0.8f * s, 0x40FFFFFF);
         Gfx.round(g, mx0 + mouseW / 2.0f - 1.8f * s, my0 + bh * 0.3f, 3.6f * s, bh * 0.4f, ExtraHud.rad(1.8f * s), -13883584);
@@ -255,7 +259,7 @@ public final class ExtraHud {
         }
     }
 
-    static void cps(GuiGraphicsExtractor g, LFConfig c) {
+    static void cps(class_332 g, LFConfig c) {
         float s = c.cpsScale;
         String f = ExtraHud.font();
         float ts = 8.0f * s;
@@ -265,8 +269,8 @@ public final class ExtraHud {
         String tail = "  CPS";
         float w = Gfx.textWidth(ls + mid + rs + tail, f, ts) + 14.0f * s;
         float h = 15.0f * s;
-        float x = ExtraHud.place(c.cpsX, ((float)g.guiWidth() - w) / 2.0f, w, g.guiWidth());
-        float y = ExtraHud.place(c.cpsY, (float)g.guiHeight() - 74.0f, h, g.guiHeight());
+        float x = ExtraHud.place(c.cpsX, ((float)g.method_51421() - w) / 2.0f, w, g.method_51421());
+        float y = ExtraHud.place(c.cpsY, (float)g.method_51443() - 74.0f, h, g.method_51443());
         ExtraHud.BOX[1] = new float[]{x, y, w, h};
         Gfx.round(g, x, y, w, h, ExtraHud.rad(h / 2.0f), ExtraHud.bg());
         if (ExtraHud.round()) {
@@ -281,7 +285,7 @@ public final class ExtraHud {
         Gfx.text(g, tail, f, tx, ty, ts, col);
     }
 
-    static void player(GuiGraphicsExtractor g, LFConfig c, boolean edit, double mx, double my) {
+    static void player(class_332 g, LFConfig c, boolean edit, double mx, double my) {
         MediaManager mm = MediaManager.get();
         Track t = mm.track();
         float s = c.playerScale;
@@ -296,8 +300,8 @@ public final class ExtraHud {
         float H2 = lines ? lineH * 3.0f + 10.0f * s : 0.0f;
         float H3 = edit ? 20.0f * s : 0.0f;
         float H = H1 + (lines ? 4.0f * s + H2 : 0.0f) + (edit ? 4.0f * s + H3 : 0.0f);
-        float x = ExtraHud.place(c.playerX, (float)g.guiWidth() - W - 4.0f, W, g.guiWidth());
-        float y = ExtraHud.place(c.playerY, 4.0f, H, g.guiHeight());
+        float x = ExtraHud.place(c.playerX, (float)g.method_51421() - W - 4.0f, W, g.method_51421());
+        float y = ExtraHud.place(c.playerY, 4.0f, H, g.method_51443());
         ExtraHud.BOX[2] = new float[]{x, y, W, H};
         int col = ExtraHud.color();
         float r = ExtraHud.rad(6.0f * s);
@@ -419,7 +423,7 @@ public final class ExtraHud {
     }
 
     private static String Ui_tr(String k) {
-        return I18n.get((String)k, (Object[])new Object[0]);
+        return class_1074.method_4662((String)k, (Object[])new Object[0]);
     }
 
     public static boolean press(double mx, double my, int button) {
@@ -463,7 +467,7 @@ public final class ExtraHud {
             }
         }
         for (int i = 2; i >= 0; --i) {
-            if (!ExtraHud.on(c, i) && !(Minecraft.getInstance().gui.screen() instanceof HudEditorScreen) || !ExtraHud.Gfx_inside(mx, my, BOX[i])) continue;
+            if (!ExtraHud.on(c, i) && !(class_310.method_1551().field_1755 instanceof HudEditorScreen) || !ExtraHud.Gfx_inside(mx, my, BOX[i])) continue;
             dragging = i;
             grabX = mx - (double)BOX[i][0];
             grabY = my - (double)BOX[i][1];
@@ -480,9 +484,9 @@ public final class ExtraHud {
         if (dragging < 0) {
             return false;
         }
-        Minecraft mc = Minecraft.getInstance();
-        float sw = mc.getWindow().getGuiScaledWidth();
-        float sh = mc.getWindow().getGuiScaledHeight();
+        class_310 mc = class_310.method_1551();
+        float sw = mc.method_22683().method_4486();
+        float sh = mc.method_22683().method_4502();
         float[] b = BOX[dragging];
         double nx = mx - grabX;
         double ny = my - grabY;
@@ -524,7 +528,7 @@ public final class ExtraHud {
     public static boolean scroll(double mx, double my, double v) {
         LFConfig c = ConfigManager.get();
         for (int i = 2; i >= 0; --i) {
-            if (!ExtraHud.on(c, i) && !(Minecraft.getInstance().gui.screen() instanceof HudEditorScreen) || !ExtraHud.Gfx_inside(mx, my, BOX[i])) continue;
+            if (!ExtraHud.on(c, i) && !(class_310.method_1551().field_1755 instanceof HudEditorScreen) || !ExtraHud.Gfx_inside(mx, my, BOX[i])) continue;
             float d = (float)v * 0.05f;
             switch (i) {
                 case 0: {
@@ -561,13 +565,13 @@ public final class ExtraHud {
 
     public static void init() {
         ScreenEvents.AFTER_INIT.register((client, screen, w, h) -> {
-            if (!(screen instanceof ChatScreen)) {
+            if (!(screen instanceof class_408)) {
                 return;
             }
-            ScreenMouseEvents.allowMouseClick((Screen)screen).register((sc, e) -> !ExtraHud.press(e.x(), e.y(), e.button()));
-            ScreenMouseEvents.allowMouseDrag((Screen)screen).register((sc, e, dx, dy) -> !ExtraHud.drag(e.x(), e.y()));
-            ScreenMouseEvents.allowMouseRelease((Screen)screen).register((sc, e) -> !ExtraHud.release());
-            ScreenMouseEvents.allowMouseScroll((Screen)screen).register((sc, x, y, hh, v) -> !ExtraHud.scroll(x, y, v));
+            ScreenMouseEvents.allowMouseClick((class_437)screen).register((sc, e) -> !ExtraHud.press(e.comp_4798(), e.comp_4799(), e.method_74245()));
+            ScreenMouseEvents.allowMouseDrag((class_437)screen).register((sc, e, dx, dy) -> !ExtraHud.drag(e.comp_4798(), e.comp_4799()));
+            ScreenMouseEvents.allowMouseRelease((class_437)screen).register((sc, e) -> !ExtraHud.release());
+            ScreenMouseEvents.allowMouseScroll((class_437)screen).register((sc, x, y, hh, v) -> !ExtraHud.scroll(x, y, v));
         });
     }
 
@@ -584,3 +588,4 @@ public final class ExtraHud {
     private record Key(String label, int code, float w) {
     }
 }
+

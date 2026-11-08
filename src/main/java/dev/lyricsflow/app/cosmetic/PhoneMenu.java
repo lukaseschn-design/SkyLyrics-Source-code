@@ -2,19 +2,19 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.screens.Screen
- *  dev.lyricsflow.compat.LegacyBufferSource
+ *  net.minecraft.class_310
+ *  net.minecraft.class_437
+ *  net.minecraft.class_4597
  *  org.joml.Matrix4f
  */
 package dev.lyricsflow.app.cosmetic;
 
 import dev.lyricsflow.app.Core;
 import dev.lyricsflow.app.cosmetic.WorldPanel;
-import dev.lyricsflow.gui.SkyLyricsScreen;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import dev.lyricsflow.compat.LegacyBufferSource;
+import dev.lyricsflow.gui.LyricsFlowScreen;
+import net.minecraft.class_310;
+import net.minecraft.class_437;
+import net.minecraft.class_4597;
 import org.joml.Matrix4f;
 
 public final class PhoneMenu {
@@ -27,15 +27,15 @@ public final class PhoneMenu {
         return Core.cfg().menuMode == 1;
     }
 
-    public static void open(Minecraft mc) {
+    public static void open(class_310 mc) {
         if (panel != null) {
             if (!panel.closing()) {
                 panel.close();
             }
-        } else if (PhoneMenu.interactive() && mc.level != null && mc.player != null) {
+        } else if (PhoneMenu.interactive() && mc.field_1687 != null && mc.field_1724 != null) {
             panel = new WorldPanel(mc);
         } else {
-            mc.gui.setScreen((Screen)new SkyLyricsScreen());
+            mc.method_1507((class_437)new LyricsFlowScreen());
         }
     }
 
@@ -54,9 +54,9 @@ public final class PhoneMenu {
         return false;
     }
 
-    public static void tick(Minecraft mc) {
+    public static void tick(class_310 mc) {
         if (panel != null) {
-            if (mc.level != null && mc.player != null && !panel.finished() && !(mc.player.position().distanceTo(panel.pos()) > 32.0)) {
+            if (mc.field_1687 != null && mc.field_1724 != null && !panel.finished() && !(mc.field_1724.method_73189().method_1022(panel.pos()) > 32.0)) {
                 panel.tick(mc);
             } else {
                 panel = null;
@@ -64,19 +64,19 @@ public final class PhoneMenu {
         }
     }
 
-    public static void startTick(Minecraft mc) {
-        if (panel != null && mc.gui.screen() == null && panel.hovered()) {
-            while (mc.options.keyAttack.consumeClick()) {
+    public static void startTick(class_310 mc) {
+        if (panel != null && mc.field_1755 == null && panel.hovered()) {
+            while (mc.field_1690.field_1886.method_1436()) {
                 panel.click();
             }
-            while (mc.options.keyUse.consumeClick()) {
+            while (mc.field_1690.field_1904.method_1436()) {
                 panel.click();
             }
         }
     }
 
-    public static void render(Minecraft mc, LegacyBufferSource buffers, Matrix4f base, float pt) {
-        if (panel != null && mc.player != null) {
+    public static void render(class_310 mc, class_4597 buffers, Matrix4f base, float pt) {
+        if (panel != null && mc.field_1724 != null) {
             panel.render(mc, buffers, base);
         }
     }

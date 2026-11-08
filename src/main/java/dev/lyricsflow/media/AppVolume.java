@@ -19,7 +19,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.FloatByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
 import dev.lyricsflow.media.Com;
@@ -124,7 +124,7 @@ public final class AppVolume {
             return true;
         }
         catch (Throwable t) {
-            SkyLyrics.LOG.warn("App volume unavailable", t);
+            LyricsFlow.LOG.warn("App volume unavailable", t);
             failed = true;
             return false;
         }
@@ -280,7 +280,7 @@ public final class AppVolume {
             }
             catch (Throwable t) {
                 try {
-                    SkyLyrics.LOG.debug("App volume failed", t);
+                    LyricsFlow.LOG.debug("App volume failed", t);
                     lastRead = System.currentTimeMillis();
                     break block25;
                 }

@@ -2,9 +2,9 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.resources.ClientPackSource
- *  net.minecraft.server.packs.repository.PackRepository
- *  net.minecraft.server.packs.repository.RepositorySource
+ *  net.minecraft.class_1065
+ *  net.minecraft.class_3283
+ *  net.minecraft.class_3285
  *  org.spongepowered.asm.mixin.Final
  *  org.spongepowered.asm.mixin.Mixin
  *  org.spongepowered.asm.mixin.Mutable
@@ -18,9 +18,9 @@ package dev.lyricsflow.mixin;
 import dev.lyricsflow.render.CustomFonts;
 import java.util.LinkedHashSet;
 import java.util.Set;
-import net.minecraft.client.resources.ClientPackSource;
-import net.minecraft.server.packs.repository.PackRepository;
-import net.minecraft.server.packs.repository.RepositorySource;
+import net.minecraft.class_1065;
+import net.minecraft.class_3283;
+import net.minecraft.class_3285;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -29,26 +29,26 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-@Mixin(value={PackRepository.class})
+@Mixin(value={class_3283.class})
 public abstract class PackRepositoryMixin {
     @Shadow
     @Final
     @Mutable
-    private Set<RepositorySource> sources;
+    private Set<class_3285> field_14227;
 
     @Inject(method={"<init>"}, at={@At(value="RETURN")}, require=0)
-    private void lyricsflow$addFonts(RepositorySource[] given, CallbackInfo ci) {
+    private void lyricsflow$addFonts(class_3285[] given, CallbackInfo ci) {
         boolean client = false;
-        for (RepositorySource s : this.sources) {
-            if (!(s instanceof ClientPackSource)) continue;
+        for (class_3285 s : this.field_14227) {
+            if (!(s instanceof class_1065)) continue;
             client = true;
         }
         if (!client) {
             return;
         }
-        LinkedHashSet<RepositorySource> set = new LinkedHashSet<RepositorySource>(this.sources);
+        LinkedHashSet<class_3285> set = new LinkedHashSet<class_3285>(this.field_14227);
         set.add(CustomFonts.source());
-        this.sources = set;
+        this.field_14227 = set;
     }
 }
 

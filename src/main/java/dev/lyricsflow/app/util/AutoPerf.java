@@ -2,11 +2,11 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.Minecraft
+ *  net.minecraft.class_310
  */
 package dev.lyricsflow.app.util;
 
-import net.minecraft.client.Minecraft;
+import net.minecraft.class_310;
 
 public final class AutoPerf {
     public static final int MAX = 6;
@@ -50,7 +50,7 @@ public final class AutoPerf {
         dev.lyricsflow.perf.AutoPerf.frame();
     }
 
-    public static void tick(Minecraft mc) {
+    public static void tick(class_310 mc) {
     }
 
     public static void reset() {

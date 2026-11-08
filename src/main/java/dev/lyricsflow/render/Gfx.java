@@ -2,25 +2,25 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.renderer.RenderPipelines
- *  net.minecraft.client.renderer.rendertype.RenderTypes
- *  net.minecraft.client.renderer.rendertype.RenderType
- *  net.minecraft.network.chat.Component
- *  net.minecraft.resources.Identifier
- *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.Font
- *  net.minecraft.client.gui.GuiGraphicsExtractor
- *  com.mojang.blaze3d.vertex.PoseStack
- *  com.mojang.blaze3d.vertex.PoseStack$Pose
- *  com.mojang.blaze3d.vertex.VertexConsumer
- *  dev.lyricsflow.compat.LegacyBufferSource
- *  dev.lyricsflow.compat.LegacyBufferSource$BufferSource
- *  net.minecraft.client.renderer.texture.OverlayTexture
- *  net.minecraft.network.chat.MutableComponent
+ *  net.minecraft.class_10799
+ *  net.minecraft.class_12249
+ *  net.minecraft.class_1921
+ *  net.minecraft.class_2561
+ *  net.minecraft.class_2960
+ *  net.minecraft.class_310
+ *  net.minecraft.class_327
+ *  net.minecraft.class_332
+ *  net.minecraft.class_4587
+ *  net.minecraft.class_4587$class_4665
+ *  net.minecraft.class_4588
+ *  net.minecraft.class_4597
+ *  net.minecraft.class_4597$class_4598
+ *  net.minecraft.class_4608
+ *  net.minecraft.class_5250
  */
 package dev.lyricsflow.render;
 
-import dev.lyricsflow.SkyLyrics;
+import dev.lyricsflow.LyricsFlow;
 import dev.lyricsflow.config.ConfigManager;
 import dev.lyricsflow.config.LFConfig;
 import dev.lyricsflow.render.Fonts;
@@ -28,38 +28,38 @@ import dev.lyricsflow.render.Proj;
 import dev.lyricsflow.util.Col;
 import java.util.HashSet;
 import java.util.Set;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.client.renderer.rendertype.RenderTypes;
-import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import dev.lyricsflow.compat.LegacyBufferSource;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.class_10799;
+import net.minecraft.class_12249;
+import net.minecraft.class_1921;
+import net.minecraft.class_2561;
+import net.minecraft.class_2960;
+import net.minecraft.class_310;
+import net.minecraft.class_327;
+import net.minecraft.class_332;
+import net.minecraft.class_4587;
+import net.minecraft.class_4588;
+import net.minecraft.class_4597;
+import net.minecraft.class_4608;
+import net.minecraft.class_5250;
 
 public final class Gfx {
-    private static PoseStack wPose;
-    private static LegacyBufferSource wBuf;
+    private static class_4587 wPose;
+    private static class_4597 wBuf;
     public static float worldDepth;
     private static final float[] W0;
     private static final float[] W1;
     private static final float[] W2;
     private static final float[] W3;
-    private static final Set<RenderType> wUsed;
+    private static final Set<class_1921> wUsed;
     private static int wSeq;
     private static final Seg[] SEGS;
     private static int segNext;
-    private static final Identifier ROUND;
-    private static final Identifier RING;
-    private static final Identifier SOFT;
-    private static final Identifier DOT;
-    private static final Identifier GLOW;
-    private static final Identifier BAND;
+    private static final class_2960 ROUND;
+    private static final class_2960 RING;
+    private static final class_2960 SOFT;
+    private static final class_2960 DOT;
+    private static final class_2960 GLOW;
+    private static final class_2960 BAND;
 
     private Gfx() {
     }
@@ -68,7 +68,7 @@ public final class Gfx {
         return wPose != null;
     }
 
-    public static void beginWorld(PoseStack pose, LegacyBufferSource buffers) {
+    public static void beginWorld(class_4587 pose, class_4597 buffers) {
         wPose = pose;
         wBuf = buffers;
         worldDepth = Gfx.skyDepth();
@@ -76,28 +76,28 @@ public final class Gfx {
     }
 
     public static float skyDepth() {
-        Minecraft mc = Minecraft.getInstance();
-        return Math.max(20.0f, Math.min(96.0f, (float)mc.options.getEffectiveRenderDistance() * 16.0f * 0.5f));
+        class_310 mc = class_310.method_1551();
+        return Math.max(20.0f, Math.min(96.0f, (float)mc.field_1690.method_38521() * 16.0f * 0.5f));
     }
 
     public static void flushWorld() {
         Gfx.flushBands();
-        LegacyBufferSource class_45972 = wBuf;
-        if (class_45972 instanceof LegacyBufferSource.BufferSource) {
-            LegacyBufferSource.BufferSource bs = (LegacyBufferSource.BufferSource)class_45972;
-            for (RenderType t : wUsed) {
-                bs.endBatch(t);
+        class_4597 class_45972 = wBuf;
+        if (class_45972 instanceof class_4597.class_4598) {
+            class_4597.class_4598 bs = (class_4597.class_4598)class_45972;
+            for (class_1921 t : wUsed) {
+                bs.method_22994(t);
             }
         }
     }
 
     public static void endWorld() {
         Gfx.flushBands();
-        LegacyBufferSource class_45972 = wBuf;
-        if (class_45972 instanceof LegacyBufferSource.BufferSource) {
-            LegacyBufferSource.BufferSource bs = (LegacyBufferSource.BufferSource)class_45972;
-            for (RenderType t : wUsed) {
-                bs.endBatch(t);
+        class_4597 class_45972 = wBuf;
+        if (class_45972 instanceof class_4597.class_4598) {
+            class_4597.class_4598 bs = (class_4597.class_4598)class_45972;
+            for (class_1921 t : wUsed) {
+                bs.method_22994(t);
             }
         }
         wUsed.clear();
@@ -105,11 +105,11 @@ public final class Gfx {
         wBuf = null;
     }
 
-    private static void wQuad(Identifier tex, float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, float u0, float v0, float u1, float v1, int color) {
+    private static void wQuad(class_2960 tex, float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, float u0, float v0, float u1, float v1, int color) {
         Gfx.wQuadC(tex, x0, y0, x1, y1, x2, y2, x3, y3, u0, v0, u1, v1, color, color, color, color);
     }
 
-    private static void wQuadC(Identifier tex, float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, float u0, float v0, float u1, float v1, int c0, int c1, int c2, int c3) {
+    private static void wQuadC(class_2960 tex, float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, float u0, float v0, float u1, float v1, int c0, int c1, int c2, int c3) {
         int color = c0;
         if (Col.a(c0) < 2 && Col.a(c1) < 2 && Col.a(c2) < 2 && Col.a(c3) < 2) {
             return;
@@ -120,11 +120,11 @@ public final class Gfx {
         Proj.unproject(x1, y1, d, W1);
         Proj.unproject(x2, y2, d, W2);
         Proj.unproject(x3, y3, d, W3);
-        RenderType type = RenderTypes.eyes((Identifier)tex);
+        class_1921 type = class_12249.method_76014((class_2960)tex);
         wUsed.add(type);
-        VertexConsumer vc = wBuf.getBuffer(type);
-        PoseStack.Pose pose = wPose.last();
-        int ov = OverlayTexture.NO_OVERLAY;
+        class_4588 vc = wBuf.method_73477(type);
+        class_4587.class_4665 pose = wPose.method_23760();
+        int ov = class_4608.field_21444;
         int light = 0xF000F0;
         if (area < 0.0f) {
             Gfx.vert(vc, pose, W0, u0, v0, c0, ov, light);
@@ -139,11 +139,11 @@ public final class Gfx {
         }
     }
 
-    private static void vert(VertexConsumer vc, PoseStack.Pose pose, float[] p, float u, float v, int color, int ov, int light) {
-        vc.addVertex(pose, p[0], p[1], p[2]).setColor(color).setUv(u, v).setOverlay(ov).setLight(light).setNormal(pose, 0.0f, 1.0f, 0.0f);
+    private static void vert(class_4588 vc, class_4587.class_4665 pose, float[] p, float u, float v, int color, int ov, int light) {
+        vc.method_56824(pose, p[0], p[1], p[2]).method_39415(color).method_22913(u, v).method_22922(ov).method_60803(light).method_60831(pose, 0.0f, 1.0f, 0.0f);
     }
 
-    private static void wStrip(Identifier tex, float x0, float y0, float x1, float y1, float thickness, float u0, float v0, float u1, float v1, int color) {
+    private static void wStrip(class_2960 tex, float x0, float y0, float x1, float y1, float thickness, float u0, float v0, float u1, float v1, int color) {
         float dx = x1 - x0;
         float dy = y1 - y0;
         float len = (float)Math.sqrt(dx * dx + dy * dy);
@@ -155,7 +155,7 @@ public final class Gfx {
         Gfx.wQuad(tex, x0 - nx, y0 - ny, x1 - nx, y1 - ny, x1 + nx, y1 + ny, x0 + nx, y0 + ny, u0, v0, u1, v1, color);
     }
 
-    public static void bandPath(GuiGraphicsExtractor g, float[] xs, float[] ys, int n, float thickness, int color) {
+    public static void bandPath(class_332 g, float[] xs, float[] ys, int n, float thickness, int color) {
         int i;
         if (n < 2 || Col.a(color) == 0) {
             return;
@@ -260,7 +260,7 @@ public final class Gfx {
         }
     }
 
-    public static void bandPathC(GuiGraphicsExtractor g, float[] xs, float[] ys, float[] ws, int[] cs, int n) {
+    public static void bandPathC(class_332 g, float[] xs, float[] ys, float[] ws, int[] cs, int n) {
         int i;
         if (n < 2) {
             return;
@@ -299,14 +299,14 @@ public final class Gfx {
     }
 
     public static float scale() {
-        return Minecraft.getInstance().getWindow().getGuiScale();
+        return class_310.method_1551().method_22683().method_4495();
     }
 
-    public static Font font() {
-        return Minecraft.getInstance().font;
+    public static class_327 font() {
+        return class_310.method_1551().field_1772;
     }
 
-    public static void rect(GuiGraphicsExtractor g, float x, float y, float w, float h, int color) {
+    public static void rect(class_332 g, float x, float y, float w, float h, int color) {
         if (Col.a(color) == 0 || w <= 0.0f || h <= 0.0f) {
             return;
         }
@@ -315,44 +315,44 @@ public final class Gfx {
             return;
         }
         float s = Gfx.scale();
-        g.pose().pushMatrix();
-        g.pose().scale(1.0f / s, 1.0f / s);
+        g.method_51448().pushMatrix();
+        g.method_51448().scale(1.0f / s, 1.0f / s);
         int x0 = Math.round(x * s);
         int y0 = Math.round(y * s);
         int x1 = Math.round((x + w) * s);
         int y1 = Math.round((y + h) * s);
         if (x1 > x0 && y1 > y0) {
-            g.fill(x0, y0, x1, y1, color);
+            g.method_25294(x0, y0, x1, y1, color);
         }
-        g.pose().popMatrix();
+        g.method_51448().popMatrix();
     }
 
-    public static void gradientV(GuiGraphicsExtractor g, float x, float y, float w, float h, int top, int bottom) {
+    public static void gradientV(class_332 g, float x, float y, float w, float h, int top, int bottom) {
         float s = Gfx.scale();
-        g.pose().pushMatrix();
-        g.pose().scale(1.0f / s, 1.0f / s);
-        g.fillGradient(Math.round(x * s), Math.round(y * s), Math.round((x + w) * s), Math.round((y + h) * s), top, bottom);
-        g.pose().popMatrix();
+        g.method_51448().pushMatrix();
+        g.method_51448().scale(1.0f / s, 1.0f / s);
+        g.method_25296(Math.round(x * s), Math.round(y * s), Math.round((x + w) * s), Math.round((y + h) * s), top, bottom);
+        g.method_51448().popMatrix();
     }
 
-    public static void gradientH(GuiGraphicsExtractor g, float x, float y, float w, float h, int left, int right) {
+    public static void gradientH(class_332 g, float x, float y, float w, float h, int left, int right) {
         float s = Gfx.scale();
         int px0 = Math.round(x * s);
         int px1 = Math.round((x + w) * s);
         int py0 = Math.round(y * s);
         int py1 = Math.round((y + h) * s);
         int n = Math.max(1, Math.min(48, (px1 - px0) / 4));
-        g.pose().pushMatrix();
-        g.pose().scale(1.0f / s, 1.0f / s);
+        g.method_51448().pushMatrix();
+        g.method_51448().scale(1.0f / s, 1.0f / s);
         for (int i = 0; i < n; ++i) {
             int a = px0 + (px1 - px0) * i / n;
             int b = px0 + (px1 - px0) * (i + 1) / n;
-            g.fill(a, py0, b, py1, Col.lerp(left, right, ((float)i + 0.5f) / (float)n));
+            g.method_25294(a, py0, b, py1, Col.lerp(left, right, ((float)i + 0.5f) / (float)n));
         }
-        g.pose().popMatrix();
+        g.method_51448().popMatrix();
     }
 
-    public static void band(GuiGraphicsExtractor g, float x0, float y0, float x1, float y1, float thickness, int color) {
+    public static void band(class_332 g, float x0, float y0, float x1, float y1, float thickness, int color) {
         float dx = x1 - x0;
         float dy = y1 - y0;
         float len = (float)Math.sqrt(dx * dx + dy * dy);
@@ -364,21 +364,21 @@ public final class Gfx {
             return;
         }
         float s = Gfx.scale();
-        g.pose().pushMatrix();
-        g.pose().translate(x0, y0);
-        g.pose().rotate((float)Math.atan2(dy, dx));
-        g.pose().scale(1.0f / s, 1.0f / s);
+        g.method_51448().pushMatrix();
+        g.method_51448().translate(x0, y0);
+        g.method_51448().rotate((float)Math.atan2(dy, dx));
+        g.method_51448().scale(1.0f / s, 1.0f / s);
         int L = Math.round(len * s) + 2;
         int T = Math.max(2, Math.round(thickness * s));
-        g.blit(RenderPipelines.GUI_TEXTURED, BAND, -1, -T / 2, 0.0f, 0.0f, L, T, 64, 64, 64, 64, color);
-        g.pose().popMatrix();
+        g.method_25293(class_10799.field_56883, BAND, -1, -T / 2, 0.0f, 0.0f, L, T, 64, 64, 64, 64, color);
+        g.method_51448().popMatrix();
     }
 
-    public static void worldPicture(Identifier tex, double[] tl, double[] tr, double[] br, double[] bl, int color) {
+    public static void worldPicture(class_2960 tex, double[] tl, double[] tr, double[] br, double[] bl, int color) {
         Gfx.worldPicture(tex, tl, tr, br, bl, 0.0f, 0.0f, 1.0f, 1.0f, color);
     }
 
-    public static void worldQuad(Identifier tex, double[][] p, float[][] uv, int[] col) {
+    public static void worldQuad(class_2960 tex, double[][] p, float[][] uv, int[] col) {
         int[] order;
         if (!Gfx.inWorld()) {
             return;
@@ -386,26 +386,26 @@ public final class Gfx {
         if (Col.a(col[0]) < 2 && Col.a(col[1]) < 2 && Col.a(col[2]) < 2 && Col.a(col[3]) < 2) {
             return;
         }
-        RenderType type = RenderTypes.eyes((Identifier)tex);
+        class_1921 type = class_12249.method_76014((class_2960)tex);
         wUsed.add(type);
-        VertexConsumer vc = wBuf.getBuffer(type);
-        PoseStack.Pose pose = wPose.last();
-        int ov = OverlayTexture.NO_OVERLAY;
+        class_4588 vc = wBuf.method_73477(type);
+        class_4587.class_4665 pose = wPose.method_23760();
+        int ov = class_4608.field_21444;
         int light = 0xF000F0;
         for (int k : order = new int[]{0, 1, 2, 3, 3, 2, 1, 0}) {
             Gfx.vert(vc, pose, Gfx.f(p[k]), uv[k][0], uv[k][1], col[k], ov, light);
         }
     }
 
-    public static void worldPictureV(Identifier tex, double[] tl, double[] tr, double[] br, double[] bl, int top, int bottom) {
+    public static void worldPictureV(class_2960 tex, double[] tl, double[] tr, double[] br, double[] bl, int top, int bottom) {
         if (!Gfx.inWorld() || Col.a(top) < 2 && Col.a(bottom) < 2) {
             return;
         }
-        RenderType type = RenderTypes.eyes((Identifier)tex);
+        class_1921 type = class_12249.method_76014((class_2960)tex);
         wUsed.add(type);
-        VertexConsumer vc = wBuf.getBuffer(type);
-        PoseStack.Pose pose = wPose.last();
-        int ov = OverlayTexture.NO_OVERLAY;
+        class_4588 vc = wBuf.method_73477(type);
+        class_4587.class_4665 pose = wPose.method_23760();
+        int ov = class_4608.field_21444;
         int light = 0xF000F0;
         float[] a = Gfx.f(tl);
         float[] b = Gfx.f(tr);
@@ -421,15 +421,15 @@ public final class Gfx {
         Gfx.vert(vc, pose, a, 0.0f, 0.0f, top, ov, light);
     }
 
-    public static void worldPicture(Identifier tex, double[] tl, double[] tr, double[] br, double[] bl, float u0, float v0, float u1, float v1, int color) {
+    public static void worldPicture(class_2960 tex, double[] tl, double[] tr, double[] br, double[] bl, float u0, float v0, float u1, float v1, int color) {
         if (!Gfx.inWorld() || Col.a(color) < 2) {
             return;
         }
-        RenderType type = RenderTypes.eyes((Identifier)tex);
+        class_1921 type = class_12249.method_76014((class_2960)tex);
         wUsed.add(type);
-        VertexConsumer vc = wBuf.getBuffer(type);
-        PoseStack.Pose pose = wPose.last();
-        int ov = OverlayTexture.NO_OVERLAY;
+        class_4588 vc = wBuf.method_73477(type);
+        class_4587.class_4665 pose = wPose.method_23760();
+        int ov = class_4608.field_21444;
         int light = 0xF000F0;
         float[] a = Gfx.f(tl);
         float[] b = Gfx.f(tr);
@@ -449,7 +449,7 @@ public final class Gfx {
         return new float[]{(float)p[0], (float)p[1], (float)p[2]};
     }
 
-    public static void image(GuiGraphicsExtractor g, Identifier tex, int texW, int texH, float x, float y, float w, float h, int color) {
+    public static void image(class_332 g, class_2960 tex, int texW, int texH, float x, float y, float w, float h, int color) {
         if (Col.a(color) == 0 || w <= 0.0f || h <= 0.0f) {
             return;
         }
@@ -462,13 +462,13 @@ public final class Gfx {
         int y0 = Math.round(y * s);
         int W = Math.max(1, Math.round(w * s));
         int H = Math.max(1, Math.round(h * s));
-        g.pose().pushMatrix();
-        g.pose().scale(1.0f / s, 1.0f / s);
-        g.blit(RenderPipelines.GUI_TEXTURED, tex, x0, y0, 0.0f, 0.0f, W, H, texW, texH, texW, texH, color);
-        g.pose().popMatrix();
+        g.method_51448().pushMatrix();
+        g.method_51448().scale(1.0f / s, 1.0f / s);
+        g.method_25293(class_10799.field_56883, tex, x0, y0, 0.0f, 0.0f, W, H, texW, texH, texW, texH, color);
+        g.method_51448().popMatrix();
     }
 
-    private static void single(GuiGraphicsExtractor g, Identifier tex, float cx, float cy, float radius, int color) {
+    private static void single(class_332 g, class_2960 tex, float cx, float cy, float radius, int color) {
         if (Gfx.inWorld()) {
             Gfx.wQuad(tex, cx - radius, cy - radius, cx + radius, cy - radius, cx + radius, cy + radius, cx - radius, cy + radius, 0.0f, 0.0f, 1.0f, 1.0f, color);
             return;
@@ -477,13 +477,13 @@ public final class Gfx {
         int d = Math.max(1, Math.round(radius * 2.0f * s));
         int x0 = Math.round(cx * s) - d / 2;
         int y0 = Math.round(cy * s) - d / 2;
-        g.pose().pushMatrix();
-        g.pose().scale(1.0f / s, 1.0f / s);
-        g.blit(RenderPipelines.GUI_TEXTURED, tex, x0, y0, 0.0f, 0.0f, d, d, 128, 128, 128, 128, color);
-        g.pose().popMatrix();
+        g.method_51448().pushMatrix();
+        g.method_51448().scale(1.0f / s, 1.0f / s);
+        g.method_25293(class_10799.field_56883, tex, x0, y0, 0.0f, 0.0f, d, d, 128, 128, 128, 128, color);
+        g.method_51448().popMatrix();
     }
 
-    private static void nine(GuiGraphicsExtractor g, Identifier tex, int texSize, int slice, float x, float y, float w, float h, float corner, int top, int bottom) {
+    private static void nine(class_332 g, class_2960 tex, int texSize, int slice, float x, float y, float w, float h, float corner, int top, int bottom) {
         float s = Gfx.scale();
         int x0 = Math.round(x * s);
         int y0 = Math.round(y * s);
@@ -496,36 +496,36 @@ public final class Gfx {
         }
         int c = Math.max(1, Math.min(Math.round(corner * s), Math.min(W, H) / 2));
         int mid = texSize - 2 * slice;
-        g.pose().pushMatrix();
-        g.pose().scale(1.0f / s, 1.0f / s);
+        g.method_51448().pushMatrix();
+        g.method_51448().scale(1.0f / s, 1.0f / s);
         int cw = W - 2 * c;
         int ch = H - 2 * c;
-        g.blit(RenderPipelines.GUI_TEXTURED, tex, x0, y0, 0.0f, 0.0f, c, c, slice, slice, texSize, texSize, top);
+        g.method_25293(class_10799.field_56883, tex, x0, y0, 0.0f, 0.0f, c, c, slice, slice, texSize, texSize, top);
         if (cw > 0) {
-            g.blit(RenderPipelines.GUI_TEXTURED, tex, x0 + c, y0, (float)slice, 0.0f, cw, c, mid, slice, texSize, texSize, top);
+            g.method_25293(class_10799.field_56883, tex, x0 + c, y0, (float)slice, 0.0f, cw, c, mid, slice, texSize, texSize, top);
         }
-        g.blit(RenderPipelines.GUI_TEXTURED, tex, x1 - c, y0, (float)(slice + mid), 0.0f, c, c, slice, slice, texSize, texSize, top);
+        g.method_25293(class_10799.field_56883, tex, x1 - c, y0, (float)(slice + mid), 0.0f, c, c, slice, slice, texSize, texSize, top);
         if (ch > 0) {
             if (top == bottom || tex != ROUND) {
                 int mc = top == bottom ? top : Col.lerp(top, bottom, 0.5f);
-                g.blit(RenderPipelines.GUI_TEXTURED, tex, x0, y0 + c, 0.0f, (float)slice, c, ch, slice, mid, texSize, texSize, mc);
+                g.method_25293(class_10799.field_56883, tex, x0, y0 + c, 0.0f, (float)slice, c, ch, slice, mid, texSize, texSize, mc);
                 if (cw > 0) {
-                    g.blit(RenderPipelines.GUI_TEXTURED, tex, x0 + c, y0 + c, (float)slice, (float)slice, cw, ch, mid, mid, texSize, texSize, mc);
+                    g.method_25293(class_10799.field_56883, tex, x0 + c, y0 + c, (float)slice, (float)slice, cw, ch, mid, mid, texSize, texSize, mc);
                 }
-                g.blit(RenderPipelines.GUI_TEXTURED, tex, x1 - c, y0 + c, (float)(slice + mid), (float)slice, c, ch, slice, mid, texSize, texSize, mc);
+                g.method_25293(class_10799.field_56883, tex, x1 - c, y0 + c, (float)(slice + mid), (float)slice, c, ch, slice, mid, texSize, texSize, mc);
             } else {
-                g.fillGradient(x0, y0 + c, x1, y1 - c, top, bottom);
+                g.method_25296(x0, y0 + c, x1, y1 - c, top, bottom);
             }
         }
-        g.blit(RenderPipelines.GUI_TEXTURED, tex, x0, y1 - c, 0.0f, (float)(slice + mid), c, c, slice, slice, texSize, texSize, bottom);
+        g.method_25293(class_10799.field_56883, tex, x0, y1 - c, 0.0f, (float)(slice + mid), c, c, slice, slice, texSize, texSize, bottom);
         if (cw > 0) {
-            g.blit(RenderPipelines.GUI_TEXTURED, tex, x0 + c, y1 - c, (float)slice, (float)(slice + mid), cw, c, mid, slice, texSize, texSize, bottom);
+            g.method_25293(class_10799.field_56883, tex, x0 + c, y1 - c, (float)slice, (float)(slice + mid), cw, c, mid, slice, texSize, texSize, bottom);
         }
-        g.blit(RenderPipelines.GUI_TEXTURED, tex, x1 - c, y1 - c, (float)(slice + mid), (float)(slice + mid), c, c, slice, slice, texSize, texSize, bottom);
-        g.pose().popMatrix();
+        g.method_25293(class_10799.field_56883, tex, x1 - c, y1 - c, (float)(slice + mid), (float)(slice + mid), c, c, slice, slice, texSize, texSize, bottom);
+        g.method_51448().popMatrix();
     }
 
-    public static void round(GuiGraphicsExtractor g, float x, float y, float w, float h, float radius, int color) {
+    public static void round(class_332 g, float x, float y, float w, float h, float radius, int color) {
         if (Col.a(color) == 0 || w <= 0.0f || h <= 0.0f) {
             return;
         }
@@ -536,7 +536,7 @@ public final class Gfx {
         Gfx.nine(g, ROUND, 136, 64, x, y, w, h, radius, color, color);
     }
 
-    public static void roundGradient(GuiGraphicsExtractor g, float x, float y, float w, float h, float radius, int top, int bottom) {
+    public static void roundGradient(class_332 g, float x, float y, float w, float h, float radius, int top, int bottom) {
         if (w <= 0.0f || h <= 0.0f) {
             return;
         }
@@ -547,7 +547,7 @@ public final class Gfx {
         Gfx.nine(g, ROUND, 136, 64, x, y, w, h, radius, top, bottom);
     }
 
-    public static void roundOutline(GuiGraphicsExtractor g, float x, float y, float w, float h, float radius, float thickness, int color) {
+    public static void roundOutline(class_332 g, float x, float y, float w, float h, float radius, float thickness, int color) {
         if (Col.a(color) == 0 || w <= 0.0f || h <= 0.0f) {
             return;
         }
@@ -575,14 +575,14 @@ public final class Gfx {
         Gfx.nine(g, RING, 136, 64, x, y, w, h, corner, color, color);
     }
 
-    public static void circle(GuiGraphicsExtractor g, float cx, float cy, float radius, int color) {
+    public static void circle(class_332 g, float cx, float cy, float radius, int color) {
         if (radius <= 0.0f || Col.a(color) == 0) {
             return;
         }
         Gfx.single(g, DOT, cx, cy, radius, color);
     }
 
-    public static void shadow(GuiGraphicsExtractor g, float x, float y, float w, float h, float radius, float size, int color) {
+    public static void shadow(class_332 g, float x, float y, float w, float h, float radius, float size, int color) {
         if (Col.a(color) == 0) {
             return;
         }
@@ -590,14 +590,14 @@ public final class Gfx {
         Gfx.nine(g, SOFT, 128, 48, x - e, y - e + size * 0.4f, w + 2.0f * e, h + 2.0f * e, Math.max(radius, size) + e, color, color);
     }
 
-    public static void blob(GuiGraphicsExtractor g, float cx, float cy, float radius, int color) {
+    public static void blob(class_332 g, float cx, float cy, float radius, int color) {
         if (Col.a(color) == 0 || radius <= 0.5f) {
             return;
         }
         Gfx.single(g, GLOW, cx, cy, radius, color);
     }
 
-    public static void glow(GuiGraphicsExtractor g, float x, float y, float w, float h, float radius, float size, int color) {
+    public static void glow(class_332 g, float x, float y, float w, float h, float radius, float size, int color) {
         if (Col.a(color) == 0) {
             return;
         }
@@ -605,7 +605,7 @@ public final class Gfx {
         Gfx.nine(g, SOFT, 128, 48, x - e, y - e, w + 2.0f * e, h + 2.0f * e, Math.max(radius, size) + e, color, color);
     }
 
-    public static void line(GuiGraphicsExtractor g, float x0, float y0, float x1, float y1, float thickness, int color) {
+    public static void line(class_332 g, float x0, float y0, float x1, float y1, float thickness, int color) {
         float dx = x1 - x0;
         float dy = y1 - y0;
         float len = (float)Math.sqrt(dx * dx + dy * dy);
@@ -617,17 +617,17 @@ public final class Gfx {
             return;
         }
         float s = Gfx.scale();
-        g.pose().pushMatrix();
-        g.pose().translate(x0, y0);
-        g.pose().rotate((float)Math.atan2(dy, dx));
-        g.pose().scale(1.0f / s, 1.0f / s);
+        g.method_51448().pushMatrix();
+        g.method_51448().translate(x0, y0);
+        g.method_51448().rotate((float)Math.atan2(dy, dx));
+        g.method_51448().scale(1.0f / s, 1.0f / s);
         int L = Math.round(len * s);
         int T = Math.max(1, Math.round(thickness * s));
-        g.fill(0, -T / 2, L, -T / 2 + T, color);
-        g.pose().popMatrix();
+        g.method_25294(0, -T / 2, L, -T / 2 + T, color);
+        g.method_51448().popMatrix();
     }
 
-    public static void streak(GuiGraphicsExtractor g, float x0, float y0, float x1, float y1, float thickness, int color) {
+    public static void streak(class_332 g, float x0, float y0, float x1, float y1, float thickness, int color) {
         int n = 6;
         for (int i = 0; i < n; ++i) {
             float a = (float)i / (float)n;
@@ -640,22 +640,22 @@ public final class Gfx {
         return Fonts.unitWidth(s, fontId, Gfx.font()) * size;
     }
 
-    public static float text(GuiGraphicsExtractor g, String s, String fontId, float x, float y, float size, int color) {
+    public static float text(class_332 g, String s, String fontId, float x, float y, float size, int color) {
         if (s.isEmpty() || Col.a(color) < 4) {
             return 0.0f;
         }
-        Font f = Gfx.font();
-        MutableComponent c = Fonts.text(s, fontId);
+        class_327 f = Gfx.font();
+        class_5250 c = Fonts.text(s, fontId);
         float k = size / Fonts.height(fontId);
-        g.pose().pushMatrix();
-        g.pose().translate(x, y + size * Fonts.yShift(fontId, Fonts.capsOnly(s)));
-        g.pose().scale(k, k);
-        g.text(f, (Component)c, 0, 0, color, false);
-        g.pose().popMatrix();
+        g.method_51448().pushMatrix();
+        g.method_51448().translate(x, y + size * Fonts.yShift(fontId, Fonts.capsOnly(s)));
+        g.method_51448().scale(k, k);
+        g.method_51439(f, (class_2561)c, 0, 0, color, false);
+        g.method_51448().popMatrix();
         return Fonts.unitWidth(s, fontId, f) * size;
     }
 
-    public static float textCentered(GuiGraphicsExtractor g, String s, String fontId, float cx, float y, float size, int color) {
+    public static float textCentered(class_332 g, String s, String fontId, float cx, float y, float size, int color) {
         float w = Gfx.textWidth(s, fontId, size);
         Gfx.text(g, s, fontId, cx - w / 2.0f, y, size, color);
         return w;
@@ -679,7 +679,7 @@ public final class Gfx {
         return s.substring(0, lo).trim() + e;
     }
 
-    private static void textShadow(GuiGraphicsExtractor g, String s, String fontId, float x, float y, float size, float o, int soft, float alpha) {
+    private static void textShadow(class_332 g, String s, String fontId, float x, float y, float size, float o, int soft, float alpha) {
         int strong;
         int mode = ConfigManager.get().textShadow;
         int custom = ConfigManager.get().shadowColor;
@@ -695,7 +695,7 @@ public final class Gfx {
         }
     }
 
-    public static void neon(GuiGraphicsExtractor g, String s, String fontId, float cx, float y, float size, int main, int a, int b, float alpha, boolean twoColor, float glow) {
+    public static void neon(class_332 g, String s, String fontId, float cx, float y, float size, int main, int a, int b, float alpha, boolean twoColor, float glow) {
         if (alpha <= 0.01f) {
             return;
         }
@@ -727,14 +727,14 @@ public final class Gfx {
         W1 = new float[3];
         W2 = new float[3];
         W3 = new float[3];
-        wUsed = new HashSet<RenderType>();
+        wUsed = new HashSet<class_1921>();
         SEGS = new Seg[]{new Seg(), new Seg(), new Seg(), new Seg(), new Seg(), new Seg()};
-        ROUND = SkyLyrics.id("textures/gui/shape/round.png");
-        RING = SkyLyrics.id("textures/gui/shape/ring.png");
-        SOFT = SkyLyrics.id("textures/gui/shape/soft.png");
-        DOT = SkyLyrics.id("textures/gui/shape/dot.png");
-        GLOW = SkyLyrics.id("textures/gui/shape/glow.png");
-        BAND = SkyLyrics.id("textures/gui/shape/band.png");
+        ROUND = LyricsFlow.id("textures/gui/shape/round.png");
+        RING = LyricsFlow.id("textures/gui/shape/ring.png");
+        SOFT = LyricsFlow.id("textures/gui/shape/soft.png");
+        DOT = LyricsFlow.id("textures/gui/shape/dot.png");
+        GLOW = LyricsFlow.id("textures/gui/shape/glow.png");
+        BAND = LyricsFlow.id("textures/gui/shape/band.png");
     }
 
     private static final class Seg {

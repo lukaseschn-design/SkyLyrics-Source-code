@@ -2,107 +2,79 @@
  * Decompiled with CFR 0.152.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.resources.language.I18n
- *  net.minecraft.client.resources.sounds.SimpleSoundInstance
- *  net.minecraft.client.resources.sounds.SoundInstance
- *  net.minecraft.ChatFormatting
- *  net.minecraft.network.chat.Component
- *  net.minecraft.client.Minecraft
- *  net.minecraft.sounds.SoundEvent
- *  net.minecraft.sounds.SoundEvents
+ *  net.minecraft.class_1074
+ *  net.minecraft.class_1109
+ *  net.minecraft.class_1113
+ *  net.minecraft.class_124
+ *  net.minecraft.class_2561
+ *  net.minecraft.class_310
+ *  net.minecraft.class_3414
+ *  net.minecraft.class_3417
  */
 package dev.lyricsflow.app.util;
 
 import dev.lyricsflow.app.Core;
-import java.awt.Desktop;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Path;
-import net.minecraft.client.resources.language.I18n;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Component;
-import net.minecraft.client.Minecraft;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
+import net.minecraft.class_1074;
+import net.minecraft.class_1109;
+import net.minecraft.class_1113;
+import net.minecraft.class_124;
+import net.minecraft.class_2561;
+import net.minecraft.class_310;
+import net.minecraft.class_3414;
+import net.minecraft.class_3417;
 
 public final class Fx {
     private Fx() {
     }
 
     public static String t(String key, Object ... args) {
-        return I18n.get((String)key, (Object[])args);
+        return class_1074.method_4662((String)key, (Object[])args);
     }
 
     public static void sound(Sfx s) {
-        Minecraft mc;
-        if (Core.cfg().sounds && (mc = Minecraft.getInstance()).getSoundManager() != null) {
+        class_310 mc;
+        if (Core.cfg().sounds && (mc = class_310.method_1551()).method_1483() != null) {
             switch (s.ordinal()) {
                 case 0: {
-                    mc.getSoundManager().play((SoundInstance)SimpleSoundInstance.forUI((SoundEvent)((SoundEvent)SoundEvents.UI_BUTTON_CLICK.value()), (float)1.4f, (float)0.35f));
+                    mc.method_1483().method_4873((class_1113)class_1109.method_4757((class_3414)((class_3414)class_3417.field_15015.comp_349()), (float)1.4f, (float)0.35f));
                     break;
                 }
                 case 1: {
-                    mc.getSoundManager().play((SoundInstance)SimpleSoundInstance.forUI((SoundEvent)SoundEvents.PLAYER_LEVELUP, (float)1.0f, (float)0.6f));
+                    mc.method_1483().method_4873((class_1113)class_1109.method_4757((class_3414)class_3417.field_14709, (float)1.0f, (float)0.6f));
                     break;
                 }
                 case 2: {
-                    mc.getSoundManager().play((SoundInstance)SimpleSoundInstance.forUI((SoundEvent)((SoundEvent)SoundEvents.NOTE_BLOCK_BASS.value()), (float)0.6f, (float)0.7f));
+                    mc.method_1483().method_4873((class_1113)class_1109.method_4757((class_3414)((class_3414)class_3417.field_14624.comp_349()), (float)0.6f, (float)0.7f));
                     break;
                 }
                 case 3: {
-                    mc.getSoundManager().play((SoundInstance)SimpleSoundInstance.forUI((SoundEvent)((SoundEvent)SoundEvents.NOTE_BLOCK_HAT.value()), (float)1.8f, (float)0.4f));
+                    mc.method_1483().method_4873((class_1113)class_1109.method_4757((class_3414)((class_3414)class_3417.field_15204.comp_349()), (float)1.8f, (float)0.4f));
                 }
             }
         }
     }
 
     public static void info(String text) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.gui != null) {
-            mc.gui.chatListener().handleSystemMessage((Component)Component.literal((String)"[SkyLyrics] ").withStyle(ChatFormatting.AQUA).append((Component)Component.literal((String)text).withStyle(ChatFormatting.WHITE)), false);
+        class_310 mc = class_310.method_1551();
+        if (mc.field_1705 != null) {
+            mc.field_1705.method_1743().method_1812((class_2561)class_2561.method_43470((String)"[SkyLyrics] ").method_27692(class_124.field_1075).method_10852((class_2561)class_2561.method_43470((String)text).method_27692(class_124.field_1068)));
         }
     }
 
     public static void error(String text) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.gui != null) {
-            mc.gui.chatListener().handleSystemMessage((Component)Component.literal((String)"[SkyLyrics] ").withStyle(ChatFormatting.LIGHT_PURPLE).append((Component)Component.literal((String)text).withStyle(ChatFormatting.RED)), false);
+        class_310 mc = class_310.method_1551();
+        if (mc.field_1705 != null) {
+            mc.field_1705.method_1743().method_1812((class_2561)class_2561.method_43470((String)"[SkyLyrics] ").method_27692(class_124.field_1076).method_10852((class_2561)class_2561.method_43470((String)text).method_27692(class_124.field_1061)));
             Fx.sound(Sfx.ERROR);
         }
     }
 
     public static void clipboard(String s) {
-        Minecraft.getInstance().keyboardHandler.setClipboard(s);
-    }
-
-    public static void openUri(String uri) {
-        try {
-            if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
-                throw new UnsupportedOperationException("No desktop browser is available");
-            }
-            Desktop.getDesktop().browse(URI.create(uri));
-        } catch (IOException | IllegalArgumentException | UnsupportedOperationException | SecurityException e) {
-            Core.LOG.warn("Could not open URI {}", uri, e);
-            Fx.error("Could not open the link.");
-        }
-    }
-
-    public static void openPath(Path path) {
-        try {
-            if (!Desktop.isDesktopSupported() || !Desktop.getDesktop().isSupported(Desktop.Action.OPEN)) {
-                throw new UnsupportedOperationException("No desktop file manager is available");
-            }
-            Desktop.getDesktop().open(path.toFile());
-        } catch (IOException | IllegalArgumentException | UnsupportedOperationException | SecurityException e) {
-            Core.LOG.warn("Could not open path {}", path, e);
-            Fx.error("Could not open the folder.");
-        }
+        class_310.method_1551().field_1774.method_1455(s);
     }
 
     public static String myName() {
-        return Minecraft.getInstance().getUser().getName();
+        return class_310.method_1551().method_1548().method_1676();
     }
 
     public static enum Sfx {
@@ -113,3 +85,4 @@ public final class Fx {
 
     }
 }
+
