@@ -42,8 +42,16 @@ dependencies {
     // Mod Menu API (optional at runtime)
     compileOnly "com.terraformersmc:modmenu:17.0.1"
 
-    // NanoVG & Native APIs
-    compileOnly "org.lwjgl:lwjgl-nanovg:3.3.3"
+    // NanoVG & Native APIs (Bundled via Jar-in-Jar for custom UI rendering)
+    implementation "org.lwjgl:lwjgl-nanovg:3.3.3"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-windows"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-windows-arm64"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-linux"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-linux-arm64"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-macos"
+    include "org.lwjgl:lwjgl-nanovg:3.3.3:natives-macos-arm64"
+
     compileOnly "net.java.dev.jna:jna:5.14.0"
     compileOnly "net.java.dev.jna:jna-platform:5.14.0"
 }

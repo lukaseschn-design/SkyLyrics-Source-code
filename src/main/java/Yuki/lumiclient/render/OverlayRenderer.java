@@ -55,6 +55,7 @@ public final class OverlayRenderer {
             }
         } catch (Throwable t) {
             crashed = true;
+            t.printStackTrace();
         }
     }
 
