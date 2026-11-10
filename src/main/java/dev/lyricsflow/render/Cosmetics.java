@@ -35,10 +35,10 @@ import net.minecraft.class_7833;
 import org.joml.Quaternionfc;
 
 public final class Cosmetics {
-    public static final String[] IDS = new String[]{"none", "kuz3y_wqq", "astronaut_helmet", "axolotl", "snorkel", "cat_ears", "pixel_glasses", "halo", "hair_bow", "cap_back", "devil_horns", "viking", "cat_headphones", "straw_hat", "pirate_hat", "spartan", "dragon_wings", "red_dragon_wings", "bat_wings", "captain_hat", "knight_helmet", "top_hat", "witch_hat", "jack_o_lantern", "cowboy_hat", "snapback", "ninja_band", "traffic_cone"};
+    public static final String[] IDS = new String[]{"none", "vmtq", "astronaut_helmet", "axolotl", "snorkel", "cat_ears", "pixel_glasses", "halo", "hair_bow", "cap_back", "devil_horns", "viking", "cat_headphones", "straw_hat", "pirate_hat", "spartan", "dragon_wings", "red_dragon_wings", "bat_wings", "captain_hat", "knight_helmet", "top_hat", "witch_hat", "jack_o_lantern", "cowboy_hat", "snapback", "ninja_band", "traffic_cone"};
     private static final float SCALE = 0.3f;
     private static final class_2960 SKIN = LyricsFlow.id("cosmetic/buddy_skin");
-    static final class_2960 KUZ3Y = LyricsFlow.id("textures/cosmetic/kuz3y_wqq.png");
+    static final class_2960 VMTQ = LyricsFlow.id("textures/cosmetic/vmtq.png");
     private static final Map<Integer, class_591> BUDDIES = new HashMap<Integer, class_591>();
     private static class_591 wide;
     private static class_591 slim;
@@ -102,8 +102,8 @@ public final class Cosmetics {
             return;
         }
         for (class_1657 pl : mc.field_1687.method_18456()) {
-            if (!Cosmetics.wornBy(pl).contains("kuz3y_wqq") || pl == mc.field_1724 && mc.field_1690.method_31044().method_31034() || pl.method_5707(mc.field_1773.method_19418().method_71156()) > 4096.0) continue;
-            Cosmetics.renderOne(ps, buffers, pl, "kuz3y_wqq");
+            if (!Cosmetics.wornBy(pl).contains("vmtq") || pl == mc.field_1724 && mc.field_1690.method_31044().method_31034() || pl.method_5707(mc.field_1773.method_19418().method_71156()) > 4096.0) continue;
+            Cosmetics.renderOne(ps, buffers, pl, "vmtq");
         }
     }
 
@@ -161,8 +161,8 @@ public final class Cosmetics {
         boolean isSlim;
         class_2960 skinTex;
         class_310 mc = class_310.method_1551();
-        if ("kuz3y_wqq".equals(name)) {
-            skinTex = KUZ3Y;
+        if ("vmtq".equals(name)) {
+            skinTex = VMTQ;
             isSlim = true;
         } else {
             Cosmetics.ensureSkin(name);

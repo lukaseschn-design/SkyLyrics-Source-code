@@ -77,7 +77,7 @@ extends class_3887<class_10055, class_591> {
             this.axolotl(pose, queue, light, owner);
             return;
         }
-        if ("kuz3y_wqq".equals(cos)) {
+        if ("vmtq".equals(cos)) {
             this.buddy(pose, queue, light, owner, state.field_53528, yRot, xRot);
             return;
         }
@@ -216,7 +216,7 @@ extends class_3887<class_10055, class_591> {
         pose.method_22905(k, k, k);
         pose.method_46416(0.0f, -0.75f, 0.0f);
         pose.method_22907((Quaternionfc)class_7833.field_40716.rotation((float)Math.toRadians(class_3532.method_15363((float)headYaw, (float)-80.0f, (float)80.0f))));
-        queue.method_73491(b.method_63512(), pose, class_12249.method_76000((class_2960)Cosmetics.KUZ3Y), light, class_4608.field_21444, null);
+        queue.method_73491(b.method_63512(), pose, class_12249.method_76000((class_2960)Cosmetics.VMTQ), light, class_4608.field_21444, null);
         pose.method_22909();
     }
 
