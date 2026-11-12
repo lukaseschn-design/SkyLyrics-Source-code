@@ -12,11 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * LevelLoadingScreenMixin - Ersetzt den Vanilla Singleplayer & Multiplayer Terrain-Ladebildschirm
- * durch den eleganten Lotus Ladebildschirm mit dem neuen Lotus-Emblem,
- * Glow-Effekt und animierter Fortschrittsanzeige.
- */
 @Mixin(value = {class_3928.class})
 public abstract class LevelLoadingScreenMixin extends class_437 {
 

@@ -14,13 +14,8 @@ import org.joml.Matrix3x2fStack;
 
 import java.util.WeakHashMap;
 
-/**
- * LotusButtonRenderer - Überträgt das moderne Frosted-Glass Pill Design des Startmenüs
- * (LotusTitleScreen / Aurora Aesthetic) auf alle Menü-Buttons und Regler im gesamten Client.
- */
 public final class LotusButtonRenderer {
 
-    // ── Design Tokens (Exakt abgestimmt auf LotusTitleScreen) ─────────────
     public static final int GLASS_BG = 0x55101824;
     public static final int GLASS_BG_HOVER = 0x801A283C;
     public static final int GLASS_BG_DISABLED = 0x220B111A;
@@ -31,18 +26,15 @@ public final class LotusButtonRenderer {
 
     public static final int ACCENT_CYAN = 0xFF7FE6FF;
 
-    // Vollständige 32-Bit ARGB Textfarben (Alpha immer 0xFF für permanente Sichtbarkeit)
     public static final int TEXT_WHITE = 0xFFFFFFFF;
     public static final int TEXT_IDLE = 0xFFD8E4F0;
     public static final int TEXT_DISABLED = 0xFF6A7B8C;
 
-    // Animations- und Sound-Status pro Widget
     private static final WeakHashMap<class_339, Float> HOVER_MAP = new WeakHashMap<>();
     private static final WeakHashMap<class_339, Boolean> SOUND_STATE_MAP = new WeakHashMap<>();
 
     private LotusButtonRenderer() {}
 
-    // ── Button Rendering ──────────────────────────────────────────────────
     public static void renderButton(class_4264 button, class_332 g, int mouseX, int mouseY, float delta) {
         int x = button.method_46426();
         int y = button.method_46427();
@@ -59,12 +51,10 @@ public final class LotusButtonRenderer {
             } catch (Throwable ignored) {}
         }
 
-        // 1. Weicher Cyan-Glow bei Hover (flackerfrei & sauber außenliegend)
         if (active && hover > 0.02f) {
             drawOuterGlow(g, x, y, w, h, hover);
         }
 
-        // 2. Button-Hintergrund (Frosted Glass ohne Überlappungen)
         int bg;
         int border;
         if (!active) {
@@ -77,15 +67,12 @@ public final class LotusButtonRenderer {
 
         drawRoundedFill(g, x, y, w, h, bg);
 
-        // 3. Feiner Glas-Lichtschein & Reflektion (obere Hälfte)
         if (active) {
             drawGlassSheen(g, x, y, w, h, hover);
         }
 
-        // 4. Nahtlose abgerundete Kontur
         drawRoundedBorder(g, x, y, w, h, border);
 
-        // 5. Zentrierter Text (IMMER sichtbar, sanftes Aufleuchten bei Hover)
         class_310 client = class_310.method_1551();
         class_327 font = client != null ? client.field_1772 : null;
         if (font != null) {
@@ -95,7 +82,6 @@ public final class LotusButtonRenderer {
         }
     }
 
-    // ── Slider Rendering ──────────────────────────────────────────────────
     public static void renderSlider(class_357 slider, class_332 g, int mouseX, int mouseY, float delta, double value) {
         int x = slider.method_46426();
         int y = slider.method_46427();
@@ -113,7 +99,6 @@ public final class LotusButtonRenderer {
             } catch (Throwable ignored) {}
         }
 
-        // 1. Sanfter Track Glow
         if (active && hover > 0.02f) {
             drawOuterGlow(g, x, y, w, h, hover * 0.75f);
         }
@@ -123,7 +108,6 @@ public final class LotusButtonRenderer {
 
         drawRoundedFill(g, x, y, w, h, trackBg);
 
-        // 2. Fortschrittsbalken im Inneren des Reglers
         int handleOffset = (int) (clampedVal * (w - 8));
         int progressW = handleOffset + 4;
         if (progressW > 3 && active) {
@@ -131,15 +115,12 @@ public final class LotusButtonRenderer {
             drawProgressFill(g, x, y, progressW, h, progressCol);
         }
 
-        // 3. Glas-Lichtschein
         if (active) {
             drawGlassSheen(g, x, y, w, h, hover);
         }
 
-        // 4. Regler-Schiene Kontur
         drawRoundedBorder(g, x, y, w, h, trackBorder);
 
-        // 5. Regler-Griff (Handle Knob)
         int hx = x + handleOffset;
         int hw = 8;
         int hy = y + 1;
@@ -150,7 +131,6 @@ public final class LotusButtonRenderer {
 
         drawHandle(g, hx, hy, hw, hh, handleBg, handleBorder, hovered && active);
 
-        // 6. Zentrierter Text (IMMER sichtbar)
         class_310 client = class_310.method_1551();
         class_327 font = client != null ? client.field_1772 : null;
         if (font != null) {
@@ -160,7 +140,6 @@ public final class LotusButtonRenderer {
         }
     }
 
-    // ── Animations-Helper ─────────────────────────────────────────────────
     private static float updateHover(class_339 widget, boolean isHovered) {
         float target = isHovered ? 1.0f : 0.0f;
         Float currentObj = HOVER_MAP.get(widget);
@@ -183,21 +162,17 @@ public final class LotusButtonRenderer {
         return current;
     }
 
-    // ── Glow & Sheen Rendering ────────────────────────────────────────────
     private static void drawOuterGlow(class_332 g, int x, int y, int w, int h, float hover) {
         int alpha = (int) (0x35 * hover);
         if (alpha <= 0) return;
         int glowColor = (alpha << 24) | 0x7FE6FF;
 
-        // Horizontale Außenränder (vollständig außerhalb des Buttons)
         g.method_25294(x + 2, y - 1, x + w - 2, y, glowColor);
         g.method_25294(x + 2, y + h, x + w - 2, y + h + 1, glowColor);
 
-        // Vertikale Außenränder
         g.method_25294(x - 1, y + 2, x, y + h - 2, glowColor);
         g.method_25294(x + w, y + 2, x + w + 1, y + h - 2, glowColor);
 
-        // Abgeschlossene äußere Ecken
         g.method_25294(x, y - 1, x + 2, y, glowColor);
         g.method_25294(x - 1, y, x, y + 2, glowColor);
 
@@ -221,7 +196,6 @@ public final class LotusButtonRenderer {
         g.method_25294(x + 3, y + 1, x + w - 3, y + 2, specColor);
     }
 
-    // ── Pixel-Perfekte Abgerundete Geometrie (Absolut Nahtlos & Ohne Überlappung) ──
     public static void drawRoundedFill(class_332 g, int x, int y, int w, int h, int color) {
         if (w <= 0 || h <= 0) return;
         if (w < 8 || h < 8) {
@@ -229,7 +203,6 @@ public final class LotusButtonRenderer {
             return;
         }
 
-        // Komplett disjunkte horizontale Zeilen: Kein einziger Pixel wird doppelt gezeichnet!
         g.method_25294(x + 2, y + 1, x + w - 2, y + 2, color);
         g.method_25294(x + 1, y + 2, x + w - 1, y + h - 2, color);
         g.method_25294(x + 2, y + h - 2, x + w - 2, y + h - 1, color);
@@ -242,15 +215,12 @@ public final class LotusButtonRenderer {
             return;
         }
 
-        // Horizontale Außenkanten
         g.method_25294(x + 2, y, x + w - 2, y + 1, color);
         g.method_25294(x + 2, y + h - 1, x + w - 2, y + h, color);
 
-        // Vertikale Außenkanten
         g.method_25294(x, y + 2, x + 1, y + h - 2, color);
         g.method_25294(x + w - 1, y + 2, x + w, y + h - 2, color);
 
-        // Verbindende Eck-Pixel (perfekt geschlossener 1px Radius)
         g.method_25294(x + 1, y + 1, x + 2, y + 2, color);
         g.method_25294(x + w - 2, y + 1, x + w - 1, y + 2, color);
         g.method_25294(x + 1, y + h - 2, x + 2, y + h - 1, color);
@@ -277,7 +247,6 @@ public final class LotusButtonRenderer {
         g.method_25294(x + 2, y + 2, x + w - 2, y + 3, Colors.withAlpha(0xFFFFFF, 0.45f));
     }
 
-    // ── Zentrierter & Garantiert Sichtbarer Button-Text ───────────────────
     public static void drawCenteredButtonText(class_332 g, class_327 font, class_2561 text, int x, int y, int w, int h, int color) {
         if (text == null) return;
         int textW = font.method_27525(text);

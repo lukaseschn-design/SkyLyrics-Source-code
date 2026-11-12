@@ -23,12 +23,6 @@ import Yuki.lumiclient.gui.LotusLoadingOverlay;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-/**
- * SplashOverlayMixin - 1:1 Aurora-Style Minimalist Custom Loading Screen für Lotus Client.
- *
- * Zeigt das leuchtende Lotus-Logo zentriert auf edlem dunklem Hintergrund
- * mit einer animierten, farbverlaufenden Fortschrittsleiste (Violett -> Cyan).
- */
 @Mixin(value = {class_425.class})
 public abstract class SplashOverlayMixin {
 

@@ -41,7 +41,7 @@ public class LotusLoadingOverlay {
 
         int a = Math.round(alpha * 255.0f);
 
-        // Dunkler Hintergrund
+        
         int bgColor = (a << 24) | 0x0A0C13;
         context.method_25294(0, 0, screenW, screenH, bgColor);
 
@@ -59,7 +59,7 @@ public class LotusLoadingOverlay {
         int centerY = screenH / 2 - 20;
         int startX = (screenW - totalHeaderW) / 2;
 
-        // 1. Menschliches Pixel-Art-Logo (links)
+        
         if (brandLoaded) {
             int logoColor = (a << 24) | 0x00FFFFFF;
             int iconX = startX;
@@ -67,7 +67,7 @@ public class LotusLoadingOverlay {
             context.method_25293(class_10799.field_56883, BRAND_LOGO, iconX, iconY, 0.0f, 0.0f, iconSize, iconSize, 512, 512, 512, 512, logoColor);
         }
 
-        // 2. Identischer SkyLyrics-Text wie im Hauptmenü (rechts neben dem Logo)
+        
         if (font != null) {
             Matrix3x2fStack matrices = context.method_51448();
             matrices.pushMatrix();
@@ -77,7 +77,7 @@ public class LotusLoadingOverlay {
             matrices.popMatrix();
         }
 
-        // 3. Fortschrittsbalken
+        
         int barW = Math.max(totalHeaderW, Math.min(280, Math.round(screenW * 0.25f)));
         int barH = 3;
         int barX = (screenW - barW) / 2;
@@ -96,7 +96,7 @@ public class LotusLoadingOverlay {
             context.method_25296(barX, barY, barX + fillW, barY + barH, (a << 24) | 0x45D6F5, (a << 24) | 0x8A2BE2);
         }
 
-        // 4. Status-Text
+        
         if (statusText != null && !statusText.isEmpty() && font != null) {
             int textAlpha = Math.round(alpha * 190.0f);
             int textColor = (textAlpha << 24) | 0xB0C4DE;

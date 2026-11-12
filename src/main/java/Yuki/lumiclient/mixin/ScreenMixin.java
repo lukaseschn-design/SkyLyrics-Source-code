@@ -12,12 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/**
- * ScreenMixin - Ersetzt das Vanilla-Panorama und den Dirt-Hintergrund
- * in sämtlichen Screens (Singleplayer, Multiplayer, Options, Sub-Menüs)
- * durch den dynamisch animierten Lotus-Hintergrund, solange der Spieler
- * sich in den Menüs befindet (world == null).
- */
 @Mixin(value = {class_437.class})
 public abstract class ScreenMixin {
 
@@ -28,7 +22,7 @@ public abstract class ScreenMixin {
     @Inject(method = "method_25420(Lnet/minecraft/class_332;IIF)V", at = @At("HEAD"), cancellable = true)
     private void lotus$renderMenuBackground(class_332 context, int mouseX, int mouseY, float deltaTicks, CallbackInfo ci) {
         if (this.field_22787 != null && this.field_22787.field_1687 == null) {
-            // LotusTitleScreen übernimmt seine Hintergrund-Zeichnung selbst
+            
             if (((Object) this) instanceof LotusTitleScreen) {
                 return;
             }

@@ -11,11 +11,6 @@ import org.joml.Matrix3x2fStack;
 
 import java.util.Random;
 
-/**
- * LotusBackdrop - 1:1 Aurora-Style Animated Northern Lights Procedural Backdrop
- * Mit dynamischen Waving-Curtains, Sternenfeld, Bergkämmen und umschaltbaren Sky-Themes:
- * Polar, Glacier, Dusk, Mono und dem Lotus-eigenen Blossom Theme.
- */
 public final class LotusBackdrop {
 
     public record Curtain(float base, float amp, float height, int waves, int ripples, int bands, float phase, int rgb, float alpha, float drift, float rays) {
@@ -125,7 +120,6 @@ public final class LotusBackdrop {
         float timeSec = (float) (System.currentTimeMillis() % 10000000L) / 1000.0f;
         int a255 = Math.round(255.0f * Math.min(1.0f, alpha));
 
-        // 1. Sky Gradient (2-teilig: Top -> Mid, Mid -> Bot)
         int hMid = Math.round((float) height * 0.60f);
         int topCol = withAlpha(s.skyTop, a255);
         int midCol = withAlpha(s.skyMid, a255);
@@ -134,16 +128,13 @@ public final class LotusBackdrop {
         context.method_25296(0, 0, width, hMid, topCol, midCol);
         context.method_25296(0, hMid, width, height, midCol, botCol);
 
-        // 2. Stars
         stars(context, width, height, timeSec, alpha);
 
-        // 3. Animated Northern Lights Curtains
         int styleIdx = current;
         for (int i = 0; i < s.curtains.length; i++) {
             curtain(context, styleIdx, i, s.curtains[i], width, height, timeSec, alpha);
         }
 
-        // 4. Horizon Glow & Mountain Ridges
         ridge(context, s, width, height, alpha);
     }
 

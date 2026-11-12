@@ -65,7 +65,6 @@ public class LotusTitleScreen extends class_437 {
         int btnGap = 4;
         int startY = sh / 2 - 10;
 
-        // 1. Singleplayer Button
         this.method_37063(class_4185.method_46430(
             class_2561.method_43470("Singleplayer"),
             b -> {
@@ -74,7 +73,6 @@ public class LotusTitleScreen extends class_437 {
             }
         ).method_46434(cx - menuW / 2, startY, menuW, btnH).method_46431());
 
-        // 2. Multiplayer Button
         this.method_37063(class_4185.method_46430(
             class_2561.method_43470("Multiplayer"),
             b -> {
@@ -83,7 +81,6 @@ public class LotusTitleScreen extends class_437 {
             }
         ).method_46434(cx - menuW / 2, startY + (btnH + btnGap), menuW, btnH).method_46431());
 
-        // 3. Options... & Quit Game (Split Row)
         int splitW = (menuW - btnGap) / 2;
         int splitY = startY + 2 * (btnH + btnGap);
 
@@ -103,11 +100,9 @@ public class LotusTitleScreen extends class_437 {
             }
         ).method_46434(cx - menuW / 2 + splitW + btnGap, splitY, splitW, btnH).method_46431());
 
-        // 4. Oben Rechts: Sky Theme, Keybinds & Music
         int topBtnH = 20;
         int topY = 10;
 
-        // Sky: <Theme>
         class_4185 skyBtn = class_4185.method_46430(
             class_2561.method_43470("Sky: " + LotusBackdrop.name()),
             b -> {
@@ -117,7 +112,6 @@ public class LotusTitleScreen extends class_437 {
         ).method_46434(sw - 85 - 10, topY, 85, topBtnH).method_46431();
         this.method_37063(skyBtn);
 
-        // Keybinds
         this.method_37063(class_4185.method_46430(
             class_2561.method_43470("Keybinds"),
             b -> {
@@ -126,7 +120,6 @@ public class LotusTitleScreen extends class_437 {
             }
         ).method_46434(sw - 85 - 10 - 75 - 6, topY, 75, topBtnH).method_46431());
 
-        // 🎵 Music
         this.method_37063(class_4185.method_46430(
             class_2561.method_43470("🎵 Music"),
             b -> {
@@ -135,7 +128,6 @@ public class LotusTitleScreen extends class_437 {
             }
         ).method_46434(sw - 85 - 10 - 75 - 6 - 72 - 6, topY, 72, topBtnH).method_46431());
 
-        // 5. Wardrobe Button unter dem Skin (oben rechts versetzt)
         int skinX = Math.min(sw - 90 - 15, cx + 220);
         int skinY = Math.max(35, startY - 55);
         int skinW = 90;
@@ -168,13 +160,10 @@ public class LotusTitleScreen extends class_437 {
         int h = this.field_22790;
         int cx = w / 2;
 
-        // 1. Aurora Dynamic Animated Background
         LotusBackdrop.render(context, w, h, 1.0f);
 
-        // 2. 3D Mannequin (etwas kompakter & zentraler)
         drawMannequin(context, mouseX, mouseY, deltaTicks);
 
-        // 3. Zentrierter SkyLyrics Titel (Sauber in der Mitte, kein Vanilla-Logo)
         class_327 font = this.field_22787 != null ? this.field_22787.field_1772 : null;
         if (font != null) {
             int startY = h / 2 - 10;
@@ -189,11 +178,9 @@ public class LotusTitleScreen extends class_437 {
             context.method_51439(font, title, -tw / 2, -4, 0xFFFFFFFF, true);
             matrices.popMatrix();
 
-            // Unten links: Ausschließlich unser Mod-Branding (keine Überlappung mehr!)
             context.method_51439(font, class_2561.method_43470("§7SkyLyrics 1.0  §8Minecraft 1.21.11"), 12, h - 14, 0xFFCAD4E0, true);
         }
 
-        // 4. Buttons rendern (Screen.render zeichnet die Widgets mit LotusButtonRenderer)
         super.method_25394(context, mouseX, mouseY, deltaTicks);
 
         context.method_71278();
